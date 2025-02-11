@@ -10,6 +10,8 @@ import { logger } from '../utils/logger';
 import { isCelebrateError } from 'celebrate';
 import * as useragent from 'express-useragent';
 import { UserAgentMiddleware } from '../api/middlewares/user-agent';
+import Router from 'file-express-router';
+import path from 'path';
 
 const expressLoader = async ({ app }: { app: express.Application }) => {
   app.get('/status', (req, res) => {
@@ -59,6 +61,11 @@ const expressLoader = async ({ app }: { app: express.Application }) => {
 
   // Load all routes
   app.use('/api/v1', api);
+
+  const router = await Router({
+    dir: path.join(__dirname, '../api/handlers'),
+  });
+  app.use('/api/v1', router);
 
   // Catch 404 and forward to error handler
   app.all('*', (req, res, next) => {

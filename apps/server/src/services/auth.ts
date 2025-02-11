@@ -39,7 +39,7 @@ export class AuthService {
     this.publisher = publisher;
   }
 
-  private async hashPassword(password: string): Promise<string> {
+  async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
   }
 
@@ -55,6 +55,7 @@ export class AuthService {
     mfaVerified = false,
   ): Promise<TokenPayload> {
     return {
+      id: user._id.toString(),
       email: user.email,
       name: user.name,
       imageUrl: user.imageUrl,

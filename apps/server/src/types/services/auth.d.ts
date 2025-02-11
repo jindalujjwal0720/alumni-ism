@@ -34,6 +34,7 @@ export interface UserLoginConfig {
 }
 
 export interface TokenPayload {
+  id: string;
   email: string;
   name: string;
   imageUrl?: string;

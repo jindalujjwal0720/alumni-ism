@@ -63,5 +63,9 @@ export const api = createApi({
   endpoints: () => ({}),
   tagTypes: [
     'Auth', // This is a tag for the auth related endpoints
+
+    'Admin',
+    'Partner',
+    'Offer',
   ],
 });
