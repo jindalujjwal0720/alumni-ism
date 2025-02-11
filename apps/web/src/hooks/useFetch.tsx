@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getErrorMessage } from '../utils/error';
+import { getErrorMessage } from '@/utils/errors';
 
 export const useFetch = <T,>(
   url: string,

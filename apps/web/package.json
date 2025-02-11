@@ -11,7 +11,10 @@
     "lint:fix": "eslint --fix \"src/**/*.{js,ts,jsx,tsx}\"",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "jest",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
