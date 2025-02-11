@@ -1,8 +1,12 @@
-const Logo = () => {
+import { cn } from '@/utils/tw';
+
+const Logo = ({ className }: { className?: string }) => {
   return (
-    <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-700">
-      Something
-    </span>
+    <img
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsZ7kt9KQfrDnrsqSJplujymGADx_v11ucHA&s"
+      alt="IIT Dhanbad Alumni Card"
+      className={cn('h-10 w-10 object-contain', className)}
+    />
   );
 };
 
