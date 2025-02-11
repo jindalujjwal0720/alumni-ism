@@ -9,9 +9,13 @@ import { useState } from 'react';
 
 interface NavbarProps {
   variant: 'sticky' | 'fixed';
+  left?: React.ReactNode;
+  center?: React.ReactNode;
+  right?: React.ReactNode;
+  drawer?: React.ReactNode;
 }
 
-const Navbar = ({ variant }: NavbarProps) => {
+const Navbar = ({ variant, left, center, right, drawer }: NavbarProps) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -25,17 +29,24 @@ const Navbar = ({ variant }: NavbarProps) => {
       >
         <div className="container px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/">
-              <div className="flex items-center space-x-3">
-                <Logo className="size-8" />
-                <span className="text-lg font-medium bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                  IIT(ISM) Alumni
-                </span>
-              </div>
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link to="/">
+                <div className="flex items-center space-x-3">
+                  <Logo className="size-8" />
+                  <span className="text-lg font-medium bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                    IIT(ISM) Alumni
+                  </span>
+                </div>
+              </Link>
+              {left}
+            </div>
+
+            {center}
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4">
+              {right}
+
               {!isAuthenticated && (
                 <Link
                   to="/auth/login"
@@ -113,14 +124,14 @@ const Navbar = ({ variant }: NavbarProps) => {
           </Button>
         </div>
 
-        <div className="flex flex-col p-4 space-y-4">
-          <a
-            href="#benefits"
-            onClick={() => setIsDrawerOpen(false)}
-            className="text-gray-700 hover:text-primary"
-          >
+        <div
+          className="flex flex-col p-4 space-y-4"
+          onClick={() => setIsDrawerOpen(false)}
+        >
+          <Link to="/" className="text-muted-foreground hover:text-primary">
             Home
-          </a>
+          </Link>
+          {drawer}
         </div>
       </div>
 

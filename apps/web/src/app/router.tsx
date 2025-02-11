@@ -5,7 +5,13 @@ export interface RouterProps {
 }
 
 const Router = ({ children }: RouterProps) => {
-  return <BrowserRouter>{children}</BrowserRouter>;
+  return (
+    <BrowserRouter
+      basename={process.env.NODE_ENV === 'production' ? '/alumni-ism' : '/'}
+    >
+      {children}
+    </BrowserRouter>
+  );
 };
 
 export default Router;

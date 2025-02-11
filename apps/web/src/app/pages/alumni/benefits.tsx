@@ -10,7 +10,7 @@ import {
 import useSearchParamState from '@/hooks/useSearchParamState';
 import useSearchParam from '@/hooks/useSearchParam';
 import { useMemo } from 'react';
-import { AlumniFooter } from '.';
+import { AlumniFooter } from '@/features/alumni/components/footer';
 
 interface Benefit {
   company: {
@@ -185,7 +185,7 @@ const FilterActions = ({ tags }: { tags: string[] }) => {
   );
 };
 
-const OffersPage = () => {
+const BenefitsPage = () => {
   const filterTag = useSearchParam('tag');
   const tags = useMemo(() => {
     const allTags: string[] = [];
@@ -232,4 +232,4 @@ const OffersPage = () => {
   );
 };
 
-export default OffersPage;
+export default BenefitsPage;
