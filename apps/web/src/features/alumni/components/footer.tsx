@@ -1,6 +1,13 @@
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { FiGlobe, FiMessageSquare, FiUsers } from 'react-icons/fi';
 
 export const AlumniFooter = () => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <footer className="bg-slate-900 text-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -14,15 +14,22 @@ import {
 } from '@/features/auth/stores/auth';
 import { getErrorMessage } from '@/utils/errors';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-const Profile = () => {
+const Profile = ({
+  popover = true,
+  details = true,
+}: {
+  popover?: boolean;
+  details?: boolean;
+}) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const { data: { user } = {}, isLoading: isUserLoading } = useGetMeQuery();
   const currentUserRole = useSelector(selectRole);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   if (!isAuthenticated) {
     return null;
@@ -39,51 +46,90 @@ const Profile = () => {
 
   const handleViewAs = (role: string) => {
     dispatch(setRole(role));
+    switch (role) {
+      case 'admin':
+        navigate('/admin');
+        break;
+      case 'partner':
+        navigate('/partner');
+        break;
+      default:
+        navigate('/');
+    }
   };
+
+  if (!popover) {
+    return (
+      <Link
+        to="/settings"
+        className="flex items-center gap-3 cursor-pointer rounded-md py-1.5 px-2"
+      >
+        <Avatar className="size-8">
+          <AvatarImage src={user?.imageUrl} alt={user?.name} />
+          <AvatarFallback className="bg-muted-foreground text-background">
+            {user?.name[0]}
+          </AvatarFallback>
+        </Avatar>
+        {details && (
+          <div>
+            <h4 className="text-sm font-semibold">
+              {user?.name}
+              <p className="text-xs text-muted-foreground">{currentUserRole}</p>
+            </h4>
+          </div>
+        )}
+      </Link>
+    );
+  }
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         {!isUserLoading ? (
-          <div className="flex items-center gap-2 cursor-pointer hover:bg-muted rounded-md py-1.5 px-2">
-            <Avatar className="size-7">
+          <div className="flex items-center gap-3 cursor-pointer hover:bg-muted rounded-md py-1.5 px-2">
+            <Avatar className="size-8">
               <AvatarImage src={user?.imageUrl} alt={user?.name} />
               <AvatarFallback className="bg-muted-foreground text-background">
                 {user?.name[0]}
               </AvatarFallback>
             </Avatar>
-            <div>
-              <h4 className="text-sm font-semibold">
-                {user?.name}
-                <span className="font-normal text-muted-foreground">
-                  {' '}
-                  ({currentUserRole})
-                </span>
-              </h4>
-            </div>
+            {details && (
+              <div>
+                <h4 className="text-sm font-semibold">
+                  {user?.name}
+                  <p className="text-xs text-muted-foreground">
+                    {currentUserRole}
+                  </p>
+                </h4>
+              </div>
+            )}
           </div>
         ) : (
-          <div className="flex items-center gap-2 cursor-pointer hover:bg-muted rounded-md py-1.5 px-2 pointer-events-none">
+          <div className="flex items-center gap-3 cursor-pointer hover:bg-muted rounded-md py-1.5 px-2 pointer-events-none">
             <Avatar className="size-7">
               <AvatarFallback className="bg-muted-foreground animate-pulse"></AvatarFallback>
             </Avatar>
-            <span className="text-sm animate-pulse h-3 w-24 bg-muted-foreground rounded-lg"></span>
+            {details && (
+              <span className="text-sm animate-pulse h-3 w-24 bg-muted-foreground rounded-lg"></span>
+            )}
           </div>
         )}
       </PopoverTrigger>
       <PopoverContent>
         <div className="divide-y-2 space-y-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Avatar className="size-9">
               <AvatarImage src={user?.imageUrl} alt={user?.name} />
               <AvatarFallback className="bg-muted-foreground text-background">
                 {user?.name[0]}
               </AvatarFallback>
             </Avatar>
-            <div>
-              <h4 className="text-sm font-semibold">{user?.name}</h4>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
-            </div>
+            {details && (
+              <div>
+                <h4 className="text-sm font-semibold">{user?.name}</h4>
+                <p className="text-xs text-muted-foreground">{user?.email}</p>
+              </div>
+            )}
           </div>
           <div>
             {user?.roles && user.roles.length > 1 && (
@@ -93,7 +139,7 @@ const Profile = () => {
                   .map((role) => (
                     <div
                       key={role}
-                      className="text-sm cursor-pointer hover:text-blue-500"
+                      className="text-sm cursor-pointer hover:text-primary"
                       onClick={() => handleViewAs(role)}
                     >
                       View as {role}
@@ -102,10 +148,7 @@ const Profile = () => {
               </div>
             )}
             <div className="pt-4">
-              <Link
-                to="/settings"
-                className="block text-sm hover:text-blue-500"
-              >
+              <Link to="/settings" className="block text-sm hover:text-primary">
                 Account Settings
               </Link>
             </div>

@@ -1,4 +1,3 @@
-import { Separator } from '@/components/ui/separator';
 import SidebarNav from '@/features/settings/components/sidebar-nav';
 import { Routes, Route } from 'react-router-dom';
 import Account from './account';
@@ -6,7 +5,6 @@ import Security from './security';
 import Preferences from './preferences';
 import SetupTwoFactorAuthentication from './security/setup-2fa';
 import SetupAuthenticator from './security/setup-authenticator';
-import Navbar from '@/features/navbar/components/navbar';
 import UpdateRecoveryEmail from './security/update-recovery-email';
 import RegenerateBackupCodes from './security/regenerate-backup-codes';
 import { useSelector } from 'react-redux';
@@ -15,17 +13,21 @@ import { AlumniDetails } from '@/features/alumni/components/settings/alumni-deta
 import ProtectedRoute from '@/features/auth/components/protected-route';
 import { useMemo } from 'react';
 import { PledgesAndDonationsPage } from '../alumni/pledges-and-donations';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { ContactAndLicenses } from './contact-and-licenses';
 
 const sidebarNavItems = [
   { href: '/settings', title: 'Account' },
   { href: '/settings/security', title: 'Security' },
   { href: '/settings/preferences', title: 'Preferences' },
+  { href: '/settings/contacts', title: 'Contact & Licenses' },
 ];
 
 const Settings = () => {
   const role = useSelector(selectRole);
+  const isMobile = useIsMobile();
   const items = useMemo(() => {
-    if (role === 'student') {
+    if (role === 'student' && !isMobile) {
       return [
         { href: '/settings/details', title: 'Alumni Details' },
         { href: '/settings/donations', title: 'Pledge & Donations' },
@@ -34,51 +36,49 @@ const Settings = () => {
       ];
     }
     return sidebarNavItems;
-  }, [role]);
+  }, [role, isMobile]);
 
   return (
-    <div className="pt-navbar">
-      <Navbar variant="fixed" />
-      <div className="space-y-6 pt-5 px-6 pb-12 md:px-10 md:pb-16 md:block">
-        <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-        </div>
-        <Separator className="my-6" />
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-          <aside className="lg:w-1/5">
-            <SidebarNav items={items} />
-          </aside>
-          <div className="flex-1 w-full">
-            <Routes>
-              <Route path="" element={<Account />} />
-              <Route
-                path="/details"
-                element={<ProtectedRoute roles={['student']} />}
-              >
-                <Route path="" element={<AlumniDetails />} />
-              </Route>
-              <Route
-                path="/donations"
-                element={<ProtectedRoute roles={['student']} />}
-              >
-                <Route path="" element={<PledgesAndDonationsPage />} />
-              </Route>
-              <Route path="/security">
-                <Route path="" element={<Security />} />
-                <Route path="2fa" element={<SetupTwoFactorAuthentication />} />
-                <Route path="authenticator" element={<SetupAuthenticator />} />
+    <div className="space-y-6 pt-5 pb-12 md:px-10 md:pb-16 md:block">
+      <div className="space-y-0.5 px-6">
+        <h2 className="text-2xl font-semibold tracking-tight">Settings</h2>
+      </div>
+      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <aside className="lg:w-1/5 px-2">
+          <SidebarNav items={items} />
+        </aside>
+        <div className="flex-1 w-full px-6">
+          <Routes>
+            <Route path="" element={<Account />} />
+            {!isMobile && (
+              <>
                 <Route
-                  path="recovery/email"
-                  element={<UpdateRecoveryEmail />}
-                />
+                  path="/details"
+                  element={<ProtectedRoute roles={['student']} />}
+                >
+                  <Route path="" element={<AlumniDetails />} />
+                </Route>
                 <Route
-                  path="recovery/codes"
-                  element={<RegenerateBackupCodes />}
-                />
-              </Route>
-              <Route path="/preferences" element={<Preferences />} />
-            </Routes>
-          </div>
+                  path="/donations"
+                  element={<ProtectedRoute roles={['student']} />}
+                >
+                  <Route path="" element={<PledgesAndDonationsPage />} />
+                </Route>
+              </>
+            )}
+            <Route path="/security">
+              <Route path="" element={<Security />} />
+              <Route path="2fa" element={<SetupTwoFactorAuthentication />} />
+              <Route path="authenticator" element={<SetupAuthenticator />} />
+              <Route path="recovery/email" element={<UpdateRecoveryEmail />} />
+              <Route
+                path="recovery/codes"
+                element={<RegenerateBackupCodes />}
+              />
+            </Route>
+            <Route path="/preferences" element={<Preferences />} />
+            <Route path="/contacts" element={<ContactAndLicenses />} />
+          </Routes>
         </div>
       </div>
     </div>

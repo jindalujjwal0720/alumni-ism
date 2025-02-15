@@ -10,7 +10,7 @@ import UpdateRecoveryEmailForm from '@/features/auth/components/forms/update-rec
 
 const UpdateRecoveryEmail = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

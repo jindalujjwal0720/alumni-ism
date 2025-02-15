@@ -1,5 +1,4 @@
 import { Card, CardContent } from '@/components/ui/card';
-import Navbar from '@/features/navbar/components/navbar';
 import {
   Select,
   SelectContent,
@@ -210,7 +209,6 @@ const BenefitsPage = () => {
 
   return (
     <div>
-      <Navbar variant="sticky" />
       <div className="container p-6 space-y-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between">

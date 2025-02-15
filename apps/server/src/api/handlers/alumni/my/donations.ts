@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
-import { IPayment, PaymentCategory } from '../../../types/models/payment';
+import { IPayment, PaymentCategory } from '../../../../types/models/payment';
 import { RequestHandler } from 'express';
-import Payment from '../../../models/payment';
+import Payment from '../../../../models/payment';
 
 const getMyDonations =
   (paymentModel: Model<IPayment>): RequestHandler =>

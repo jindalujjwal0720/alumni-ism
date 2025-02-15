@@ -10,7 +10,7 @@ import RegenerateBackupCodesForm from '@/features/auth/components/forms/regenera
 
 const RegenerateBackupCodes = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

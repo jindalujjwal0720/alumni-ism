@@ -1,11 +1,11 @@
 import { cn } from '@/utils/tw';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Profile from './profile';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from '@/features/auth/stores/auth';
+import { selectIsAuthenticated, selectRole } from '@/features/auth/stores/auth';
 import Logo from '@/components/logo';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 interface NavbarProps {
   variant?: 'default' | 'sticky' | 'fixed';
@@ -24,12 +24,22 @@ const Navbar = ({
 }: NavbarProps) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const currentRole = useSelector(selectRole);
+  const location = useLocation();
+  const showAdminPanelButton = useMemo(() => {
+    return currentRole === 'admin' && !location.pathname.startsWith('/admin');
+  }, [currentRole, location.pathname]);
+  const showPartnerPanelButton = useMemo(() => {
+    return (
+      currentRole === 'partner' && !location.pathname.startsWith('/partner')
+    );
+  }, [currentRole, location.pathname]);
 
   return (
     <>
       <nav
         className={cn(
-          'top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-slate-100 w-full',
+          'top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-muted w-full',
           variant === 'sticky' && 'sticky',
           variant === 'fixed' && 'fixed',
         )}
@@ -40,9 +50,7 @@ const Navbar = ({
               <Link to="/">
                 <div className="flex items-center space-x-3">
                   <Logo className="size-8" />
-                  <span className="text-lg font-medium bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                    IIT(ISM) Alumni
-                  </span>
+                  <span className="text-lg font-medium">IIT(ISM) Alumni</span>
                 </div>
               </Link>
               {left}
@@ -54,6 +62,37 @@ const Navbar = ({
             <div className="hidden md:flex items-center gap-4">
               {right}
 
+              {/* Admin Navigation */}
+              {showAdminPanelButton && (
+                <Link
+                  to="/admin"
+                  className={cn(
+                    buttonVariants({
+                      variant: 'outline',
+                      size: 'sm',
+                    }),
+                  )}
+                >
+                  Admin Panel
+                </Link>
+              )}
+
+              {/* Partner Navigation */}
+              {showPartnerPanelButton && (
+                <Link
+                  to="/partner"
+                  className={cn(
+                    buttonVariants({
+                      variant: 'outline',
+                      size: 'sm',
+                    }),
+                  )}
+                >
+                  Partner Panel
+                </Link>
+              )}
+
+              {/* Partner Navigation */}
               {!isAuthenticated && (
                 <Link
                   to="/auth/login"
@@ -73,7 +112,7 @@ const Navbar = ({
               size="icon"
               className="md:hidden"
             >
-              <svg
+              {/* <svg
                 className="w-6 h-6"
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -84,7 +123,8 @@ const Navbar = ({
                   d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                   clipRule="evenodd"
                 />
-              </svg>
+              </svg> */}
+              <Profile popover={false} details={false} />
             </Button>
           </div>
         </div>
@@ -106,7 +146,7 @@ const Navbar = ({
                 Login
               </Link>
             )}
-            <Profile />
+            <Profile popover={false} />
           </div>
           <Button
             title="Close Menu"

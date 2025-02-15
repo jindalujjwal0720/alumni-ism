@@ -15,14 +15,17 @@ import { Link } from 'react-router-dom';
 
 const AlumniCardLanding = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const { data: { alumni } = {} } = useGetMyAlumniDataQuery(undefined, {
-    skip: !isAuthenticated,
-  });
+  const { data: { alumni } = {}, isLoading } = useGetMyAlumniDataQuery(
+    undefined,
+    {
+      skip: !isAuthenticated,
+    },
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/10">
       <AlumniNavigation />
-      {isAuthenticated && (!alumni || !alumni.isVerified) && (
+      {isAuthenticated && !isLoading && (!alumni || !alumni.isVerified) && (
         <div className="bg-yellow-600 text-sm text-primary-foreground text-center p-3">
           Your account is not verified. Please{' '}
           <Link to="/settings/alumni" className="underline">

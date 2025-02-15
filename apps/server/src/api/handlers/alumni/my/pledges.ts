@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import { IPledge } from '../../../types/models/pledge';
-import Pledge from '../../../models/pledge';
+import { IPledge } from '../../../../types/models/pledge';
+import Pledge from '../../../../models/pledge';
 import { Model } from 'mongoose';
 
 const getMyPledges =

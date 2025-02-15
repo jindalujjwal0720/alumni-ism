@@ -10,7 +10,7 @@ import Setup2faAuthenticatorForm from '@/features/auth/components/forms/setup-2f
 
 const SetupAuthenticator = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

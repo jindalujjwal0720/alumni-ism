@@ -6,17 +6,17 @@ const sidebarItems = [
   {
     title: 'Dashboard',
     icon: LayoutDashboard,
-    link: '/',
+    link: '/partner',
   },
   {
     title: 'Offers',
     icon: PercentCircle,
-    link: '/offers',
+    link: '/partner/offers',
   },
   {
     title: 'Validate card',
     icon: CreditCard,
-    link: '/validate',
+    link: '/partner/validate',
   },
 ];
 

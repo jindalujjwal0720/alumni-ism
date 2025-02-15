@@ -11,27 +11,27 @@ const sidebarItems = [
   {
     title: 'Dashboard',
     icon: LayoutDashboard,
-    link: '/',
+    link: '/admin',
   },
   {
     title: 'Verifications',
     icon: User2,
-    link: '/alumni/unverified',
+    link: '/admin/alumni/unverified',
   },
   {
     title: 'Payments',
     icon: ReceiptIndianRupee,
-    link: '/alumni/payments',
+    link: '/admin/alumni/payments',
   },
   {
     title: 'Partners',
     icon: Building,
-    link: '/partners',
+    link: '/admin/partners',
   },
   {
     title: 'Admins',
     icon: User2,
-    link: '/admins',
+    link: '/admin/admins',
   },
 ];
 

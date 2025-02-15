@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/tw';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
@@ -19,6 +19,13 @@ import {
   supportedThemes,
   usePreferences,
 } from '@/components/ui/theme-provider';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const preferencesFormSchema = z.object({
   font: z.enum(supportedFonts),
@@ -49,19 +56,18 @@ const PreferencesForm = () => {
               <FormLabel>Font</FormLabel>
               <div className="relative w-max">
                 <FormControl>
-                  <select
-                    className={cn(
-                      buttonVariants({ variant: 'outline' }),
-                      'w-[200px] appearance-none font-normal capitalize',
-                    )}
-                    {...field}
-                  >
-                    {supportedFonts.map((font) => (
-                      <option key={font} value={font}>
-                        {font}
-                      </option>
-                    ))}
-                  </select>
+                  <Select {...field}>
+                    <SelectTrigger className="w-full sm:w-max min-w-[200px]">
+                      <SelectValue placeholder="Select font" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {supportedFonts.map((font) => (
+                        <SelectItem key={font} value={font}>
+                          {font}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
               </div>
@@ -123,7 +129,9 @@ const PreferencesForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Update preferences</Button>
+        <Button type="submit" className="w-full sm:w-max">
+          Update preferences
+        </Button>
       </form>
     </Form>
   );

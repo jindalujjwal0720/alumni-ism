@@ -11,12 +11,12 @@ const alumniApi = api.injectEndpoints({
       },
       undefined
     >({
-      query: () => '/v1/alumni',
+      query: () => '/v1/alumni/my',
       providesTags: ['Alumni'],
     }),
     createOrUpdateMyAlumniData: builder.mutation({
       query: (body) => ({
-        url: '/v1/alumni',
+        url: '/v1/alumni/my',
         method: 'POST',
         body,
       }),
@@ -36,12 +36,12 @@ const alumniApi = api.injectEndpoints({
       },
       undefined
     >({
-      query: () => '/v1/alumni/pledges',
+      query: () => '/v1/alumni/my/pledges',
       providesTags: ['Pledge'],
     }),
     createPledge: builder.mutation({
       query: (body) => ({
-        url: '/v1/alumni/pledges',
+        url: '/v1/alumni/my/pledges',
         method: 'POST',
         body,
       }),
@@ -57,6 +57,15 @@ const alumniApi = api.injectEndpoints({
       query: () => '/v1/alumni/donations',
       providesTags: ['Payment'],
     }),
+
+    readAlumniPublicData: builder.query<
+      {
+        alumni: IAlumni;
+      },
+      string
+    >({
+      query: (ucn) => `/v1/public/alumni/${ucn}`,
+    }),
   }),
 });
 
@@ -69,4 +78,6 @@ export const {
   useCreatePledgeMutation,
 
   useGetMyDonationsQuery,
+
+  useReadAlumniPublicDataQuery,
 } = alumniApi;

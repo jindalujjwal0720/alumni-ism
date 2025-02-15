@@ -94,7 +94,7 @@ const ChangePasswordForm = ({ onSuccess }: ChangePasswordFormProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-4 justify-between">
+        <div className="flex flex-col-reverse sm:flex-row gap-4 justify-between">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -152,14 +152,16 @@ const ChangePasswordForm = ({ onSuccess }: ChangePasswordFormProps) => {
                 )}
               />
               <div className="flex space-x-4">
-                <Button type="submit">Update password</Button>
+                <Button type="submit" className="flex-1">
+                  Update password
+                </Button>
                 <Button variant="outline" onClick={onFormReset}>
                   Cancel
                 </Button>
               </div>
             </form>
           </Form>
-          <div className="w-max max-w-52">
+          <div className="w-full sm:w-max sm:max-w-52">
             <div className="rounded-lg bg-muted p-4 space-y-3">
               <h3 className="text-sm font-medium">Password requirements</h3>
               <p className="text-xs">

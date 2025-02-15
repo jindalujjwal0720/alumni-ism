@@ -10,7 +10,7 @@ import SetupTwoFactorAuthenticationForm from '@/features/auth/components/forms/s
 
 const SetupTwoFactorAuthentication = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
