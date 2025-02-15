@@ -37,10 +37,22 @@ const createOrUpdateMyAlumniData =
 
       // Validate request body
       const schema = Joi.object({
+        // personal details
         name: Joi.string().required(),
         alias: Joi.string().required(),
-        yearOfGraduation: Joi.number().required(),
+        // contact details
         phone: Joi.string().required(),
+        permanentAddress: Joi.string().required(),
+        // academic details
+        degree: Joi.string().required(),
+        branch: Joi.string().required(),
+        yearOfGraduation: Joi.number().required(),
+        // professional details
+        pan: Joi.string().required(),
+        company: Joi.string().required(),
+        designation: Joi.string().required(),
+        location: Joi.string().required(),
+        // verification details
         verificationDocLink: Joi.string().required(),
       });
       const { error } = schema.validate(req.body);
@@ -52,10 +64,23 @@ const createOrUpdateMyAlumniData =
         );
       }
 
-      alumni.name = req.body.name;
-      alumni.alias = req.body.alias;
-      alumni.yearOfGraduation = req.body.yearOfGraduation;
-      alumni.phone = req.body.phone;
+      alumni.updates = {
+        name: req.body.name,
+        alias: req.body.alias,
+
+        phone: req.body.phone,
+        permanentAddress: req.body.permanentAddress,
+
+        degree: req.body.degree,
+        branch: req.body.branch,
+        yearOfGraduation: req.body.yearOfGraduation,
+
+        pan: req.body.pan,
+        company: req.body.company,
+        designation: req.body.designation,
+        location: req.body.location,
+      };
+
       alumni.verificationDocLink = req.body.verificationDocLink;
       alumni.isVerified = false;
       await alumni.save();

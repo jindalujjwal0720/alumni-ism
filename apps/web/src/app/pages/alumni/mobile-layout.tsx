@@ -1,6 +1,6 @@
 import { BottomNavigationTabs } from '@/components/bottom-tabs';
 import Navbar from '@/features/navbar/components/navbar';
-import { HomeIcon, IdCard, Settings } from 'lucide-react';
+import { HomeIcon, IdCard, ReceiptIndianRupee, Settings } from 'lucide-react';
 import { Outlet } from 'react-router-dom';
 
 const navigationTabs = [
@@ -9,6 +9,12 @@ const navigationTabs = [
     icon: <HomeIcon />,
     label: 'Home',
     to: '/',
+  },
+  {
+    id: 'pledges',
+    icon: <ReceiptIndianRupee />,
+    label: 'Donations',
+    to: '/donations',
   },
   {
     id: 'details',

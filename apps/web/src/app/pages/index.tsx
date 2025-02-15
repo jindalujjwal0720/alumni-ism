@@ -11,6 +11,7 @@ import { AlumniLayout } from './alumni/layout';
 import { AlumniDetailsPage } from './alumni/details';
 import { AlumniHome } from './alumni/home';
 import AlumniCardLanding from './alumni/landing';
+import { PledgesAndDonationsPage } from './alumni/pledges-and-donations';
 
 // Lazy load the admin and partner pages
 const AdminHome = lazy(() =>
@@ -60,7 +61,12 @@ const Pages = () => {
           path=""
           element={isMobileDevice ? <AlumniHome /> : <AlumniCardLanding />}
         />
-        <Route path="details" element={<AlumniDetailsPage />} />
+        {isMobileDevice && (
+          <>
+            <Route path="details" element={<AlumniDetailsPage />} />
+            <Route path="donations" element={<PledgesAndDonationsPage />} />
+          </>
+        )}
         <Route path="benefits" element={<BenefitsPage />} />
         <Route path="settings/*" element={<ProtectedRoute />}>
           <Route path="*" element={<Settings />} />

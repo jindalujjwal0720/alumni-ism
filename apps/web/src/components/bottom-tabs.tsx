@@ -25,7 +25,7 @@ export const BottomNavigationTabs = ({ tabs }: { tabs: Tab[] }) => {
               key={tab.to}
               to={tab.to}
               className={cn(
-                'flex flex-col items-center justify-center gap-1',
+                'flex-1 flex flex-col items-center justify-center gap-1',
                 tab.id === activeTabId && 'text-primary',
               )}
             >

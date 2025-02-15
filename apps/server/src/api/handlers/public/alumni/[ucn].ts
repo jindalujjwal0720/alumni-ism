@@ -11,10 +11,11 @@ const readAlumniPublicData =
   async (req, res, next) => {
     try {
       const { ucn } = req.params;
-      const alumni = await alumniModel.findOne({ ucn }).select({
-        _id: 0,
-        verificationDocLink: 0,
-      });
+      const alumni = await alumniModel
+        .findOne({ ucn })
+        .select(
+          'ucn validity account name alias degree branch yearOfGraduation company designation location isVerified',
+        );
       if (!alumni) {
         throw new AppError(
           CommonErrors.NotFound.name,
@@ -29,7 +30,9 @@ const readAlumniPublicData =
       res.status(200).json({
         alumni: {
           ...alumni.toObject(),
+          _id: undefined,
           account: undefined,
+
           email: user?.email,
           imageUrl: user?.imageUrl,
         },

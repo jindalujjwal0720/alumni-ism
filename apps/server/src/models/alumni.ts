@@ -8,6 +8,7 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
       ref: 'User',
       required: true,
     },
+    // unique card number
     ucn: {
       type: String,
       required: function () {
@@ -23,24 +24,61 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
       default: new Date(),
     },
 
-    // Alumni specific fields
+    // personal details
     name: {
       type: String,
-      required: true,
+      default: '',
     },
     alias: {
       type: String,
-      required: true,
-    },
-    yearOfGraduation: {
-      type: Number,
-      required: true,
-    },
-    phone: {
-      type: String,
-      required: true,
+      default: '',
     },
 
+    // contact details
+    phone: {
+      type: String,
+      default: '',
+    },
+    permanentAddress: {
+      type: String,
+      default: '',
+    },
+
+    // academic details
+    yearOfGraduation: {
+      type: Number,
+      default: 0,
+    },
+    branch: {
+      type: String,
+      default: '',
+    },
+    degree: {
+      type: String,
+      default: '',
+    },
+
+    // professional details
+    pan: {
+      type: String,
+      default: '',
+    },
+    company: {
+      type: String,
+      default: '',
+    },
+    designation: {
+      type: String,
+      default: '',
+    },
+    location: {
+      type: String,
+      default: '',
+    },
+
+    updates: {
+      type: mongoose.Schema.Types.Mixed,
+    },
     // Verification document link
     verificationDocLink: {
       type: String,

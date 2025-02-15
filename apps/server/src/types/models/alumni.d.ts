@@ -8,11 +8,39 @@ export interface IAlumni extends Record<string, unknown> {
 
   // personal details
   name: string;
-  // name on certificate/card/etc
   alias: string;
-  yearOfGraduation: number;
-  phone: string;
 
+  // contact details
+  phone: string;
+  permanentAddress: string;
+
+  // academic details
+  degree: string;
+  branch: string;
+  yearOfGraduation: number;
+
+  // professional details
+  pan: string;
+  company: string;
+  designation: string;
+  location: string;
+
+  updates?: {
+    name: string;
+    alias: string;
+
+    phone: string;
+    permanentAddress: string;
+
+    degree: string;
+    branch: string;
+    yearOfGraduation: number;
+
+    pan: string;
+    company: string;
+    designation: string;
+    location: string;
+  };
   verificationDocLink: string;
   isVerified: boolean;
 

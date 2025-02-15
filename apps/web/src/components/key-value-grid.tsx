@@ -1,36 +1,36 @@
-type FormatterFunctionWithRow<TData> = (
-  value: unknown,
-  row: TData,
-) => string | JSX.Element;
+export type FormatterFunction<TRow extends Record<string, unknown>> = (params: {
+  key: keyof TRow;
+  row: TRow;
+}) => string | JSX.Element;
 
-type FormatterFunction = (value: unknown) => string | JSX.Element;
-
-export type KeyValueType =
+export type KeyValueType<TRow extends Record<string, unknown>> =
   | string
   | {
       key: string;
       label?: string;
-      formatter?:
-        | FormatterFunction
-        | FormatterFunctionWithRow<Record<string, unknown>>;
+      formatter?: FormatterFunction<TRow>;
     };
 
-interface KeyValueProps {
+interface KeyValueProps<TRow extends Record<string, unknown>> {
+  dataKey: string;
   label: string;
-  value: unknown;
-  formatter?: (
-    value: unknown,
-    row: Record<string, unknown>,
-  ) => string | JSX.Element;
-  row: Record<string, unknown>;
+  formatter?: FormatterFunction<TRow>;
+  row: TRow;
 }
 
-function KeyValue({ row, label, value, formatter }: Readonly<KeyValueProps>) {
+function KeyValue<TRow extends Record<string, unknown>>({
+  row,
+  label,
+  dataKey,
+  formatter,
+}: Readonly<KeyValueProps<TRow>>) {
+  const value = row[dataKey as keyof TRow];
+
   return (
     <div className="space-y-1.5">
       <div className="text-sm text-muted-foreground">{label}</div>
       <div className="text-sm">
-        {formatter ? formatter(value, row) : value?.toString()}
+        {formatter ? formatter({ key: dataKey, row }) : value?.toString()}
       </div>
     </div>
   );
@@ -39,14 +39,16 @@ function KeyValue({ row, label, value, formatter }: Readonly<KeyValueProps>) {
 interface KeyValueGridProps<TData extends Record<string, unknown>> {
   title?: string;
   data: TData;
-  keys?: KeyValueType[];
+  keys?: KeyValueType<TData>[];
   colsCount?: number;
+  formatter?: FormatterFunction<TData>;
 }
 
 function KeyValueGrid<TData extends Record<string, unknown>>({
   title,
   data,
   keys,
+  formatter,
   // colsCount = 2,
 }: Readonly<KeyValueGridProps<TData>>) {
   return (
@@ -62,8 +64,9 @@ function KeyValueGrid<TData extends Record<string, unknown>>({
                 return (
                   <KeyValue
                     key={`${currentKey}-${index}`}
+                    dataKey={currentKey}
                     label={currentKey}
-                    value={data[currentKey]}
+                    formatter={formatter}
                     row={data}
                   />
                 );
@@ -71,9 +74,9 @@ function KeyValueGrid<TData extends Record<string, unknown>>({
                 return (
                   <KeyValue
                     key={`${currentKey.key}-${index}`}
+                    dataKey={currentKey.key}
                     label={currentKey.label ?? currentKey.key}
-                    value={data[currentKey.key]}
-                    formatter={currentKey.formatter}
+                    formatter={currentKey.formatter ?? formatter}
                     row={data}
                   />
                 );

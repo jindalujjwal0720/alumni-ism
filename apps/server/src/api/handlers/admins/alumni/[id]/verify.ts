@@ -41,6 +41,24 @@ const verifyAlumni =
         );
       }
 
+      alumni.name = alumni.updates?.name ?? alumni.name;
+      alumni.alias = alumni.updates?.alias ?? alumni.alias;
+
+      alumni.phone = alumni.updates?.phone ?? alumni.phone;
+      alumni.permanentAddress =
+        alumni.updates?.permanentAddress ?? alumni.permanentAddress;
+
+      alumni.degree = alumni.updates?.degree ?? alumni.degree;
+      alumni.branch = alumni.updates?.branch ?? alumni.branch;
+      alumni.yearOfGraduation =
+        alumni.updates?.yearOfGraduation ?? alumni.yearOfGraduation;
+
+      alumni.pan = alumni.updates?.pan ?? alumni.pan;
+      alumni.company = alumni.updates?.company ?? alumni.company;
+      alumni.designation = alumni.updates?.designation ?? alumni.designation;
+      alumni.location = alumni.updates?.location ?? alumni.location;
+
+      alumni.updates = undefined;
       alumni.isVerified = true;
 
       // generate unique card number, if not already generated

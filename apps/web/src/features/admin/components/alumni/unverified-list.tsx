@@ -16,7 +16,7 @@ export const UnverifiedAlumniList = () => {
               const { _id, name } = row.original;
               return (
                 <Link
-                  to={`/alumni/unverified/${_id}`}
+                  to={`/admin/alumni/unverified/${_id}`}
                   className="hover:underline"
                 >
                   {name}

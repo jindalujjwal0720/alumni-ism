@@ -23,8 +23,10 @@ import { TriangleAlert } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useGetMeQuery } from '@/features/auth/api/auth';
+import { Textarea } from '@/components/ui/textarea';
 
 const accountFormSchema = z.object({
+  // personal details
   name: z.string().min(3, {
     message: 'Name must be at least 3 characters long',
   }),
@@ -34,15 +36,26 @@ const accountFormSchema = z.object({
       message: 'Alias must be at least 3 characters long',
     })
     .default(''),
+  // graduation details
+  degree: z.string().default('B.Tech'),
+  branch: z.string().default('Mining Engineering'),
   yearOfGraduation: z.coerce
     .number()
     .int()
     .positive()
     .min(1926)
     .max(new Date().getFullYear() + 5),
+  // contact details
   phone: z.string().min(10, {
     message: 'Phone number must be at least 10 characters long',
   }),
+  permanentAddress: z.string().default(''),
+  // professional details
+  pan: z.string().default(''),
+  company: z.string().default(''),
+  designation: z.string().default(''),
+  location: z.string().default(''),
+  // verification
   verificationDocLink: z.string().url({
     message: 'Invalid URL',
   }),
@@ -54,11 +67,18 @@ export const AlumniDetailsForm = () => {
   const { data: { user } = {} } = useGetMeQuery();
   const { data: { alumni } = {} } = useGetMyAlumniDataQuery(undefined);
   const defaultValues: AlumniDetailsFormValues = {
-    name: alumni?.name || '',
-    alias: alumni?.alias || alumni?.name || '',
-    yearOfGraduation: alumni?.yearOfGraduation || new Date().getFullYear(),
-    phone: alumni?.phone || '',
-    verificationDocLink: alumni?.verificationDocLink || '',
+    name: '',
+    alias: '',
+    degree: 'B.Tech',
+    branch: 'Mining Engineering',
+    yearOfGraduation: new Date().getFullYear(),
+    phone: '',
+    permanentAddress: '',
+    pan: '',
+    company: '',
+    designation: '',
+    location: '',
+    verificationDocLink: '',
   };
   const form = useForm<AlumniDetailsFormValues>({
     resolver: zodResolver(accountFormSchema),
@@ -80,10 +100,19 @@ export const AlumniDetailsForm = () => {
   useEffect(() => {
     if (alumni) {
       form.reset({
-        name: alumni.name,
-        alias: alumni.alias || alumni.name,
-        yearOfGraduation: alumni.yearOfGraduation,
-        phone: alumni.phone,
+        name: alumni.updates?.name ?? alumni.name,
+        alias: alumni.updates?.alias ?? alumni.alias,
+        degree: alumni.updates?.degree ?? alumni.degree,
+        branch: alumni.updates?.branch ?? alumni.branch,
+        yearOfGraduation:
+          alumni.updates?.yearOfGraduation ?? alumni.yearOfGraduation,
+        phone: alumni.updates?.phone ?? alumni.phone,
+        permanentAddress:
+          alumni.updates?.permanentAddress ?? alumni.permanentAddress,
+        pan: alumni.updates?.pan ?? alumni.pan,
+        company: alumni.updates?.company ?? alumni.company,
+        designation: alumni.updates?.designation ?? alumni.designation,
+        location: alumni.updates?.location ?? alumni.location,
         verificationDocLink: alumni.verificationDocLink,
       });
     }
@@ -103,7 +132,7 @@ export const AlumniDetailsForm = () => {
           Your account is verified. Thank you for your cooperation.
         </div>
       )}
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Card>
           <CardContent className="space-y-6">
             <h3 className="text-lg font-medium">Personal Details</h3>
@@ -162,6 +191,22 @@ export const AlumniDetailsForm = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="permanentAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Permanent Address</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Your permanent address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </CardContent>
         </Card>
@@ -169,6 +214,32 @@ export const AlumniDetailsForm = () => {
           <CardContent className="space-y-6">
             <h3 className="text-lg font-medium">Graduation Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="degree"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Degree</FormLabel>
+                    <FormControl>
+                      <Input placeholder="B.Tech" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="branch"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Branch</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Mining Engineering" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="yearOfGraduation"
@@ -188,6 +259,65 @@ export const AlumniDetailsForm = () => {
                     <FormDescription>
                       This is the year you graduated from IIT Dhanbad
                     </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-6">
+            <h3 className="text-lg font-medium">Professional Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="pan"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PAN</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your PAN number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="company"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Company</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your company" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="designation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Designation</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your designation" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your location" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
