@@ -1,9 +1,9 @@
-import { AlumniDetails } from '@/features/alumni/components/details';
+import { AlumniPublicDetails } from '@/features/alumni/components/details';
 
 export const AlumniHome = () => {
   return (
-    <div>
-      <AlumniDetails alumni="2871799343322025" />
+    <div className="p-6">
+      <AlumniPublicDetails alumni="2871799343322025" />
     </div>
   );
 };

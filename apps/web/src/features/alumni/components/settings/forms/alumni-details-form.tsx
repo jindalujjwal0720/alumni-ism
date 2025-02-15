@@ -21,6 +21,8 @@ import {
 import { useEffect } from 'react';
 import { TriangleAlert } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { useGetMeQuery } from '@/features/auth/api/auth';
 
 const accountFormSchema = z.object({
   name: z.string().min(3, {
@@ -49,6 +51,7 @@ const accountFormSchema = z.object({
 type AlumniDetailsFormValues = z.infer<typeof accountFormSchema>;
 
 export const AlumniDetailsForm = () => {
+  const { data: { user } = {} } = useGetMeQuery();
   const { data: { alumni } = {} } = useGetMyAlumniDataQuery(undefined);
   const defaultValues: AlumniDetailsFormValues = {
     name: alumni?.name || '',
@@ -135,6 +138,17 @@ export const AlumniDetailsForm = () => {
                   </FormItem>
                 )}
               />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="space-y-6">
+            <h3 className="text-lg font-medium">Contact Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <Label>Email</Label>
+                <Input value={user?.email} disabled />
+              </div>
               <FormField
                 control={form.control}
                 name="phone"

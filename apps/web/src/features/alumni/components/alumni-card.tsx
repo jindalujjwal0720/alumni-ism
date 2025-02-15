@@ -23,7 +23,7 @@ export const AlumniCard = ({ name, ucn, expiry }: AlumniCardProps) => {
   return (
     <div className="relative w-full max-w-[500px] transition-all duration-200 ease-out">
       {/* Card Front */}
-      <div className="flex flex-col justify-between p-6 sm:p-8 w-full aspect-video rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl overflow-hidden transition-all duration-200 ease-out">
+      <div className="flex flex-col justify-between p-6 sm:p-8 w-full aspect-video rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-md md:shadow-2xl overflow-hidden transition-all duration-200 ease-out">
         {/* Matte Finish Effect */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.1),rgba(255,255,255,0))]" />
 

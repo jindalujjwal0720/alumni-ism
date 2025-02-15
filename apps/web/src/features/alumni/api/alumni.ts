@@ -2,6 +2,7 @@ import { api } from '@/stores/api';
 import { IAlumni } from '@/types/models/alumni';
 import { IPayment } from '@/types/models/payment';
 import { IPledge } from '@/types/models/pledge';
+import { IUser } from '@/types/models/user';
 
 const alumniApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -60,7 +61,10 @@ const alumniApi = api.injectEndpoints({
 
     readAlumniPublicData: builder.query<
       {
-        alumni: IAlumni;
+        alumni: IAlumni & {
+          email: IUser['email'];
+          imageUrl: IUser['imageUrl'];
+        };
       },
       string
     >({

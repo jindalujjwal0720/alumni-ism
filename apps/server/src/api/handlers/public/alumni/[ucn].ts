@@ -22,12 +22,15 @@ const readAlumniPublicData =
           'Alumni not found',
         );
       }
-      const user = await userModel.findById(alumni.account).select('imageUrl');
+      const user = await userModel
+        .findById(alumni.account)
+        .select('imageUrl email');
 
       res.status(200).json({
         alumni: {
           ...alumni.toObject(),
           account: undefined,
+          email: user?.email,
           imageUrl: user?.imageUrl,
         },
       });
