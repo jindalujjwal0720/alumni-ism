@@ -2,7 +2,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/utils/tw';
 import { FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { AlumniPremiumCard } from '../alumni-card';
+import { AlumniPremiumCardWrapper } from '../alumni-card';
 
 export const AlumniHeroSection = () => {
   return (
@@ -55,7 +55,7 @@ export const AlumniHeroSection = () => {
             </div>
           </div>
           <div className="relative perspective-2xl">
-            <AlumniPremiumCard />
+            <AlumniPremiumCardWrapper />
           </div>
         </div>
       </div>

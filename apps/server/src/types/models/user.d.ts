@@ -34,23 +34,6 @@ export type IRecoveryDetails = {
   backupCodesUsedCount?: number;
 };
 
-export interface IStudentData {
-  /** Unique Card Number */
-  ucn: string;
-  verificationDoc?: string;
-}
-
-export interface IPartnerData {
-  /** Partner's organization name */
-  name: string;
-  /** Partner's organization logo */
-  logo: string;
-  /** Partner's organization website */
-  supportUrl: string;
-  /** Partner's organization description */
-  about: string;
-}
-
 export interface IUser {
   _id: string;
   // Base properties, required for creating a new user
@@ -58,10 +41,6 @@ export interface IUser {
   name: string;
   email: string;
   imageUrl?: string;
-  // For student and partner
-  studentData?: IStudentData;
-  studentDataVerified: boolean;
-  partnerData?: IPartnerData;
 
   // For updating user profile
   // For use cases where user can update their profile but need to be approved by admin

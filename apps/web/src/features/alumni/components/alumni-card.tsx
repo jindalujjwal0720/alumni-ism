@@ -1,7 +1,87 @@
 import { useState } from 'react';
 import { FiWifi } from 'react-icons/fi';
 
-export const AlumniPremiumCard = () => {
+interface AlumniCardProps {
+  name: string;
+  ucn: string;
+  expiry: Date | string;
+}
+
+const formatExpiry = (expiry: Date | string) => {
+  let expiryDate: Date;
+  try {
+    expiryDate = new Date(expiry);
+  } catch {
+    return '••/••';
+  }
+  const month = expiryDate.getMonth() + 1;
+  const year = expiryDate.getFullYear().toString().slice(-2);
+  return `${month.toString().padStart(2, '0')}/${year}`;
+};
+
+export const AlumniCard = ({ name, ucn, expiry }: AlumniCardProps) => {
+  return (
+    <div className="relative w-full max-w-[500px] transition-all duration-200 ease-out">
+      {/* Card Front */}
+      <div className="flex flex-col justify-between p-6 sm:p-8 w-full aspect-video rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl overflow-hidden transition-all duration-200 ease-out">
+        {/* Matte Finish Effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.1),rgba(255,255,255,0))]" />
+
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            {/* EMV Chip */}
+            <div className="w-9 h-7 sm:w-12 sm:h-10 bg-gradient-to-br from-yellow-500/80 to-yellow-600/80 rounded-md overflow-hidden">
+              <div className="w-full h-full bg-[linear-gradient(90deg,transparent_50%,rgba(255,255,255,0.15)_50%)] bg-stripes-sm" />
+            </div>
+
+            {/* Contactless Symbol */}
+            <div className="text-muted-foreground">
+              <FiWifi className="size-6 sm:size-8 transform rotate-90" />
+            </div>
+          </div>
+
+          {/* Holographic Strip */}
+          <div className="space-x-2">
+            <img
+              src="/centenary/logo.png"
+              alt="centenary"
+              className="size-11 sm:size-14"
+            />
+          </div>
+        </div>
+
+        {/* Card Details */}
+        <div className="flex flex-col gap-2 sm:gap-4">
+          <p className="font-mono sm:text-lg text-white/90 tracking-wider">
+            {ucn.slice(0, 4)} {ucn.slice(4, 8)} {ucn.slice(8, 12)}{' '}
+            {ucn.slice(12, 16)}
+          </p>
+          <div className="space-y-1">
+            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider">
+              Card Holder
+            </p>
+            <p className="text-sm sm:text-base font-medium text-white tracking-wider uppercase">
+              {name}
+            </p>
+          </div>
+          <div className="text-sm sm:text-base flex justify-between items-end">
+            <div className="text-white/90 font-medium tracking-widest">
+              IIT DHANBAD
+            </div>
+            <div className="text-muted-foreground text-sm">
+              VALID THRU
+              <span className="ml-2 font-mono text-primary-foreground">
+                {formatExpiry(expiry)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const AlumniPremiumCardWrapper = () => {
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [glarePosition, setGlarePosition] = useState({ x: 0, y: 0 });
 
@@ -29,7 +109,7 @@ export const AlumniPremiumCard = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[400px] p-8">
+    <div className="flex items-center justify-center min-h-[400px] md:p-8">
       {/* Perspective container */}
       <div
         className="relative w-full max-w-[500px] transition-all duration-200 ease-out"
@@ -42,57 +122,17 @@ export const AlumniPremiumCard = () => {
       >
         {/* Card container */}
         <div
-          className="flex flex-col justify-between p-8 w-full aspect-video rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl overflow-hidden transition-all duration-200 ease-out"
+          className="flex flex-col justify-between w-full aspect-video rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl overflow-hidden transition-all duration-200 ease-out"
           style={{
             transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
             transformStyle: 'preserve-3d',
           }}
         >
-          {/* Matte Finish Effect */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.1),rgba(255,255,255,0))]" />
-
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              {/* EMV Chip */}
-              <div className="w-12 h-10 bg-gradient-to-br from-yellow-500/80 to-yellow-600/80 rounded-md overflow-hidden">
-                <div className="w-full h-full bg-[linear-gradient(90deg,transparent_50%,rgba(255,255,255,0.15)_50%)] bg-stripes-sm" />
-              </div>
-
-              {/* Contactless Symbol */}
-              <div className="left-24 text-white/60">
-                <FiWifi className="w-8 h-8 transform rotate-90" />
-              </div>
-            </div>
-
-            {/* Holographic Strip */}
-            <div className="w-12 h-12 bg-gradient-to-r from-indigo-400/30 via-blue-400/30 to-purple-400/30 rounded-lg backdrop-blur-sm border border-white/10" />
-          </div>
-
-          {/* Card Details */}
-          <div className="flex flex-col gap-4">
-            <p className="font-mono text-lg text-white/90 tracking-wider">
-              •••• •••• •••• 2025
-            </p>
-            <div className="space-y-1">
-              <p className="text-sm text-white/60 uppercase tracking-wider">
-                Card Holder
-              </p>
-              <p className="font-medium text-white tracking-wide">
-                UJJWAL JINDAL
-              </p>
-            </div>
-            <div className="flex justify-between items-end">
-              <div className="text-white/90 font-semibold tracking-widest">
-                IIT DHANBAD
-              </div>
-              <div className="text-white/60 text-sm">
-                VALID THRU
-                <span className="ml-2 font-mono">LIFETIME</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Logo and Validity */}
+          <AlumniCard
+            name="Ujjwal Jindal"
+            ucn="••••••••••••2025"
+            expiry={new Date(2025, 11)}
+          />
 
           {/* Decorative Pattern */}
           <div className="absolute inset-0">

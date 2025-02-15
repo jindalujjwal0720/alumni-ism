@@ -1,5 +1,10 @@
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import { FiArrowRight, FiCheck } from 'react-icons/fi';
+import { PaymentDialog } from '../settings/payment-dialog';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '@/features/auth/stores/auth';
 
 interface Pricing {
   title: string;
@@ -41,7 +46,16 @@ const pricings: Pricing[] = [
   },
 ];
 
-const AlumniPricingCard = ({ pricing }: { pricing: Pricing }) => {
+const AlumniPricingCard = ({
+  pricing,
+  onSelect,
+}: {
+  pricing: Pricing;
+  onSelect?: () => void;
+}) => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const navigate = useNavigate();
+
   return (
     <div className="w-full max-w-96 bg-white p-8 rounded-2xl shadow-lg border-2 border-indigo-100 relative overflow-hidden">
       {pricing.tag && (
@@ -70,7 +84,16 @@ const AlumniPricingCard = ({ pricing }: { pricing: Pricing }) => {
           </li>
         ))}
       </ul>
+
       <Button
+        onClick={
+          isAuthenticated
+            ? onSelect
+            : () => {
+                // Redirect to login page
+                navigate('/auth/login');
+              }
+        }
         variant={pricing.tag ? 'default' : 'outline'}
         className="w-full group"
       >
@@ -82,8 +105,22 @@ const AlumniPricingCard = ({ pricing }: { pricing: Pricing }) => {
 };
 
 export const AlumniPricingSection = () => {
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+
+  const navigate = useNavigate();
+
   return (
     <section id="pricing" className="py-20 bg-white">
+      <PaymentDialog
+        open={isPaymentDialogOpen}
+        onOpenChange={setIsPaymentDialogOpen}
+        onSuccess={() => {
+          setIsPaymentDialogOpen(false);
+
+          // Redirect to payments page
+          navigate('/settings/payments');
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-slate-900 mb-4 font-display">
@@ -96,7 +133,11 @@ export const AlumniPricingSection = () => {
         <div className="w-full">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 justify-center gap-6 w-full mx-auto">
             {pricings.map((p, i) => (
-              <AlumniPricingCard key={i} pricing={p} />
+              <AlumniPricingCard
+                key={i}
+                pricing={p}
+                onSelect={() => setIsPaymentDialogOpen(true)}
+              />
             ))}
           </div>
         </div>

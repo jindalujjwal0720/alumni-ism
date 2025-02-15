@@ -12,7 +12,7 @@ const offerSchema = new mongoose.Schema<IOffer>({
   },
   partner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Partner',
     required: true,
   },
 });

@@ -64,6 +64,7 @@ const expressLoader = async ({ app }: { app: express.Application }) => {
 
   const router = await Router({
     dir: path.join(__dirname, '../api/handlers'),
+    logger: false,
   });
   app.use('/api/v1', router);
 

@@ -4,6 +4,25 @@ import { AppError, CommonErrors } from '../../../../utils/errors';
 import { Model } from 'mongoose';
 import Offer from '../../../../models/offer';
 
+const readOffer =
+  (offerModel: Model<IOffer>): RequestHandler =>
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const offer = await offerModel.findById(id);
+      if (!offer) {
+        throw new AppError(
+          CommonErrors.NotFound.name,
+          CommonErrors.NotFound.statusCode,
+          'Offer not found',
+        );
+      }
+      res.json({ offer });
+    } catch (err) {
+      next(err);
+    }
+  };
+
 const updateOffer =
   (offerModel: Model<IOffer>): RequestHandler =>
   async (req, res, next) => {
@@ -24,6 +43,7 @@ const updateOffer =
       offer.tags = tags;
 
       await offer.save();
+      res.status(204).send();
     } catch (err) {
       next(err);
     }
@@ -41,5 +61,6 @@ const deleteOffer =
     }
   };
 
+export const get = readOffer(Offer);
 export const put = updateOffer(Offer);
 export const del = deleteOffer(Offer);

@@ -8,7 +8,7 @@ const getOffers =
   async (req, res, next) => {
     try {
       const { user } = req;
-      const offers = await offerModel.find({ user: user.id });
+      const offers = await offerModel.find({ partner: user.id });
       res.json({ offers });
     } catch (err) {
       next(err);

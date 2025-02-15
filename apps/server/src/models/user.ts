@@ -4,8 +4,6 @@ import {
   IRefreshToken,
   ITwoFactorAuth,
   IRecoveryDetails,
-  IPartnerData,
-  IStudentData,
 } from '../types/models/user.d';
 
 const ALL_ROLES = ['student', 'admin', 'partner'] as const;
@@ -76,24 +74,6 @@ const recoveryDetailsSchema = new mongoose.Schema<IRecoveryDetails>(
   },
 );
 
-const studentDataSchema = new mongoose.Schema<IStudentData>(
-  {
-    ucn: { type: String, required: true },
-    verificationDoc: { type: String },
-  },
-  { _id: false },
-);
-
-const partnerDataSchema = new mongoose.Schema<IPartnerData>(
-  {
-    name: { type: String, required: true },
-    logo: { type: String, required: true },
-    supportUrl: { type: String, required: true },
-    about: { type: String, required: true },
-  },
-  { _id: false },
-);
-
 const userSchema = new mongoose.Schema<IUser>(
   {
     name: { type: String, required: true, minlength: 3, maxlength: 50 },
@@ -111,10 +91,6 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     imageUrl: { type: String },
     passwordHash: { type: String, required: true, select: false },
-
-    studentData: { type: studentDataSchema, select: false },
-    studentDataVerified: { type: Boolean, default: false },
-    partnerData: { type: partnerDataSchema, select: false },
 
     updates: { type: updatesSchema, select: false },
     reason: { type: String, maxlength: 255, select: false },

@@ -27,7 +27,6 @@ const checkCardValidity =
 
       res.status(200).json({
         valid: true,
-        data: user.studentData,
       });
     } catch (err) {
       next(err);

@@ -1,3 +1,4 @@
+import { useGetMyAlumniDataQuery } from '@/features/alumni/api/alumni';
 import { AlumniFooter } from '@/features/alumni/components/footer';
 import { AlumniDonationsSection } from '@/features/alumni/components/landing/donation';
 import { AlumniFAQSection } from '@/features/alumni/components/landing/faq';
@@ -8,11 +9,27 @@ import { AlumniPricingSection } from '@/features/alumni/components/landing/prici
 import { AlumniStatsSection } from '@/features/alumni/components/landing/stats';
 import { AlumniTestimonialsSection } from '@/features/alumni/components/landing/testimonials';
 import { AlumniValuePropositionSection } from '@/features/alumni/components/landing/value-proposition';
+import { selectIsAuthenticated } from '@/features/auth/stores/auth';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const AlumniCardLanding = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { data: { alumni } = {} } = useGetMyAlumniDataQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/10">
       <AlumniNavigation />
+      {isAuthenticated && (!alumni || !alumni.isVerified) && (
+        <div className="bg-yellow-600 text-sm text-primary-foreground text-center p-3">
+          Your account is not verified. Please{' '}
+          <Link to="/settings/alumni" className="underline">
+            complete your profile and request verification
+          </Link>
+        </div>
+      )}
       <AlumniHeroSection />
       <AlumniStatsSection />
       <div id="benefits">

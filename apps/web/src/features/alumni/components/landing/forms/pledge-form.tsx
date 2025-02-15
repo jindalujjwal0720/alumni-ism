@@ -8,14 +8,19 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { selectIsAuthenticated } from '@/features/auth/stores/auth';
 import { amountToWords } from '@/utils/numbers';
 import { cn } from '@/utils/tw';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { capitalize } from 'lodash';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { z } from 'zod';
+import { PledgeDialog } from '../../pledges-and-donations/pledge-dialog';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CONTACT_EMAIL = 'jindalujjwal0720@gmail.com';
+const CONTACT_EMAIL = 'iraa@iitism.ac.in';
 
 const alumniPledgeFormSchema = z.object({
   amount: z
@@ -42,8 +47,15 @@ export const AlumniPledgeForm = () => {
       contactNumber: '',
     },
   });
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [isPledgeDialogOpen, setIsPledgeDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (values: AlumniPledgeFormValues) => {
+    if (isAuthenticated) {
+      return setIsPledgeDialogOpen(true);
+    }
+
     const emailBody = `Hi Alumni Office,
 
 I would like to pledge a donation to support the facilities and services provided to students and alumni at IIT Dhanbad. Please find my details below:
@@ -66,6 +78,17 @@ ${values.fullName}
 
   return (
     <Form {...form}>
+      <PledgeDialog
+        open={isPledgeDialogOpen}
+        onOpenChange={setIsPledgeDialogOpen}
+        onSuccess={() => {
+          setIsPledgeDialogOpen(false);
+          form.reset();
+
+          // navigate to the pledges page
+          navigate('/settings/donations');
+        }}
+      />
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className="max-w-md mx-auto"
@@ -151,9 +174,21 @@ ${values.fullName}
             )}
           />
 
-          <Button type="submit" className="primary-button w-full">
-            Pledge Donation
-          </Button>
+          <div>
+            <Button type="submit" className="primary-button w-full">
+              Take a Pledge
+            </Button>
+            <Button
+              type="button"
+              variant="link"
+              className="w-full mt-2 bg-transparent text-muted-foreground hover:text-primary-foreground hover:bg-transparent"
+              onClick={() => {
+                navigate('/settings/donations');
+              }}
+            >
+              Donate Now
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

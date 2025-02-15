@@ -9,6 +9,12 @@ import SetupAuthenticator from './security/setup-authenticator';
 import Navbar from '@/features/navbar/components/navbar';
 import UpdateRecoveryEmail from './security/update-recovery-email';
 import RegenerateBackupCodes from './security/regenerate-backup-codes';
+import { useSelector } from 'react-redux';
+import { selectRole } from '@/features/auth/stores/auth';
+import { AlumniDetails } from '@/features/alumni/components/settings/alumni-details';
+import ProtectedRoute from '@/features/auth/components/protected-route';
+import { useMemo } from 'react';
+import { PledgesAndDonationsPage } from '../alumni/pledges-and-donations';
 
 const sidebarNavItems = [
   { href: '/settings', title: 'Account' },
@@ -17,24 +23,46 @@ const sidebarNavItems = [
 ];
 
 const Settings = () => {
+  const role = useSelector(selectRole);
+  const items = useMemo(() => {
+    if (role === 'student') {
+      return [
+        { href: '/settings/details', title: 'Alumni Details' },
+        { href: '/settings/donations', title: 'Pledge & Donations' },
+        { href: '/settings/payments', title: 'Payments' },
+        ...sidebarNavItems,
+      ];
+    }
+    return sidebarNavItems;
+  }, [role]);
+
   return (
     <div className="pt-navbar">
       <Navbar variant="fixed" />
       <div className="space-y-6 pt-5 px-6 pb-12 md:px-10 md:pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-          <p className="text-muted-foreground">
-            Manage your account settings and set preferences.
-          </p>
         </div>
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <aside className="lg:w-1/5">
-            <SidebarNav items={sidebarNavItems} />
+            <SidebarNav items={items} />
           </aside>
-          <div className="flex-1 lg:max-w-3xl">
+          <div className="flex-1 w-full">
             <Routes>
               <Route path="" element={<Account />} />
+              <Route
+                path="/details"
+                element={<ProtectedRoute roles={['student']} />}
+              >
+                <Route path="" element={<AlumniDetails />} />
+              </Route>
+              <Route
+                path="/donations"
+                element={<ProtectedRoute roles={['student']} />}
+              >
+                <Route path="" element={<PledgesAndDonationsPage />} />
+              </Route>
               <Route path="/security">
                 <Route path="" element={<Security />} />
                 <Route path="2fa" element={<SetupTwoFactorAuthentication />} />

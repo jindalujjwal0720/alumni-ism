@@ -1,9 +1,19 @@
 import { api } from '@/stores/api';
+import { IUser } from '@/types/models/user';
 
 const partnersApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    listPartners: builder.query({
+    listPartners: builder.query<
+      {
+        partners: IUser[];
+      },
+      undefined
+    >({
       query: () => '/v1/admins/partners',
+      providesTags: ['Partner'],
+    }),
+    readPartner: builder.query({
+      query: (id) => `/v1/admins/partners/${id}`,
       providesTags: ['Partner'],
     }),
     createPartner: builder.mutation({
@@ -34,6 +44,7 @@ const partnersApi = api.injectEndpoints({
 
 export const {
   useListPartnersQuery,
+  useReadPartnerQuery,
   useCreatePartnerMutation,
   useUpdatePartnerMutation,
   useDeletePartnerMutation,

@@ -15,6 +15,7 @@ export const authorize =
           'You do not have permission to perform this action.',
         );
       }
+      next();
     } catch (err) {
       next(err);
     }

@@ -8,14 +8,20 @@ import Logo from '@/components/logo';
 import { useState } from 'react';
 
 interface NavbarProps {
-  variant: 'sticky' | 'fixed';
+  variant?: 'default' | 'sticky' | 'fixed';
   left?: React.ReactNode;
   center?: React.ReactNode;
   right?: React.ReactNode;
   drawer?: React.ReactNode;
 }
 
-const Navbar = ({ variant, left, center, right, drawer }: NavbarProps) => {
+const Navbar = ({
+  variant = 'default',
+  left,
+  center,
+  right,
+  drawer,
+}: NavbarProps) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -23,8 +29,9 @@ const Navbar = ({ variant, left, center, right, drawer }: NavbarProps) => {
     <>
       <nav
         className={cn(
-          'top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-slate-100',
-          variant === 'sticky' ? 'sticky' : 'fixed',
+          'top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-slate-100 w-full',
+          variant === 'sticky' && 'sticky',
+          variant === 'fixed' && 'fixed',
         )}
       >
         <div className="container px-4 sm:px-6 lg:px-8">

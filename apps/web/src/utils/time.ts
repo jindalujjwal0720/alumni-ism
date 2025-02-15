@@ -11,3 +11,14 @@ export const convertDurationToReadable = (
   if (minutes > 0) return `${minutes}:${seconds % 60} minutes`;
   return `${seconds} seconds`;
 };
+
+export const convertDateTimeToReadable = (dateTime: string | Date): string => {
+  const date = new Date(dateTime);
+  return Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(date);
+};

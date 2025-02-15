@@ -8,7 +8,7 @@ import BenefitsPage from './alumni/benefits';
 const Pages = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/*" element={<Home />} />
       <Route path="/benefits" element={<BenefitsPage />} />
       <Route path="/settings/*" element={<ProtectedRoute />}>
         <Route path="*" element={<Settings />} />

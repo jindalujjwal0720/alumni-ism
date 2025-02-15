@@ -96,4 +96,8 @@ export default {
   ipToGeo: {
     endpoint: process.env.IP_TO_GEO_ENDPOINT,
   },
+
+  alumniCard: {
+    specialOccassionDigits: process.env.ALUMNI_CARD_SPECIAL_OCCASSION_DIGITS,
+  },
 } as const;

@@ -1,9 +1,19 @@
 import { api } from '@/stores/api';
+import { IOffer } from '@/types/models/offer';
 
 const offersApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    listOffers: builder.query({
+    listOffers: builder.query<
+      {
+        offers: IOffer[];
+      },
+      undefined
+    >({
       query: () => '/v1/partners/offers',
+      providesTags: ['Offer'],
+    }),
+    readOffer: builder.query({
+      query: (id) => `/v1/partners/offers/${id}`,
       providesTags: ['Offer'],
     }),
     createOffer: builder.mutation({
@@ -34,6 +44,7 @@ const offersApi = api.injectEndpoints({
 
 export const {
   useListOffersQuery,
+  useReadOfferQuery,
   useCreateOfferMutation,
   useUpdateOfferMutation,
   useDeleteOfferMutation,
