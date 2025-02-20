@@ -7,7 +7,7 @@ import {
 import { Bell, Home, IndianRupee, Search, User } from 'lucide-react';
 import { Route, Routes } from 'react-router-dom';
 import { HomeScreen } from './home';
-import { ProfileScreen } from './profile';
+import { ProfileScreenLayout } from './profile';
 import { NotificationsScreen } from './notifications';
 import { DonationsScreen } from './donations';
 import { SearchScreen } from './search';
@@ -23,7 +23,7 @@ export const AppScreens = () => {
           <Route path="/search" element={<SearchScreen />} />
           <Route path="/donations" element={<DonationsScreen />} />
           <Route path="/notifications" element={<NotificationsScreen />} />
-          <Route path="/profile/*" element={<ProfileScreen />}>
+          <Route path="/profile/*" element={<ProfileScreenLayout />}>
             <Route path="personal" element={<PersonalDetailsScreen />} />
           </Route>
 
