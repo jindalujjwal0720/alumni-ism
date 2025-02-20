@@ -19,10 +19,12 @@ const NavigationContext = React.createContext<NavigationContextType | null>(
 );
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useNavigation = () => {
+export const useStandaloneNavigation = () => {
   const context = React.useContext(NavigationContext);
   if (!context) {
-    throw new Error('useNavigation must be used within a NavigationProvider');
+    throw new Error(
+      'useStandaloneNavigation must be used within a NavigationProvider',
+    );
   }
   return context;
 };

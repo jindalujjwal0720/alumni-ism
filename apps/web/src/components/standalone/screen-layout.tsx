@@ -3,24 +3,44 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { Show } from '../show';
-import { useNavigation } from './navigation';
+import { useStandaloneNavigation } from './navigation';
 import { useLocation } from 'react-router-dom';
+
+const ScreenLayoutContext = React.createContext<{
+  title?: string;
+  setTitle: (title: string) => void;
+} | null>(null);
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useScreenLayout = () => {
+  const context = React.useContext(ScreenLayoutContext);
+  if (!context) {
+    throw new Error('useScreenLayout must be used within a ScreenLayout');
+  }
+  return context;
+};
 
 const ScreenLayout = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {}
 >(({ className, children, ...props }, ref) => {
+  const [title, setTitle] = React.useState<string | undefined>(undefined);
+
+  const contextValue = React.useMemo(() => ({ title, setTitle }), [title]);
+
   return (
-    <div
-      ref={ref}
-      className={cn(
-        'h-dvh w-dvw flex flex-col items-center justify-center bg-background overflow-hidden',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </div>
+    <ScreenLayoutContext.Provider value={contextValue}>
+      <div
+        ref={ref}
+        className={cn(
+          'h-dvh w-dvw flex flex-col items-center justify-center bg-background overflow-hidden',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    </ScreenLayoutContext.Provider>
   );
 });
 ScreenLayout.displayName = 'ScreenLayout';
@@ -30,7 +50,7 @@ const ScreenTitleBar = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & {
     back?: boolean;
     title?: string;
-    variant?: 'standard' | 'large';
+    size?: 'standard' | 'large';
     actions?: React.ReactNode;
   }
 >(
@@ -38,7 +58,7 @@ const ScreenTitleBar = React.forwardRef<
     {
       className,
       title,
-      variant = 'standard',
+      size = 'standard',
       back = true,
       actions,
       children,
@@ -46,43 +66,53 @@ const ScreenTitleBar = React.forwardRef<
     },
     ref,
   ) => {
-    const { goBackTitle, canGoBack, goBack } = useNavigation();
+    const { goBackTitle, canGoBack, goBack } = useStandaloneNavigation();
+    const { setTitle } = useScreenLayout();
+
+    React.useEffect(() => {
+      if (title !== undefined) {
+        setTitle(title);
+      }
+    }, [title, setTitle]);
 
     return (
       <div
         ref={ref}
         className={cn(
-          'w-full p-4 overflow-hidden flex flex-col',
-          variant === 'standard' && 'min-h-14 shadow-sm',
-          variant === 'large' && 'min-h-20',
+          'w-full p-4 overflow-hidden flex flex-col relative bg-card',
+          size === 'standard' && 'min-h-14 shadow-sm',
+          size === 'large' && 'min-h-20',
           className,
         )}
         {...props}
       >
-        <div className="flex-1 flex items-center justify-between">
-          <div>
+        <div className="flex flex-col gap-2">
+          <div className="flex-1 flex items-center justify-between">
             <Show when={back && canGoBack}>
               <Button
                 variant="link"
-                className="px-0 hover:no-underline hover:bg-muted/10"
+                className="p-0 h-max hover:no-underline hover:bg-muted/10 text-base"
                 onClick={() => goBack('/')}
               >
                 <ChevronLeft size={24} />
                 <span>{goBackTitle || 'Back'}</span>
               </Button>
             </Show>
+            <Show when={title !== undefined && size === 'standard'}>
+              <h1
+                className={cn(
+                  'flex-1 text-center text-lg font-medium',
+                  'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+                )}
+              >
+                {title}
+              </h1>
+            </Show>
+            <div>{actions}</div>
           </div>
-          <Show when={title !== undefined}>
-            <h1
-              className={cn(
-                'flex-1 text-center text-lg font-medium',
-                variant === 'large' && 'text-3xl font-semibold text-start',
-              )}
-            >
-              {title}
-            </h1>
+          <Show when={title !== undefined && size === 'large'}>
+            <h1 className="text-3xl font-semibold text-start">{title}</h1>
           </Show>
-          <div>{actions}</div>
         </div>
         <div className="w-full overflow-x-hidden">{children}</div>
       </div>
@@ -114,7 +144,7 @@ const ScreenBottomNav = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'w-full flex items-center justify-between bg-background h-16 border-t border-border z-10',
+        'w-full flex items-center justify-between bg-card h-16 border-t border-border z-10',
         className,
       )}
       {...props}
@@ -134,7 +164,7 @@ const ScreenBottomNavItem = React.forwardRef<
   }
 >(({ className, title, path, icon, ...props }, ref) => {
   const location = useLocation();
-  const { navigate } = useNavigation();
+  const { navigate } = useStandaloneNavigation();
 
   const handleNavigate = () => {
     if (location.pathname === path) return;
