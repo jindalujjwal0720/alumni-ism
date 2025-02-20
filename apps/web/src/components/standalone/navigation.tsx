@@ -1,5 +1,4 @@
 import React, { PropsWithChildren, useCallback, useMemo } from 'react';
-import { flushSync } from 'react-dom';
 import {
   NavigateOptions,
   To,
@@ -9,8 +8,10 @@ import {
 
 interface NavigationContextType {
   canGoBack: boolean;
+  goBackTitle: string;
   goBack: (fallback: string) => void;
-  navigate: (to: To, props?: NavigateOptions) => void;
+
+  navigate: (to: To, from?: string, props?: NavigateOptions) => void;
 }
 
 const NavigationContext = React.createContext<NavigationContextType | null>(
@@ -26,20 +27,11 @@ export const useNavigation = () => {
   return context;
 };
 
-const viewTransition = (changeDOMCallback: () => void) => {
-  if (!document.startViewTransition) {
-    changeDOMCallback();
-    return;
-  }
-  document.startViewTransition(() => {
-    flushSync(() => {
-      changeDOMCallback();
-    });
-  });
-};
-
 export const NavigationProvider = ({ children }: PropsWithChildren) => {
   const location = useLocation();
+  const goBackTitle = useMemo<string>(() => {
+    return location.state?._previous?.title || '';
+  }, [location.state?._previous?.title]);
   const canGoBack = useMemo(() => {
     return location.state?._previous;
   }, [location.state]);
@@ -57,25 +49,29 @@ export const NavigationProvider = ({ children }: PropsWithChildren) => {
   );
 
   const navigate = useCallback(
-    (to: To, props?: NavigateOptions) => {
-      viewTransition(() =>
-        reactNavigate(to, {
-          ...props,
-          state: {
-            _previous: {
-              pathname: location.pathname,
-            },
-            ...props?.state,
+    (to: To, from?: string, props?: NavigateOptions) => {
+      reactNavigate(to, {
+        ...props,
+        state: {
+          _previous: {
+            title: from,
+            pathname: location.pathname,
           },
-        }),
-      );
+          ...props?.state,
+        },
+      });
     },
     [location.pathname, reactNavigate],
   );
 
   const value = useMemo(
-    () => ({ canGoBack, goBack, navigate }),
-    [canGoBack, goBack, navigate],
+    () => ({
+      canGoBack,
+      goBackTitle,
+      goBack,
+      navigate,
+    }),
+    [canGoBack, goBack, goBackTitle, navigate],
   );
 
   return (

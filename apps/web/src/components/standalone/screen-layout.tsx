@@ -14,7 +14,7 @@ const ScreenLayout = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'h-dvh w-screen flex flex-col items-center justify-center bg-background overflow-hidden',
+        'h-dvh w-dvw flex flex-col items-center justify-center bg-background overflow-hidden',
         className,
       )}
       {...props}
@@ -31,21 +31,30 @@ const ScreenTitleBar = React.forwardRef<
     back?: boolean;
     title?: string;
     variant?: 'standard' | 'large';
+    actions?: React.ReactNode;
   }
 >(
   (
-    { className, title, variant = 'standard', back = true, children, ...props },
+    {
+      className,
+      title,
+      variant = 'standard',
+      back = true,
+      actions,
+      children,
+      ...props
+    },
     ref,
   ) => {
-    const { canGoBack, goBack } = useNavigation();
+    const { goBackTitle, canGoBack, goBack } = useNavigation();
 
     return (
       <div
         ref={ref}
         className={cn(
           'w-full p-4 overflow-hidden flex flex-col',
-          variant === 'standard' && 'h-14 shadow-sm',
-          variant === 'large' && 'h-24',
+          variant === 'standard' && 'min-h-14 shadow-sm',
+          variant === 'large' && 'min-h-20',
           className,
         )}
         {...props}
@@ -59,18 +68,23 @@ const ScreenTitleBar = React.forwardRef<
                 onClick={() => goBack('/')}
               >
                 <ChevronLeft size={24} />
-                <span>Back</span>
+                <span>{goBackTitle || 'Back'}</span>
               </Button>
             </Show>
           </div>
-          <Show when={variant === 'standard' && title !== undefined}>
-            <h1 className="text-center text-lg font-medium">{title}</h1>
+          <Show when={title !== undefined}>
+            <h1
+              className={cn(
+                'flex-1 text-center text-lg font-medium',
+                variant === 'large' && 'text-3xl font-semibold text-start',
+              )}
+            >
+              {title}
+            </h1>
           </Show>
-          <div>{children}</div>
+          <div>{actions}</div>
         </div>
-        <Show when={variant === 'large' && title !== undefined}>
-          <h1 className="text-3xl font-semibold">{title}</h1>
-        </Show>
+        <div className="w-full overflow-x-hidden">{children}</div>
       </div>
     );
   },
@@ -87,7 +101,7 @@ const ScreenContent = React.forwardRef<
       className={cn('flex-1 w-full overflow-hidden', className)}
       {...props}
     >
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="h-full overflow-y-auto">{children}</div>
     </div>
   );
 });
@@ -100,7 +114,7 @@ const ScreenBottomNav = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'w-full flex items-center justify-between bg-background h-14 border-t border-border z-10',
+        'w-full flex items-center justify-between bg-background h-16 border-t border-border z-10',
         className,
       )}
       {...props}
@@ -125,7 +139,7 @@ const ScreenBottomNavItem = React.forwardRef<
   const handleNavigate = () => {
     if (location.pathname === path) return;
 
-    navigate(path, {
+    navigate(path, '', {
       replace: true,
       state: {
         // to disable the back button when changing tabs
@@ -138,14 +152,16 @@ const ScreenBottomNavItem = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'flex-1 flex flex-col items-center justify-center',
+        'flex-1 flex flex-col gap-1 items-center justify-center',
         location.pathname === path ? 'text-primary' : 'text-muted-foreground',
       )}
       onClick={handleNavigate}
       {...props}
     >
       {icon}
-      <span className="text-xs">{title}</span>
+      <Show when={title !== undefined}>
+        <span className="text-xs font-medium">{title}</span>
+      </Show>
     </div>
   );
 });

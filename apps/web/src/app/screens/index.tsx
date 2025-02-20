@@ -4,10 +4,12 @@ import {
   ScreenBottomNavItem,
   ScreenLayout,
 } from '@/components/standalone/screen-layout';
-import { Home, User } from 'lucide-react';
+import { Bell, Home, IndianRupee, User } from 'lucide-react';
 import { Route, Routes } from 'react-router-dom';
 import HomeScreen from './home';
 import ProfileScreen from './profile';
+import { NotificationsPage } from './notifications';
+import { DonationsPage } from './donations';
 
 export const AppScreens = () => {
   return (
@@ -16,12 +18,24 @@ export const AppScreens = () => {
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/donations" element={<DonationsPage />} />
         </Routes>
         <ScreenBottomNav>
           <ScreenBottomNavItem
             title="Home"
             path="/"
             icon={<Home size={20} />}
+          />
+          <ScreenBottomNavItem
+            title="Donations"
+            path="/donations"
+            icon={<IndianRupee size={20} />}
+          />
+          <ScreenBottomNavItem
+            title="Notifications"
+            path="/notifications"
+            icon={<Bell size={20} />}
           />
           <ScreenBottomNavItem
             title="Profile"

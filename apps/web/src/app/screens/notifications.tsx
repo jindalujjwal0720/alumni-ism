@@ -3,13 +3,11 @@ import {
   ScreenTitleBar,
 } from '@/components/standalone/screen-layout';
 
-const ProfileScreen = () => {
+export const NotificationsPage = () => {
   return (
     <>
-      <ScreenTitleBar title="Profile" />
+      <ScreenTitleBar title="Notifications" />
       <ScreenContent></ScreenContent>
     </>
   );
 };
-
-export default ProfileScreen;

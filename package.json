@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:server": "cd apps/server && npm run dev"
+  }
+}
