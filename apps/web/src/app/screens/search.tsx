@@ -3,10 +3,10 @@ import {
   ScreenTitleBar,
 } from '@/components/standalone/screen-layout';
 
-export const NotificationsScreen = () => {
+export const SearchScreen = () => {
   return (
     <>
-      <ScreenTitleBar title="Notifications" />
+      <ScreenTitleBar title="Search" />
       <ScreenContent></ScreenContent>
     </>
   );

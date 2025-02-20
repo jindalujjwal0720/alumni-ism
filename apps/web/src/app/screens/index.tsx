@@ -4,12 +4,15 @@ import {
   ScreenBottomNavItem,
   ScreenLayout,
 } from '@/components/standalone/screen-layout';
-import { Bell, Home, IndianRupee, User } from 'lucide-react';
+import { Bell, Home, IndianRupee, Search, User } from 'lucide-react';
 import { Route, Routes } from 'react-router-dom';
-import HomeScreen from './home';
-import ProfileScreen from './profile';
-import { NotificationsPage } from './notifications';
-import { DonationsPage } from './donations';
+import { HomeScreen } from './home';
+import { ProfileScreen } from './profile';
+import { NotificationsScreen } from './notifications';
+import { DonationsScreen } from './donations';
+import { SearchScreen } from './search';
+import { ModalLayout } from '@/components/standalone/modal-layout';
+import { PersonalDetailsScreen } from './profile/personal';
 
 export const AppScreens = () => {
   return (
@@ -17,15 +20,25 @@ export const AppScreens = () => {
       <ScreenLayout>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
-          <Route path="/profile" element={<ProfileScreen />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
-          <Route path="/donations" element={<DonationsPage />} />
+          <Route path="/search" element={<SearchScreen />} />
+          <Route path="/donations" element={<DonationsScreen />} />
+          <Route path="/notifications" element={<NotificationsScreen />} />
+          <Route path="/profile/*" element={<ProfileScreen />}>
+            <Route path="personal" element={<PersonalDetailsScreen />} />
+          </Route>
+
+          <Route path="/modal/*" element={<ModalLayout />}></Route>
         </Routes>
         <ScreenBottomNav>
           <ScreenBottomNavItem
             title="Home"
             path="/"
             icon={<Home size={20} />}
+          />
+          <ScreenBottomNavItem
+            title="Search"
+            path="/search"
+            icon={<Search size={20} />}
           />
           <ScreenBottomNavItem
             title="Donations"

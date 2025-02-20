@@ -18,10 +18,10 @@ const TableView = React.forwardRef<
           {title}
         </h2>
       </Show>
-      <div className="border shadow-sm rounded-lg">
+      <div className="border shadow-sm rounded-xl">
         <table
           ref={ref}
-          className={cn('w-full h-max rounded-lg bg-card', className)}
+          className={cn('w-full h-max rounded-xl bg-card', className)}
           {...props}
         >
           <tbody className="divide-y-2">{children}</tbody>
@@ -89,7 +89,7 @@ const TableViewCell = React.forwardRef<
             </Show>
           </td>
           <td className="p-0 w-full">
-            <div className="py-3 flex items-center justify-between gap-4">
+            <div className={cn('py-3 flex items-center justify-between gap-4')}>
               <div className="w-full flex flex-col">
                 <span className="text-base">{title}</span>
                 <span className="text-sm text-muted-foreground w-full">
@@ -104,7 +104,10 @@ const TableViewCell = React.forwardRef<
               <Show when={children !== undefined}>
                 <ChevronDown
                   size={24}
-                  className="text-muted-foreground hover:text-foreground"
+                  className={cn(
+                    'text-muted-foreground hover:text-foreground transition-transform',
+                    isExpanded && 'transform rotate-180',
+                  )}
                 />
               </Show>
               <Show when={link !== undefined && !children}>

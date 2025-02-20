@@ -3,7 +3,7 @@ import {
   ScreenTitleBar,
 } from '@/components/standalone/screen-layout';
 
-export const DonationsPage = () => {
+export const DonationsScreen = () => {
   return (
     <>
       <ScreenTitleBar title="Donations" />

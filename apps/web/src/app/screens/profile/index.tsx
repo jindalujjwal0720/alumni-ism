@@ -1,22 +1,32 @@
 import {
   ScreenContent,
   ScreenTitleBar,
+  ScreenTopNav,
+  ScreenTopNavItem,
 } from '@/components/standalone/screen-layout';
 import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import { Switch } from '@/components/ui/switch';
 import { BriefcaseBusiness, GraduationCap, UserCircle } from 'lucide-react';
 
-const ProfileScreen = () => {
+export const ProfileScreen = () => {
   return (
     <>
-      <ScreenTitleBar title="Profile" />
+      <ScreenTitleBar title="Profile">
+        <ScreenTopNav>
+          <ScreenTopNavItem title="Personal" path="/profile/personal" />
+          <ScreenTopNavItem title="Academic" path="/profile/academic" />
+          <ScreenTopNavItem title="Professional" path="/profile/professional" />
+          <ScreenTopNavItem title="Preferences" path="/profile/preferences" />
+        </ScreenTopNav>
+      </ScreenTitleBar>
       <ScreenContent className="bg-background">
-        <div className="p-4 flex flex-col gap-6">
+        <div className="p-5 flex flex-col gap-6">
           <TableView title="Personal">
             <TableViewCell
               icon={<UserCircle />}
               title="Personal"
               description="Contact information, address, bio"
-              link="/profile"
+              link="/modal/profile"
             />
             <TableViewCell
               icon={<GraduationCap />}
@@ -44,8 +54,23 @@ const ProfileScreen = () => {
             />
           </TableView>
           <TableView title="Account">
-            <TableViewCell title="Security" link="/profile" />
-            <TableViewCell title="Notifications" link="/profile" />
+            <TableViewCell title="Security" />
+            <TableViewCell title="Notifications">
+              <div className="divide-y pl-4">
+                <div className="pl-2 p-3">
+                  <div className="flex items-center justify-between">
+                    <span>Push notifications</span>
+                    <Switch />
+                  </div>
+                </div>
+                <div className="pl-2 p-3">
+                  <div className="flex items-center justify-between">
+                    <span>Email notifications</span>
+                    <Switch />
+                  </div>
+                </div>
+              </div>
+            </TableViewCell>
             <TableViewCell title="Change password" link="/profile" />
             <TableViewCell
               description={
@@ -64,5 +89,3 @@ const ProfileScreen = () => {
     </>
   );
 };
-
-export default ProfileScreen;

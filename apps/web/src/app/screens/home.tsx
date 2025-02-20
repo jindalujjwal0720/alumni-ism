@@ -3,7 +3,7 @@ import {
   ScreenTitleBar,
 } from '@/components/standalone/screen-layout';
 
-const HomeScreen = () => {
+export const HomeScreen = () => {
   return (
     <>
       <ScreenTitleBar title="Home" size="large" />
@@ -14,5 +14,3 @@ const HomeScreen = () => {
     </>
   );
 };
-
-export default HomeScreen;

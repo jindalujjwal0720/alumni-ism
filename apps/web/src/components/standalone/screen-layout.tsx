@@ -20,6 +20,13 @@ export const useScreenLayout = () => {
   return context;
 };
 
+const isPathActive = (path: string, currentPath: string) => {
+  if (path === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(path);
+};
+
 const ScreenLayout = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {}
@@ -79,14 +86,19 @@ const ScreenTitleBar = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          'w-full p-4 overflow-hidden flex flex-col relative bg-card',
-          size === 'standard' && 'min-h-14 shadow-sm',
-          size === 'large' && 'min-h-20',
+          'w-full overflow-hidden flex flex-col bg-card shadow-sm',
+
           className,
         )}
         {...props}
       >
-        <div className="flex flex-col gap-2">
+        <div
+          className={cn(
+            'flex flex-col gap-2 relative p-4',
+            size === 'standard' && 'h-14',
+            // size === 'large' && 'h-20',
+          )}
+        >
           <div className="flex-1 flex items-center justify-between">
             <Show when={back && canGoBack}>
               <Button
@@ -167,7 +179,9 @@ const ScreenBottomNavItem = React.forwardRef<
   const { navigate } = useStandaloneNavigation();
 
   const handleNavigate = () => {
-    if (location.pathname === path) return;
+    if (isPathActive(path, location.pathname)) {
+      return;
+    }
 
     navigate(path, '', {
       replace: true,
@@ -183,7 +197,9 @@ const ScreenBottomNavItem = React.forwardRef<
       ref={ref}
       className={cn(
         'flex-1 flex flex-col gap-1 items-center justify-center',
-        location.pathname === path ? 'text-primary' : 'text-muted-foreground',
+        isPathActive(path, location.pathname)
+          ? 'text-primary fill-primary'
+          : 'text-muted-foreground',
       )}
       onClick={handleNavigate}
       {...props}
@@ -196,10 +212,81 @@ const ScreenBottomNavItem = React.forwardRef<
   );
 });
 
+const ScreenTopNav = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {}
+>(({ className, children, ...props }, ref) => {
+  return (
+    <div ref={ref} className={cn('w-full z-10', className)} {...props}>
+      <div className="pb-0.5 flex items-center justify-between w-full overflow-x-auto">
+        {children}
+      </div>
+    </div>
+  );
+});
+ScreenTopNav.displayName = 'ScreenTopNav';
+
+const ScreenTopNavItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    title?: string;
+    path: string;
+  }
+>(({ className, title, path, ...props }, ref) => {
+  const location = useLocation();
+  const { navigate } = useStandaloneNavigation();
+
+  const handleNavigate = () => {
+    if (isPathActive(path, location.pathname)) {
+      return;
+    }
+
+    navigate(path, '', {
+      replace: true,
+      state: {
+        // to disable the back button when changing tabs
+        _previous: undefined,
+      },
+    });
+  };
+
+  return (
+    <div
+      role="button"
+      title={title}
+      ref={ref}
+      className={cn(
+        'flex-1 shrink-0 flex items-center justify-center border-b-2 border-transparent px-5 py-3',
+        isPathActive(path, location.pathname)
+          ? 'text-primary border-primary'
+          : 'text-muted-foreground',
+      )}
+      onClick={handleNavigate}
+      {...props}
+    >
+      <Show when={title !== undefined}>
+        <span
+          className={cn(
+            'font-medium',
+            location.pathname === path
+              ? 'text-primary'
+              : 'text-muted-foreground',
+          )}
+        >
+          {title}
+        </span>
+      </Show>
+    </div>
+  );
+});
+ScreenTopNavItem.displayName = 'ScreenTopNavItem';
+
 export {
   ScreenLayout,
   ScreenTitleBar,
   ScreenContent,
   ScreenBottomNav,
   ScreenBottomNavItem,
+  ScreenTopNav,
+  ScreenTopNavItem,
 };
