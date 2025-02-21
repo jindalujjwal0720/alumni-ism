@@ -11,7 +11,7 @@ export default defineConfig({
       manifest: {
         name: 'IIT Dhanbad Alumni',
         short_name: 'IIT Dhanbad Alumni',
-        theme_color: '#5048e5',
+        theme_color: '#FFFFFF',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',

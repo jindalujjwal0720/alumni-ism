@@ -12,11 +12,7 @@ export const ModalLayout = () => {
         goBack('/');
       }}
     >
-      <SheetContent
-        side={'bottom'}
-        className="rounded-t-2xl h-[calc(100dvh-1rem)] p-4"
-        close={false}
-      >
+      <SheetContent className="w-screen h-screen p-4" close={false}>
         <SheetHeader>
           <div className="flex items-center justify-between">
             <span

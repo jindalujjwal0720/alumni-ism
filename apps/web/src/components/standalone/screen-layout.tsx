@@ -40,7 +40,7 @@ const ScreenLayout = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          'h-dvh w-dvw flex flex-col items-center justify-center bg-background overflow-hidden',
+          'h-screen w-screen flex flex-col items-center justify-center bg-background overflow-hidden',
           className,
         )}
         {...props}
