@@ -11,7 +11,6 @@ import { ProfileScreenLayout } from './profile';
 import { NotificationsScreen } from './notifications';
 import { DonationsScreen } from './donations';
 import { SearchScreen } from './search';
-import { ModalLayout } from '@/components/standalone/modal-layout';
 import { PersonalDetailsScreen } from './profile/personal';
 
 export const AppScreens = () => {
@@ -26,8 +25,6 @@ export const AppScreens = () => {
           <Route path="/profile/*" element={<ProfileScreenLayout />}>
             <Route path="personal" element={<PersonalDetailsScreen />} />
           </Route>
-
-          <Route path="/modal/*" element={<ModalLayout />}></Route>
         </Routes>
         <ScreenBottomNav>
           <ScreenBottomNavItem
@@ -52,7 +49,8 @@ export const AppScreens = () => {
           />
           <ScreenBottomNavItem
             title="Profile"
-            path="/profile"
+            path="/profile/personal"
+            base="/profile"
             icon={<User size={20} />}
           />
         </ScreenBottomNav>

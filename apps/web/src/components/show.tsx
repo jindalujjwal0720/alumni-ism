@@ -5,7 +5,7 @@ export const Show = ({
   children,
   when,
 }: PropsWithChildren<{
-  when: boolean;
+  when: unknown;
 }>) => {
-  return when ? <>{children}</> : null;
+  return !when ? null : <>{children}</>;
 };

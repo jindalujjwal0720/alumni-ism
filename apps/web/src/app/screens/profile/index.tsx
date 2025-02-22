@@ -9,7 +9,7 @@ import { Outlet } from 'react-router-dom';
 export const ProfileScreenLayout = () => {
   return (
     <>
-      <ScreenTitleBar title="Profile">
+      <ScreenTitleBar title="Profile" logo>
         <ScreenTopNav>
           <ScreenTopNavItem title="Personal" path="/profile/personal" />
           <ScreenTopNavItem title="Academic" path="/profile/academic" />
@@ -17,7 +17,7 @@ export const ProfileScreenLayout = () => {
           <ScreenTopNavItem title="Preferences" path="/profile/preferences" />
         </ScreenTopNav>
       </ScreenTitleBar>
-      <ScreenContent className="bg-background">
+      <ScreenContent className="bg-card">
         <Outlet />
       </ScreenContent>
     </>

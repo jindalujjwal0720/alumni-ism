@@ -7,7 +7,7 @@ export enum AlumniGender {
   PREFER_NOT_TO_SAY = 'prefer-not-to-say',
 }
 
-export interface IAlumniPersonalDetails {
+export interface IAlumniPersonalDetails extends Record<string, unknown> {
   name: string;
   alias: string;
   profilePicture?: string;
@@ -16,7 +16,7 @@ export interface IAlumniPersonalDetails {
   gender: 'male' | 'female' | 'other' | 'prefer-not-to-say';
 }
 
-export interface IAlumniContactDetails {
+export interface IAlumniContactDetails extends Record<string, unknown> {
   phone: string;
   email: string;
 
@@ -31,13 +31,13 @@ export interface IAlumniContactDetails {
   website?: string;
 }
 
-export interface IAlumniEducationDetails {
+export interface IAlumniEducationDetails extends Record<string, unknown> {
   degree: string;
   branch: string;
   yearOfGraduation: number;
 }
 
-export interface IAlumniProfessionalDetails {
+export interface IAlumniProfessionalDetails extends Record<string, unknown> {
   currentCompany?: string;
   designation?: string;
   currentCompanyWebsite?: string;
@@ -53,12 +53,12 @@ export enum AlumniVerificationDocType {
   OTHER = 'other',
 }
 
-export interface IAlumniVerificationDetails {
+export interface IAlumniVerificationDetails extends Record<string, unknown> {
   verificationDocType: AlumniVerificationDocType;
   verificationDocLink: string;
 }
 
-export interface IAlumni {
+export interface IAlumni extends Record<string, unknown> {
   account: string | IUser;
   // unique card number
   ucn: string;

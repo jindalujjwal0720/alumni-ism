@@ -40,7 +40,7 @@ const ScreenLayout = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          'h-screen w-screen flex flex-col items-center justify-center bg-background overflow-hidden',
+          'h-screen w-screen flex flex-col items-center justify-center overflow-hidden',
           className,
         )}
         {...props}
@@ -59,6 +59,7 @@ const ScreenTitleBar = React.forwardRef<
     title?: string;
     size?: 'standard' | 'large';
     actions?: React.ReactNode;
+    logo?: boolean;
   }
 >(
   (
@@ -67,6 +68,7 @@ const ScreenTitleBar = React.forwardRef<
       title,
       size = 'standard',
       back = true,
+      logo = false,
       actions,
       children,
       ...props
@@ -94,7 +96,7 @@ const ScreenTitleBar = React.forwardRef<
       >
         <div
           className={cn(
-            'flex flex-col gap-2 relative p-4',
+            'flex flex-col gap-2 relative p-2',
             size === 'standard' && 'h-14',
             // size === 'large' && 'h-20',
           )}
@@ -103,7 +105,7 @@ const ScreenTitleBar = React.forwardRef<
             <Show when={back && canGoBack}>
               <Button
                 variant="link"
-                className="p-0 h-max hover:no-underline hover:bg-muted/10 text-base"
+                className="p-0 h-max hover:no-underline hover:bg-muted/10 text-sm"
                 onClick={() => goBack('/')}
               >
                 <ChevronLeft size={24} />
@@ -120,7 +122,19 @@ const ScreenTitleBar = React.forwardRef<
                 {title}
               </h1>
             </Show>
-            <div>{actions}</div>
+            <Show when={actions !== undefined}>
+              <div className="w-full flex items-center justify-end gap-3">
+                {actions}
+
+                <Show when={logo}>
+                  <img
+                    src="/iit-ism-logo.png"
+                    alt="logo"
+                    className="h-7 mr-1"
+                  />
+                </Show>
+              </div>
+            </Show>
           </div>
           <Show when={title !== undefined && size === 'large'}>
             <h1 className="text-3xl font-semibold text-start">{title}</h1>
@@ -172,9 +186,11 @@ const ScreenBottomNavItem = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & {
     title?: string;
     path: string;
+    /** The base path to be used for the initial navigate */
+    base?: string;
     icon?: React.ReactNode;
   }
->(({ className, title, path, icon, ...props }, ref) => {
+>(({ className, title, base: basePath, path, icon, ...props }, ref) => {
   const location = useLocation();
   const { navigate } = useStandaloneNavigation();
 
@@ -197,7 +213,7 @@ const ScreenBottomNavItem = React.forwardRef<
       ref={ref}
       className={cn(
         'flex-1 flex flex-col gap-1 items-center justify-center',
-        isPathActive(path, location.pathname)
+        isPathActive(basePath ?? path, location.pathname)
           ? 'text-primary fill-primary'
           : 'text-muted-foreground',
       )}
@@ -218,7 +234,7 @@ const ScreenTopNav = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   return (
     <div ref={ref} className={cn('w-full z-10', className)} {...props}>
-      <div className="pb-0.5 flex items-center justify-between w-full overflow-x-auto">
+      <div className="pb-0.5 flex items-center justify-between w-full overflow-x-auto no-scrollbar">
         {children}
       </div>
     </div>
@@ -267,9 +283,9 @@ const ScreenTopNavItem = React.forwardRef<
       <Show when={title !== undefined}>
         <span
           className={cn(
-            'font-medium',
+            'text-sm',
             location.pathname === path
-              ? 'text-primary'
+              ? 'text-primary font-medium'
               : 'text-muted-foreground',
           )}
         >

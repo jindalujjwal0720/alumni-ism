@@ -18,13 +18,13 @@ const TableView = React.forwardRef<
           {title}
         </h2>
       </Show>
-      <div className="border shadow-sm rounded-xl">
+      <div className="border rounded-xl">
         <table
           ref={ref}
           className={cn('w-full h-max rounded-xl bg-card', className)}
           {...props}
         >
-          <tbody className="divide-y-2">{children}</tbody>
+          <tbody className="divide-y">{children}</tbody>
         </table>
       </div>
     </div>
@@ -47,6 +47,11 @@ const TableViewCell = React.forwardRef<
      * such as buttons or icons
      */
     actions?: React.ReactNode;
+    /** The status to be displayed on the right side of the cell */
+    status?: React.ReactNode;
+
+    more?: boolean;
+    dropdown?: boolean;
   }
 >(
   (
@@ -58,6 +63,10 @@ const TableViewCell = React.forwardRef<
       description,
       link,
       actions,
+      status,
+
+      more,
+      dropdown,
 
       ...props
     },
@@ -77,7 +86,7 @@ const TableViewCell = React.forwardRef<
       <>
         <tr
           ref={ref}
-          className={cn('w-full hover:bg-muted/70', className)}
+          className={cn('w-full hover:bg-muted/50', className)}
           {...props}
           onClick={handleRowClick}
         >
@@ -89,30 +98,35 @@ const TableViewCell = React.forwardRef<
             </Show>
           </td>
           <td className="p-0 w-full">
-            <div className={cn('py-3 flex items-center justify-between gap-4')}>
-              <div className="w-full flex flex-col">
-                <span className="text-base">{title}</span>
-                <span className="text-sm text-muted-foreground w-full">
-                  {description}
-                </span>
+            <div className="flex justify-between gap-2">
+              <div className="flex-1 py-3 w-full flex justify-between gap-4">
+                <div className="w-max">
+                  <p className="text-sm w-max">{title}</p>
+                  <Show when={description !== undefined}>
+                    <p className="w-full text-xs text-muted-foreground">
+                      {description}
+                    </p>
+                  </Show>
+                </div>
+                <Show when={status !== undefined}>
+                  <div className="text-end w-full text-sm">{status}</div>
+                </Show>
               </div>
-            </div>
-          </td>
-          <td className="pr-3 p-0">
-            <div className="flex items-center justify-end gap-2">
-              <Show when={actions !== undefined}>{actions}</Show>
-              <Show when={children !== undefined}>
-                <ChevronDown
-                  size={24}
-                  className={cn(
-                    'text-muted-foreground hover:text-foreground transition-transform',
-                    isExpanded && 'transform rotate-180',
-                  )}
-                />
-              </Show>
-              <Show when={link !== undefined && !children}>
-                <ChevronRight size={24} className="text-muted-foreground" />
-              </Show>
+              <div className="flex items-center justify-end gap-2 pr-2">
+                <Show when={actions !== undefined}>{actions}</Show>
+                <Show when={children !== undefined || dropdown}>
+                  <ChevronDown
+                    size={20}
+                    className={cn(
+                      'text-muted-foreground hover:text-foreground transition-transform',
+                      isExpanded && 'transform rotate-180',
+                    )}
+                  />
+                </Show>
+                <Show when={(link !== undefined && !children) || more}>
+                  <ChevronRight size={20} className="text-muted-foreground" />
+                </Show>
+              </div>
             </div>
           </td>
         </tr>

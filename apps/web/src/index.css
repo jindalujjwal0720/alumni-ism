@@ -84,4 +84,35 @@
     @apply bg-background text-foreground;
     font-family: var(--font-family);
   }
+
+  @media screen and (max-width: 640px) {
+    body {
+      -webkit-user-select: none;
+      user-select: none;
+      overscroll-behavior: none;
+    }
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
