@@ -60,7 +60,7 @@ export const PersonalDetailsForm = () => {
                         <Input
                           variant="standalone"
                           type="text"
-                          placeholder="full name"
+                          placeholder="Your full name?"
                           className="w-full text-end"
                           {...field}
                         />
@@ -82,7 +82,7 @@ export const PersonalDetailsForm = () => {
                         <Input
                           variant="standalone"
                           type="text"
-                          placeholder="What should we call you?"
+                          placeholder="What's your nickname?"
                           className="w-full text-end"
                           {...field}
                         />

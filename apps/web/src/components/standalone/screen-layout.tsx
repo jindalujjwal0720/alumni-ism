@@ -122,7 +122,7 @@ const ScreenTitleBar = React.forwardRef<
                 {title}
               </h1>
             </Show>
-            <Show when={actions !== undefined}>
+            <Show when={actions !== undefined || logo}>
               <div className="w-full flex items-center justify-end gap-3">
                 {actions}
 

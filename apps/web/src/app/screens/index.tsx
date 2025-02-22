@@ -12,6 +12,8 @@ import { NotificationsScreen } from './notifications';
 import { DonationsScreen } from './donations';
 import { SearchScreen } from './search';
 import { PersonalDetailsScreen } from './profile/personal';
+import { EducationDetailsScreen } from './profile/education';
+import { ProfessionalDetailsScreen } from './profile/professional';
 
 export const AppScreens = () => {
   return (
@@ -24,6 +26,11 @@ export const AppScreens = () => {
           <Route path="/notifications" element={<NotificationsScreen />} />
           <Route path="/profile/*" element={<ProfileScreenLayout />}>
             <Route path="personal" element={<PersonalDetailsScreen />} />
+            <Route path="education" element={<EducationDetailsScreen />} />
+            <Route
+              path="professional"
+              element={<ProfessionalDetailsScreen />}
+            />
           </Route>
         </Routes>
         <ScreenBottomNav>

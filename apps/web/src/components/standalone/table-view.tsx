@@ -38,7 +38,7 @@ const TableViewCell = React.forwardRef<
     /** The icon to be displayed on the left side of the cell */
     icon?: React.ReactNode;
     /** The title to be displayed on the left side of the cell */
-    title?: string;
+    title?: string | React.ReactNode;
     /** The description to be displayed below the title */
     description?: string | React.ReactNode;
     /** The link to be navigated to when the cell is clicked */
@@ -98,18 +98,31 @@ const TableViewCell = React.forwardRef<
             </Show>
           </td>
           <td className="p-0 w-full">
-            <div className="flex justify-between gap-2">
-              <div className="flex-1 py-3 w-full flex justify-between gap-4">
-                <div className="w-max">
-                  <p className="text-sm w-max">{title}</p>
-                  <Show when={description !== undefined}>
+            <div className="w-full flex justify-between gap-2">
+              <div className="w-full py-3 flex flex-col justify-center">
+                <div className="w-full flex justify-between gap-4">
+                  <div>
+                    {typeof title === 'string' ? (
+                      <p className="text-sm w-max">{title}</p>
+                    ) : (
+                      title
+                    )}
+                  </div>
+                  <Show when={status !== undefined}>
+                    <div className="text-end w-full text-sm text-muted-foreground">
+                      {status}
+                    </div>
+                  </Show>
+                </div>
+                <Show when={description !== undefined}>
+                  <Show when={typeof description === 'string'}>
                     <p className="w-full text-xs text-muted-foreground">
                       {description}
                     </p>
                   </Show>
-                </div>
-                <Show when={status !== undefined}>
-                  <div className="text-end w-full text-sm">{status}</div>
+                  <Show when={typeof description !== 'string'}>
+                    <div className="w-full">{description}</div>
+                  </Show>
                 </Show>
               </div>
               <div className="flex items-center justify-end gap-2 pr-2">

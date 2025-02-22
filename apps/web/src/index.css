@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 220 24% 96%;
+    --background: 228 22% 95%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -105,8 +105,6 @@
     scrollbar-width: none; /* Firefox */
   }
 }
-
-
 
 @layer base {
   * {
