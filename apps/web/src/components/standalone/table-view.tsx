@@ -38,9 +38,9 @@ const TableViewCell = React.forwardRef<
     /** The icon to be displayed on the left side of the cell */
     icon?: React.ReactNode;
     /** The title to be displayed on the left side of the cell */
-    title?: string | React.ReactNode;
+    name?: React.ReactNode;
     /** The description to be displayed below the title */
-    description?: string | React.ReactNode;
+    description?: React.ReactNode;
     /** The link to be navigated to when the cell is clicked */
     link?: string;
     /** The actions to be displayed on the right side of the cell,
@@ -59,7 +59,7 @@ const TableViewCell = React.forwardRef<
       className,
       children,
       icon,
-      title,
+      name: title,
       description,
       link,
       actions,

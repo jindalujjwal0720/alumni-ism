@@ -1,10 +1,18 @@
 import { Show } from '@/components/show';
 import { TableView, TableViewCell } from '@/components/standalone/table-view';
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { AutoResizeTextarea } from '@/components/ui/textarea';
+import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
 import { AlumniGender } from '@/types/models/alumni';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -16,10 +24,21 @@ const GENDER_OPTIONS = {
 } as const;
 
 const schema = z.object({
-  name: z.string().min(3).max(255),
-  alias: z.string().min(3).max(255),
-  profilePicture: z.string().optional(),
-  bio: z.string().max(500).optional(),
+  name: z
+    .string()
+    .min(3, { message: 'Too short!' })
+    .max(255, { message: 'Too long!' }),
+  alias: z
+    .string()
+    .min(3, { message: 'Too short!' })
+    .max(255, { message: 'Too long!' }),
+  profilePicture: z
+    .string()
+    .url({ message: 'Invalid URL!' })
+    .max(255, { message: 'Too long!' })
+    .or(z.literal(''))
+    .optional(),
+  bio: z.string().max(500, { message: 'Too long!' }).optional(),
   dob: z.date().optional(),
   gender: z.nativeEnum(AlumniGender),
 });
@@ -38,22 +57,29 @@ export const PersonalDetailsForm = () => {
       gender: AlumniGender.PREFER_NOT_TO_SAY,
     },
   });
+  const formRef = useRef<HTMLFormElement | null>(null);
+  useAutoSaveForm(formRef);
 
-  const handleSubmit = (data: FormValues) => {
-    console.log(data);
+  const saveDataToServer = (data: FormValues) => {
+    console.log('Saving...', data);
   };
 
   return (
     <div className="p-4 flex flex-col gap-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form
+          ref={formRef}
+          className="space-y-2"
+          onSubmit={form.handleSubmit(saveDataToServer)}
+        >
           <TableView title="Personal details">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <TableViewCell
-                  title="Full name"
+                  name="Full name"
+                  description={<FormMessage />}
                   status={
                     <FormItem>
                       <FormControl>
@@ -75,7 +101,8 @@ export const PersonalDetailsForm = () => {
               name="alias"
               render={({ field }) => (
                 <TableViewCell
-                  title="Alias"
+                  name="Alias"
+                  description={<FormMessage />}
                   status={
                     <FormItem>
                       <FormControl>
@@ -97,7 +124,8 @@ export const PersonalDetailsForm = () => {
               name="profilePicture"
               render={({ field }) => (
                 <TableViewCell
-                  title="Profile picture"
+                  name="Profile picture"
+                  description={<FormMessage />}
                   status={
                     <FormItem>
                       <FormControl>
@@ -119,7 +147,8 @@ export const PersonalDetailsForm = () => {
               name="bio"
               render={({ field }) => (
                 <TableViewCell
-                  title="Bio"
+                  name="Bio"
+                  description={<FormMessage />}
                   status={
                     <FormItem>
                       <FormControl>
@@ -140,7 +169,8 @@ export const PersonalDetailsForm = () => {
               name="dob"
               render={({ field }) => (
                 <TableViewCell
-                  title="Date of birth"
+                  name="Date of birth"
+                  description={<FormMessage />}
                   status={
                     <FormItem>
                       <FormControl>
@@ -166,7 +196,8 @@ export const PersonalDetailsForm = () => {
               name="gender"
               render={({ field }) => (
                 <TableViewCell
-                  title="Gender"
+                  name="Gender"
+                  description={<FormMessage />}
                   status={GENDER_OPTIONS[field.value]}
                 >
                   <div className="pl-4 text-muted-foreground bg-muted/50">
@@ -193,6 +224,10 @@ export const PersonalDetailsForm = () => {
               )}
             />
           </TableView>
+          <p className="px-2 text-muted-foreground text-xs">
+            You can change the visibility of your personal details in the
+            preference settings.
+          </p>
         </form>
       </Form>
     </div>

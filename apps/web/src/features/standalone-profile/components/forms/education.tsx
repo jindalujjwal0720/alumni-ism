@@ -1,7 +1,9 @@
 import { TableView, TableViewCell } from '@/components/standalone/table-view';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -22,22 +24,27 @@ export const EducationDetailsForm = () => {
       yearOfGraduation: new Date().getFullYear(),
     },
   });
+  const formRef = useRef<HTMLFormElement | null>(null);
+  useAutoSaveForm(formRef);
 
-  const handleSubmit = (data: FormValues) => {
-    console.log(data);
+  const saveDataToServer = (data: FormValues) => {
+    console.log('Saving...', data);
   };
 
   return (
     <div className="p-4 flex flex-col gap-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(saveDataToServer)}
+          className="space-y-2"
+        >
           <TableView title="Education details">
             <FormField
               control={form.control}
               name="degree"
               render={({ field }) => (
                 <TableViewCell
-                  title="Degree"
+                  name="Degree"
                   status={
                     <FormItem>
                       <FormControl>
@@ -59,7 +66,7 @@ export const EducationDetailsForm = () => {
               name="branch"
               render={({ field }) => (
                 <TableViewCell
-                  title="Branch"
+                  name="Branch"
                   status={
                     <FormItem>
                       <FormControl>
@@ -81,7 +88,7 @@ export const EducationDetailsForm = () => {
               name="yearOfGraduation"
               render={({ field }) => (
                 <TableViewCell
-                  title="Year of graduation"
+                  name="Year of graduation"
                   status={
                     <FormItem>
                       <FormControl>
@@ -99,6 +106,10 @@ export const EducationDetailsForm = () => {
               )}
             />
           </TableView>
+          <p className="px-2 text-xs text-muted-foreground">
+            You can change the visibility of your education details in the
+            preference settings.
+          </p>
         </form>
       </Form>
     </div>

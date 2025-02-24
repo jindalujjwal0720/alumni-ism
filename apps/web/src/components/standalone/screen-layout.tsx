@@ -5,6 +5,7 @@ import { ChevronLeft } from 'lucide-react';
 import { Show } from '../show';
 import { useStandaloneNavigation } from './navigation';
 import { useLocation } from 'react-router-dom';
+import { Image } from './image';
 
 const ScreenLayoutContext = React.createContext<{
   title?: string;
@@ -127,7 +128,7 @@ const ScreenTitleBar = React.forwardRef<
                 {actions}
 
                 <Show when={logo}>
-                  <img
+                  <Image
                     src="/iit-ism-logo.png"
                     alt="logo"
                     className="h-7 mr-1"
@@ -188,7 +189,9 @@ const ScreenBottomNavItem = React.forwardRef<
     path: string;
     /** The base path to be used for the initial navigate */
     base?: string;
-    icon?: React.ReactNode;
+    icon?:
+      | React.ReactNode
+      | ((props: { selected: boolean }) => React.ReactNode);
   }
 >(({ className, title, base: basePath, path, icon, ...props }, ref) => {
   const location = useLocation();
@@ -220,7 +223,9 @@ const ScreenBottomNavItem = React.forwardRef<
       onClick={handleNavigate}
       {...props}
     >
-      {icon}
+      {typeof icon === 'function'
+        ? icon({ selected: isPathActive(path, location.pathname) })
+        : icon}
       <Show when={title !== undefined}>
         <span className="text-xs font-medium">{title}</span>
       </Show>
@@ -296,6 +301,28 @@ const ScreenTopNavItem = React.forwardRef<
   );
 });
 ScreenTopNavItem.displayName = 'ScreenTopNavItem';
+
+const ScreenFloatingButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {}
+>(({ className, children, ...props }, ref) => {
+  return (
+    <Button
+      ref={ref}
+      className={cn(
+        'fixed bottom-4 right-4 z-10',
+        'bg-primary text-primary-foreground',
+        'rounded-full shadow-lg',
+        'p-4',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+});
+ScreenFloatingButton.displayName = 'ScreenFloatingButton';
 
 export {
   ScreenLayout,
