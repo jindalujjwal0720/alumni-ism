@@ -34,7 +34,7 @@ export const AlumniFAQSection = () => {
             >
               <div className="flex items-start gap-4">
                 <div className="bg-indigo-100 p-2 rounded-lg">
-                  <FiMessageSquare className="h-5 w-5 text-indigo-600" />
+                  <FiMessageSquare className="h-5 w-5 text-primary/80" />
                 </div>
                 <div>
                   <h3 className="font-medium text-slate-900 mb-2">{faq.q}</h3>

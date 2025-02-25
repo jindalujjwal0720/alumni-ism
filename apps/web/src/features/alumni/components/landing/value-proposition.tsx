@@ -15,12 +15,12 @@ export const AlumniValuePropositionSection = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {[
             {
-              title: 'Career Services',
+              title: 'Upcoming Tie Ups',
               icon: FiBriefcase,
               features: [
-                'Executive Recruitment Access',
-                'Leadership Workshops',
-                'Career Transitions Support',
+                'Corporate Partnerships',
+                'Internship Opportunities',
+                'Job Placement Support',
               ],
               bg: 'bg-blue-50',
             },
@@ -47,7 +47,7 @@ export const AlumniValuePropositionSection = () => {
           ].map((benefit, idx) => (
             <div key={idx} className={`p-8 rounded-2xl ${benefit.bg}`}>
               <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 rounded-lg bg-indigo-600">
+                <div className="p-3 rounded-lg bg-primary/80">
                   <benefit.icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-2xl font-semibold text-slate-900">
@@ -60,7 +60,7 @@ export const AlumniValuePropositionSection = () => {
                     key={fIdx}
                     className="flex items-center gap-3 text-slate-700"
                   >
-                    <FiCheck className="h-5 w-5 text-indigo-600 flex-shrink-0" />
+                    <FiCheck className="h-5 w-5 text-primary/80 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}

@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Settings from './settings';
 import Auth from './auth';
 import ProtectedRoute from '@/features/auth/components/protected-route';
-import BenefitsPage from './alumni/benefits';
+// import BenefitsPage from './alumni/benefits';
 import { lazy, Suspense } from 'react';
 import Loading from '@/components/loading';
 import { AlumniLayout } from './alumni/layout';
@@ -47,7 +47,7 @@ const WebPages = () => {
         <Route path="details" element={<AlumniDetailsPage />} />
         <Route path="donations" element={<PledgesAndDonationsPage />} />
 
-        <Route path="benefits" element={<BenefitsPage />} />
+        {/* <Route path="benefits" element={<BenefitsPage />} /> */}
         <Route path="settings/*" element={<ProtectedRoute />}>
           <Route path="*" element={<Settings />} />
         </Route>

@@ -4,10 +4,10 @@ import { AlumniDonationsSection } from '@/features/alumni/components/landing/don
 import { AlumniFAQSection } from '@/features/alumni/components/landing/faq';
 import { AlumniHeroSection } from '@/features/alumni/components/landing/hero';
 import { AlumniNavigation } from '@/features/alumni/components/landing/nav';
-import { AlumniBrandPartnersSection } from '@/features/alumni/components/landing/partners';
+// import { AlumniBrandPartnersSection } from '@/features/alumni/components/landing/partners';
 import { AlumniPricingSection } from '@/features/alumni/components/landing/pricing';
-import { AlumniStatsSection } from '@/features/alumni/components/landing/stats';
-import { AlumniTestimonialsSection } from '@/features/alumni/components/landing/testimonials';
+// import { AlumniStatsSection } from '@/features/alumni/components/landing/stats';
+// import { AlumniTestimonialsSection } from '@/features/alumni/components/landing/testimonials';
 import { AlumniValuePropositionSection } from '@/features/alumni/components/landing/value-proposition';
 import { selectIsAuthenticated } from '@/features/auth/stores/auth';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const AlumniCardLanding = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/10">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/10 -mb-16">
       <AlumniNavigation />
       {isAuthenticated && !isLoading && (!alumni || !alumni.isVerified) && (
         <div className="bg-yellow-600 text-sm text-primary-foreground text-center p-3">
@@ -34,12 +34,12 @@ const AlumniCardLanding = () => {
         </div>
       )}
       <AlumniHeroSection />
-      <AlumniStatsSection />
+      {/* <AlumniStatsSection /> */}
       <div id="benefits">
-        <AlumniBrandPartnersSection />
+        {/* <AlumniBrandPartnersSection /> */}
         <AlumniValuePropositionSection />
       </div>
-      <AlumniTestimonialsSection />
+      {/* <AlumniTestimonialsSection /> */}
       <AlumniPricingSection />
       <AlumniDonationsSection />
       <AlumniFAQSection />

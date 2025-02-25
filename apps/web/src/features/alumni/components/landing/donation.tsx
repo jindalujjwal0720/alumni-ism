@@ -26,7 +26,7 @@ export const AlumniDonationsSection = () => {
                 { value: '4.8★', label: 'Donor Satisfaction' },
               ].map((stat, idx) => (
                 <div key={idx} className="text-center p-4">
-                  <p className="text-3xl font-bold text-indigo-600 mb-2">
+                  <p className="text-3xl font-bold text-primary/80 mb-2">
                     {stat.value}
                   </p>
                   <p className="text-slate-600 text-sm">{stat.label}</p>
@@ -61,21 +61,21 @@ export const AlumniDonationsSection = () => {
               </h4>
               <div className="flex flex-wrap gap-4 items-center">
                 {[
-                  'Dr. A. Sharma',
-                  'R. Kapoor Group',
-                  'S. Patel Foundation',
-                  '1985 Batch Alumni',
-                  'Prof. M. Krishnan',
+                  'Naresh Vashishth',
+                  'ISMAANA Chapter',
+                  'A. N. Gupta',
+                  'Mohinder Gulati',
+                  'KVK Prasad',
                 ].map((name, idx) => (
                   <div
                     key={idx}
-                    className="px-4 py-2 bg-indigo-100/50 rounded-full text-sm text-indigo-700"
+                    className="px-4 py-2 bg-indigo-100/50 rounded-full text-sm text-primary/90"
                   >
                     {name}
                   </div>
                 ))}
-                <a href="#" className="text-indigo-600 hover:underline text-sm">
-                  View All Contributors →
+                <a href="#" className="text-primary/80 hover:underline text-sm">
+                  Install app to view all →
                 </a>
               </div>
             </div>

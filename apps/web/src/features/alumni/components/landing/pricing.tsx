@@ -16,27 +16,9 @@ interface Pricing {
 
 const pricings: Pricing[] = [
   {
-    title: 'Trial Plan',
-    price: 'Free',
-    validFor: 'student',
-    features: ['All Campus Privileges', 'All Partner Benefits'],
-  },
-  {
     title: 'Lifetime Plan',
     price: 10000,
     validFor: 'Lifetime',
-    features: [
-      'All Campus Privileges',
-      'Global Network Access',
-      'All Partner Benefits',
-      '24/7 Support',
-    ],
-    tag: 'Most Popular',
-  },
-  {
-    title: 'Basic Plan',
-    price: 1000,
-    validFor: 'Year',
     features: [
       'All Campus Privileges',
       'Global Network Access',
@@ -94,7 +76,6 @@ const AlumniPricingCard = ({
                 navigate('/auth/login');
               }
         }
-        variant={pricing.tag ? 'default' : 'outline'}
         className="w-full group"
       >
         Get Started{' '}
@@ -131,7 +112,7 @@ export const AlumniPricingSection = () => {
           </p>
         </div>
         <div className="w-full">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 justify-center gap-6 w-full mx-auto">
+          <div className="flex flex-col justify-center items-center gap-6 w-full mx-auto">
             {pricings.map((p, i) => (
               <AlumniPricingCard
                 key={i}

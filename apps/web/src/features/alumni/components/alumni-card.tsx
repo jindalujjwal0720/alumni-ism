@@ -128,10 +128,15 @@ export const AlumniPremiumCardWrapper = () => {
             transformStyle: 'preserve-3d',
           }}
         >
-          <AlumniCard
+          {/* <AlumniCard
             name="Ujjwal Jindal"
             ucn="••••••••••••2025"
             expiry={new Date(2025, 11)}
+          /> */}
+          <img
+            src="/silver-card-front.png"
+            alt="Silver Alumni Card"
+            className="object-cover"
           />
 
           {/* Decorative Pattern */}
@@ -146,8 +151,8 @@ export const AlumniPremiumCardWrapper = () => {
           style={{
             background: `radial-gradient(
                 circle at ${glarePosition.x}% ${glarePosition.y}%,
-                rgba(79, 70, 229, 0.3) 0%,
-                rgba(59, 130, 246, 0.3) 50%,
+                rgba(79, 70, 229, 0.1) 0%,
+                rgba(59, 130, 246, 0.1) 50%,
                 transparent 100%
               )`,
             opacity:
