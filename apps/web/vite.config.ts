@@ -7,14 +7,25 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // Auto-update service worker
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: process.env.NODE_ENV === 'development',
+        type: 'module',
+      },
+      injectManifest: {
+        swDest: 'dist/sw.js',
+      },
       manifest: {
-        name: 'IIT Dhanbad Alumni',
-        short_name: 'IIT Dhanbad Alumni',
+        name: 'ISM Engage - Alumni App',
+        short_name: 'ISM Alumni',
         theme_color: '#FFFFFF',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
+        orientation: 'portrait',
         icons: [
           {
             src: '/pwa/pwa-48.png',
@@ -59,14 +70,6 @@ export default defineConfig({
             purpose: 'any',
           },
         ],
-      },
-      devOptions: {
-        enabled: process.env.NODE_ENV === 'development',
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,png,jpg,svg}'],
-        skipWaiting: true,
-        clientsClaim: true,
       },
     }),
   ],
