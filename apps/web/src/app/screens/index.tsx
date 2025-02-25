@@ -41,6 +41,11 @@ export const AppScreens = () => {
               element={<ProfessionalDetailsScreen />}
             />
           </Route>
+
+          {/* Public routes: IMPORTANT: DO NOT REMOVE*/}
+          <Route path="/p/*">
+            <Route path="alumni/:ucn" element={<AlumniPublicDetailsScreen />} />
+          </Route>
         </Routes>
         <ScreenBottomNav>
           <ScreenBottomNavItem

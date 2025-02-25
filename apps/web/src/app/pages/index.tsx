@@ -9,6 +9,7 @@ import { AlumniLayout } from './alumni/layout';
 import { AlumniDetailsPage } from './alumni/details';
 import AlumniCardLanding from './alumni/landing';
 import { PledgesAndDonationsPage } from './alumni/pledges-and-donations';
+import { PublicAlumniProfilePage } from './public/alumni';
 
 // Lazy load the admin and partner pages
 const AdminHome = lazy(() =>
@@ -53,6 +54,11 @@ const WebPages = () => {
         </Route>
       </Route>
       <Route path="/auth/*" element={<Auth />} />
+
+      {/* Public routes: IMPORTANT: DO NOT REMOVE*/}
+      <Route path="/p/*" element={<AlumniLayout />}>
+        <Route path="alumni/:id" element={<PublicAlumniProfilePage />} />
+      </Route>
     </Routes>
   );
 };

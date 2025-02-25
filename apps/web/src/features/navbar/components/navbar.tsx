@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectRole } from '@/features/auth/stores/auth';
 import Logo from '@/components/logo';
 import { useMemo, useState } from 'react';
+import { Show } from '@/components/show';
 
 interface NavbarProps {
   variant?: 'default' | 'sticky' | 'fixed';
@@ -34,6 +35,8 @@ const Navbar = ({
       currentRole === 'partner' && !location.pathname.startsWith('/partner')
     );
   }, [currentRole, location.pathname]);
+  // only show the auth/profile if the user is an admin or partner
+  const showAuth = showAdminPanelButton || showPartnerPanelButton;
 
   return (
     <>
@@ -92,16 +95,17 @@ const Navbar = ({
                 </Link>
               )}
 
-              {/* Partner Navigation */}
-              {!isAuthenticated && (
-                <Link
-                  to="/auth/login"
-                  className={buttonVariants({ variant: 'default' })}
-                >
-                  Login
-                </Link>
-              )}
-              <Profile />
+              <Show when={showAuth}>
+                {!isAuthenticated && (
+                  <Link
+                    to="/auth/login"
+                    className={buttonVariants({ variant: 'default' })}
+                  >
+                    Login
+                  </Link>
+                )}
+                <Profile />
+              </Show>
             </div>
 
             {/* Mobile Navigation */}
@@ -124,7 +128,9 @@ const Navbar = ({
                   clipRule="evenodd"
                 />
               </svg>
-              <Profile popover={false} details={false} />
+              <Show when={showAuth}>
+                <Profile popover={false} details={false} />
+              </Show>
             </Button>
           </div>
         </div>
@@ -137,17 +143,19 @@ const Navbar = ({
         }`}
       >
         <div className="flex justify-between items-center p-4 border-b">
-          <div className="flex items-center gap-4">
-            {!isAuthenticated && (
-              <Link
-                to="/auth/login"
-                className={buttonVariants({ variant: 'default' })}
-              >
-                Login
-              </Link>
-            )}
-            <Profile popover={false} />
-          </div>
+          <Show when={showAuth}>
+            <div className="flex items-center gap-4">
+              {!isAuthenticated && (
+                <Link
+                  to="/auth/login"
+                  className={buttonVariants({ variant: 'default' })}
+                >
+                  Login
+                </Link>
+              )}
+              <Profile popover={false} />
+            </div>
+          </Show>
           <Button
             title="Close Menu"
             onClick={() => setIsDrawerOpen(false)}
