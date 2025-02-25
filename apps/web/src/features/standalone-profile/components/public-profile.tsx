@@ -84,7 +84,7 @@ export const PublicProfile = () => {
           <div className="flex gap-4">
             <div className="size-10 rounded-md overflow-hidden flex items-center justify-center">
               <Image
-                src="https://www.google.com/s2/favicons?domain=salesforce.com&sz=128"
+                src="https://www.google.com/s2/favicons?domain=https://salesforce.com&sz=128"
                 alt="Salesforce"
                 className="max-w-8 h-8"
               />

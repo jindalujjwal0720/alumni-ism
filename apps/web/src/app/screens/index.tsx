@@ -10,7 +10,7 @@ import { HomeScreen } from './home';
 import { ProfileScreenLayout } from './profile/(tabs)';
 import { NotificationsScreen } from './notifications';
 import { DonationsScreen } from './donations';
-import { SearchScreen } from './search';
+import { SearchScreen } from './search/search';
 import { PersonalDetailsScreen } from './profile/(tabs)/personal';
 import { EducationDetailsScreen } from './profile/(tabs)/education';
 import { ProfessionalDetailsScreen } from './profile/(tabs)/professional';
@@ -18,7 +18,7 @@ import { ContactDetailsScreen } from './profile/(tabs)/contact';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/utils/tw';
 import { TbCoinRupee } from 'react-icons/tb';
-import { PublicProfileScreen } from './profile/public';
+import { AlumniPublicDetailsScreen } from './search/alumni-public-details';
 
 export const AppScreens = () => {
   return (
@@ -26,7 +26,10 @@ export const AppScreens = () => {
       <ScreenLayout>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
-          <Route path="/search" element={<SearchScreen />} />
+          <Route path="/search/*">
+            <Route path="*" element={<SearchScreen />} />
+            <Route path="alumni/:ucn" element={<AlumniPublicDetailsScreen />} />
+          </Route>
           <Route path="/donations" element={<DonationsScreen />} />
           <Route path="/notifications" element={<NotificationsScreen />} />
           <Route path="/profile/*" element={<ProfileScreenLayout />}>
@@ -37,8 +40,6 @@ export const AppScreens = () => {
               path="professional"
               element={<ProfessionalDetailsScreen />}
             />
-
-            <Route path="public/:ucn" element={<PublicProfileScreen />} />
           </Route>
         </Routes>
         <ScreenBottomNav>
@@ -68,9 +69,17 @@ export const AppScreens = () => {
             base="/profile"
             icon={({ selected }) => (
               <Avatar
-                className={cn('size-5 m-0', selected && 'ring-2 ring-primary')}
+                className={cn(
+                  'size-5 ring-2',
+                  selected
+                    ? 'ring-primary'
+                    : 'ring-offset-0 ring-muted-foreground',
+                )}
               >
-                <AvatarImage src="" alt="User" />
+                <AvatarImage
+                  src="https://randomuser.me/api/portraits/men/42.jpg"
+                  alt="User"
+                />
                 <AvatarFallback className="text-sm bg-muted-foreground text-background">
                   U
                 </AvatarFallback>

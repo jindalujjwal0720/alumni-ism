@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useCallback, useMemo } from 'react';
 import {
+  Link as ReactLink,
   NavigateOptions,
   To,
   useLocation,
@@ -80,5 +81,26 @@ export const NavigationProvider = ({ children }: PropsWithChildren) => {
     <NavigationContext.Provider value={value}>
       {children}
     </NavigationContext.Provider>
+  );
+};
+
+export const Link = ({
+  to,
+  from,
+  ...props
+}: {
+  to: To;
+  from?: string;
+} & React.ComponentProps<typeof ReactLink>) => {
+  const { navigate } = useStandaloneNavigation();
+  return (
+    <ReactLink
+      to={to}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate(to, from);
+      }}
+      {...props}
+    />
   );
 };

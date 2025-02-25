@@ -79,7 +79,7 @@ const ScreenTitleBar = React.forwardRef<
     const { goBackTitle, canGoBack, goBack } = useStandaloneNavigation();
     const { setTitle } = useScreenLayout();
     const logoPosition =
-      canGoBack && back && size === 'standard' ? 'inside' : 'outside';
+      (canGoBack && back) || size === 'standard' ? 'inside' : 'outside';
 
     React.useEffect(() => {
       if (title !== undefined) {
@@ -108,7 +108,7 @@ const ScreenTitleBar = React.forwardRef<
             <Show when={back && canGoBack}>
               <Button
                 variant="link"
-                className="p-0 h-max hover:no-underline hover:bg-muted/10 text-sm"
+                className="p-0 h-max hover:no-underline hover:bg-muted/10 text-sm flex items-center"
                 onClick={() => goBack('/')}
               >
                 <ChevronLeft size={24} />
@@ -166,7 +166,7 @@ const ScreenContent = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn('flex-1 w-full overflow-hidden', className)}
+      className={cn('flex-1 w-full overflow-hidden relative', className)}
       {...props}
     >
       <div className="h-full overflow-y-auto overflow-hidden">{children}</div>
@@ -315,18 +315,12 @@ ScreenTopNavItem.displayName = 'ScreenTopNavItem';
 
 const ScreenFloatingButton = React.forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {}
+  React.ComponentProps<typeof Button> & {}
 >(({ className, children, ...props }, ref) => {
   return (
     <Button
       ref={ref}
-      className={cn(
-        'fixed bottom-4 right-4 z-10',
-        'bg-primary text-primary-foreground',
-        'rounded-full shadow-lg',
-        'p-4',
-        className,
-      )}
+      className={cn('absolute bottom-4 right-4 z-10 shadow-lg', className)}
       {...props}
     >
       {children}
@@ -343,4 +337,5 @@ export {
   ScreenBottomNavItem,
   ScreenTopNav,
   ScreenTopNavItem,
+  ScreenFloatingButton,
 };
