@@ -24,6 +24,10 @@ const alumniPersonalDetailsSchema = new mongoose.Schema<IAlumniPersonalDetails>(
       type: String,
       default: '',
     },
+    bannerPicture: {
+      type: String,
+      default: '',
+    },
     bio: {
       type: String,
       default: '',

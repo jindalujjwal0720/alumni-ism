@@ -4,19 +4,21 @@ import {
   ScreenBottomNavItem,
   ScreenLayout,
 } from '@/components/standalone/screen-layout';
-import { Bell, Home, IndianRupee, Search } from 'lucide-react';
+import { Home, Search } from 'lucide-react';
 import { Route, Routes } from 'react-router-dom';
 import { HomeScreen } from './home';
-import { ProfileScreenLayout } from './profile';
+import { ProfileScreenLayout } from './profile/(tabs)';
 import { NotificationsScreen } from './notifications';
 import { DonationsScreen } from './donations';
 import { SearchScreen } from './search';
-import { PersonalDetailsScreen } from './profile/personal';
-import { EducationDetailsScreen } from './profile/education';
-import { ProfessionalDetailsScreen } from './profile/professional';
-import { ContactDetailsScreen } from './profile/contact';
+import { PersonalDetailsScreen } from './profile/(tabs)/personal';
+import { EducationDetailsScreen } from './profile/(tabs)/education';
+import { ProfessionalDetailsScreen } from './profile/(tabs)/professional';
+import { ContactDetailsScreen } from './profile/(tabs)/contact';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/utils/tw';
+import { TbCoinRupee } from 'react-icons/tb';
+import { PublicProfileScreen } from './profile/public';
 
 export const AppScreens = () => {
   return (
@@ -35,6 +37,8 @@ export const AppScreens = () => {
               path="professional"
               element={<ProfessionalDetailsScreen />}
             />
+
+            <Route path="public/:ucn" element={<PublicProfileScreen />} />
           </Route>
         </Routes>
         <ScreenBottomNav>
@@ -51,13 +55,13 @@ export const AppScreens = () => {
           <ScreenBottomNavItem
             title="Donations"
             path="/donations"
-            icon={<IndianRupee size={20} />}
+            icon={<TbCoinRupee size={22} />}
           />
-          <ScreenBottomNavItem
+          {/* <ScreenBottomNavItem
             title="Notifications"
             path="/notifications"
             icon={<Bell size={20} />}
-          />
+          /> */}
           <ScreenBottomNavItem
             title="Profile"
             path="/profile/personal"

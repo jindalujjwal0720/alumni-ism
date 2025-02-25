@@ -2,8 +2,8 @@ import React from 'react';
 
 const Image = React.forwardRef<
   HTMLImageElement,
-  React.ImgHTMLAttributes<HTMLImageElement>
->(({ className, ...props }, ref) => {
+  React.ImgHTMLAttributes<HTMLImageElement> & { fallback?: string }
+>(({ className, fallback, ...props }, ref) => {
   const [error, setError] = React.useState(false);
 
   const handleError = React.useCallback(() => {
@@ -11,7 +11,9 @@ const Image = React.forwardRef<
     setError(true);
   }, [props.src]);
 
-  if (error) {
+  if (error && fallback) {
+    return <Image {...props} ref={ref} className={className} src={fallback} />;
+  } else if (error) {
     return null;
   }
 

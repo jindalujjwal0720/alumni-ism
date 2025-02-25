@@ -78,6 +78,8 @@ const ScreenTitleBar = React.forwardRef<
   ) => {
     const { goBackTitle, canGoBack, goBack } = useStandaloneNavigation();
     const { setTitle } = useScreenLayout();
+    const logoPosition =
+      canGoBack && back && size === 'standard' ? 'inside' : 'outside';
 
     React.useEffect(() => {
       if (title !== undefined) {
@@ -127,7 +129,7 @@ const ScreenTitleBar = React.forwardRef<
               <div className="w-full flex items-center justify-end gap-3">
                 {actions}
 
-                <Show when={logo}>
+                <Show when={logo && logoPosition === 'inside'}>
                   <Image
                     src="/iit-ism-logo.png"
                     alt="logo"
@@ -138,7 +140,16 @@ const ScreenTitleBar = React.forwardRef<
             </Show>
           </div>
           <Show when={title !== undefined && size === 'large'}>
-            <h1 className="text-3xl font-semibold text-start">{title}</h1>
+            <div className="flex-1 flex items-center justify-between pl-2">
+              <h1 className="text-3xl font-semibold text-start">{title}</h1>
+              <Show when={logo && logoPosition === 'outside'}>
+                <Image
+                  src="/iit-ism-logo.png"
+                  alt="logo"
+                  className="h-7 mr-1"
+                />
+              </Show>
+            </div>
           </Show>
         </div>
         <div className="w-full overflow-x-hidden">{children}</div>
@@ -158,7 +169,7 @@ const ScreenContent = React.forwardRef<
       className={cn('flex-1 w-full overflow-hidden', className)}
       {...props}
     >
-      <div className="h-full overflow-y-auto">{children}</div>
+      <div className="h-full overflow-y-auto overflow-hidden">{children}</div>
     </div>
   );
 });
@@ -218,7 +229,7 @@ const ScreenBottomNavItem = React.forwardRef<
         'flex-1 flex flex-col gap-1 items-center justify-center',
         isPathActive(basePath ?? path, location.pathname)
           ? 'text-primary fill-primary'
-          : 'text-muted-foreground',
+          : 'text-primary/60',
       )}
       onClick={handleNavigate}
       {...props}

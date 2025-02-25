@@ -11,6 +11,7 @@ export interface IAlumniPersonalDetails {
   name: string;
   alias: string;
   profilePicture?: string;
+  bannerPicture?: string;
   bio?: string;
   dob?: Date;
   gender: 'male' | 'female' | 'other' | 'prefer-not-to-say';

@@ -38,6 +38,12 @@ const schema = z.object({
     .max(255, { message: 'Too long!' })
     .or(z.literal(''))
     .optional(),
+  bannerPicture: z
+    .string()
+    .url({ message: 'Invalid URL!' })
+    .max(255, { message: 'Too long!' })
+    .or(z.literal(''))
+    .optional(),
   bio: z.string().max(500, { message: 'Too long!' }).optional(),
   dob: z.date().optional(),
   gender: z.nativeEnum(AlumniGender),
@@ -65,11 +71,11 @@ export const PersonalDetailsForm = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-6">
+    <div className="p-4">
       <Form {...form}>
         <form
           ref={formRef}
-          className="space-y-2"
+          className="space-y-4"
           onSubmit={form.handleSubmit(saveDataToServer)}
         >
           <TableView title="Personal details">
@@ -110,51 +116,6 @@ export const PersonalDetailsForm = () => {
                           variant="standalone"
                           type="text"
                           placeholder="What's your nickname?"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="profilePicture"
-              render={({ field }) => (
-                <TableViewCell
-                  name="Profile picture"
-                  description={<FormMessage />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          variant="standalone"
-                          type="text"
-                          placeholder="URL"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <TableViewCell
-                  name="Bio"
-                  description={<FormMessage />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <AutoResizeTextarea
-                          variant="standalone"
-                          placeholder="Tell us about yourself..."
                           className="w-full text-end"
                           {...field}
                         />
@@ -221,6 +182,76 @@ export const PersonalDetailsForm = () => {
                     </div>
                   </div>
                 </TableViewCell>
+              )}
+            />
+          </TableView>
+          <TableView title="Personalisation">
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <TableViewCell
+                  name="Bio"
+                  description={<FormMessage />}
+                  status={
+                    <FormItem>
+                      <FormControl>
+                        <AutoResizeTextarea
+                          variant="standalone"
+                          placeholder="Tell us about yourself..."
+                          className="w-full text-end"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  }
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="profilePicture"
+              render={({ field }) => (
+                <TableViewCell
+                  name="Profile picture"
+                  description={<FormMessage />}
+                  status={
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          variant="standalone"
+                          type="url"
+                          placeholder="URL"
+                          className="w-full text-end"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  }
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="bannerPicture"
+              render={({ field }) => (
+                <TableViewCell
+                  name="Banner picture"
+                  description={<FormMessage />}
+                  status={
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          variant="standalone"
+                          type="url"
+                          placeholder="URL"
+                          className="w-full text-end"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  }
+                />
               )}
             />
           </TableView>
