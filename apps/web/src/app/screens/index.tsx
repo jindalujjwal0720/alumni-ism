@@ -51,7 +51,7 @@ export const AppScreens = () => {
           <ScreenBottomNavItem
             title="Search"
             path="/search"
-            icon={<Search size={20} />}
+            icon={<Search size={21} />}
           />
           <ScreenBottomNavItem
             title="Donations"

@@ -12,7 +12,7 @@ export const HomeScreen = () => {
       <ScreenContent>
         <h1>Home Screen</h1>
         <div className="flex flex-col space-y-4 min-h-[2000px] ">big box</div>
-        <ScreenFloatingButton className="p-4 size-12 rounded-full">
+        <ScreenFloatingButton className="p-4 size-14 rounded-full">
           <Pencil />
         </ScreenFloatingButton>
       </ScreenContent>

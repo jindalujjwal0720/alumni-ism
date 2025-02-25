@@ -49,7 +49,7 @@ export const DonationsScreen = () => {
             />
           </TableView>
         </div>
-        <ScreenFloatingButton className="p-4 size-12 rounded-full">
+        <ScreenFloatingButton className="p-4 size-14 rounded-full">
           <Plus />
         </ScreenFloatingButton>
       </ScreenContent>
