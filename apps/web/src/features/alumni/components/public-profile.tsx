@@ -50,7 +50,7 @@ export const PublicProfile = () => {
           Angeles Metroplitan Area. I talk about all things design, creativity,
           leadership, content creation and personal developement-
         </p>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <div className="flex gap-2">
             <Star size={16} className="text-primary fill-primary" />
             <div className="text-sm">

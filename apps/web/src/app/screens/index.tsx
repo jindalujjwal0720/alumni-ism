@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/utils/tw';
 import { TbCoinRupee } from 'react-icons/tb';
 import { AlumniPublicDetailsScreen } from './search/alumni-public-details';
+import { GeneralProfileScreen } from './profile/(tabs)/general';
 
 export const AppScreens = () => {
   return (
@@ -33,6 +34,7 @@ export const AppScreens = () => {
           <Route path="/donations" element={<DonationsScreen />} />
           <Route path="/notifications" element={<NotificationsScreen />} />
           <Route path="/profile/*" element={<ProfileScreenLayout />}>
+            <Route path="general" element={<GeneralProfileScreen />} />
             <Route path="personal" element={<PersonalDetailsScreen />} />
             <Route path="contact" element={<ContactDetailsScreen />} />
             <Route path="education" element={<EducationDetailsScreen />} />
@@ -70,7 +72,7 @@ export const AppScreens = () => {
           /> */}
           <ScreenBottomNavItem
             title="Profile"
-            path="/profile/personal"
+            path="/profile/general"
             base="/profile"
             icon={({ selected }) => (
               <Avatar

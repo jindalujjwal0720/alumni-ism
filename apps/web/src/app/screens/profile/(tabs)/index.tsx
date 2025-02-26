@@ -11,6 +11,7 @@ export const ProfileScreenLayout = () => {
     <>
       <ScreenTitleBar title="Profile" logo>
         <ScreenTopNav>
+          <ScreenTopNavItem title="General" path="/profile/general" />
           <ScreenTopNavItem title="Personal" path="/profile/personal" />
           <ScreenTopNavItem title="Contact" path="/profile/contact" />
           <ScreenTopNavItem title="Education" path="/profile/education" />

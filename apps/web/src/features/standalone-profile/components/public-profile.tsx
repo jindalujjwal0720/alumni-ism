@@ -15,8 +15,13 @@ import {
 import { MdCake } from 'react-icons/md';
 import React from 'react';
 import { convertDateToReadable } from '@/utils/time';
+import { FaAddressCard } from 'react-icons/fa';
 
-export const PublicProfile = () => {
+export interface PublicProfileProps {
+  ucn: string;
+}
+
+export const PublicProfile = ({ ucn }: PublicProfileProps) => {
   return (
     <div>
       <div className="relative">
@@ -51,7 +56,7 @@ export const PublicProfile = () => {
           Angeles Metroplitan Area. I talk about all things design, creativity,
           leadership, content creation and personal developement-
         </p>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <div className="flex gap-2">
             <Star size={16} className="text-primary fill-primary" />
             <div className="text-sm">
@@ -65,6 +70,12 @@ export const PublicProfile = () => {
               <span className="font-medium mr-1">
                 {convertDateToReadable(new Date('1960-03-25'))}
               </span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <FaAddressCard size={16} className="text-primary fill-primary" />
+            <div className="text-sm">
+              <span className="text-muted-foreground">{ucn}</span>
             </div>
           </div>
         </div>
