@@ -22,9 +22,6 @@ export const AlumniNavigation = () => {
           <a href="#benefits" className="nav-link">
             Benefits
           </a>
-          <a href="#testimonials" className="nav-link">
-            Testimonials
-          </a>
           <a href="#pricing" className="nav-link">
             Pricing
           </a>
