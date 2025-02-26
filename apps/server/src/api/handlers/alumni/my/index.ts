@@ -71,6 +71,7 @@ const createOrUpdateMyAlumniData =
           degree: Joi.string().required(),
           branch: Joi.string().required(),
           yearOfGraduation: Joi.number().required(),
+          admissionNumber: Joi.string().required(),
         }).optional(),
         // professional details
         professional: Joi.object({
