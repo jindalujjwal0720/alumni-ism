@@ -1,3 +1,4 @@
+import { Link } from '@/components/standalone/navigation';
 import { ScreenFloatingButton } from '@/components/standalone/screen-layout';
 import { TableView, TableViewCell } from '@/components/standalone/table-view';
 import { AlumniDonationCard } from '@/features/standalone-donations/components/alumni-donation-card';
@@ -44,7 +45,9 @@ export const MyDonationsScreenContent = () => {
         </TableView>
       </div>
       <ScreenFloatingButton className="p-4 size-14 rounded-full">
-        <Plus />
+        <Link to="/donate" from="Donations">
+          <Plus />
+        </Link>
       </ScreenFloatingButton>
     </>
   );

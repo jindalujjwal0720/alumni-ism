@@ -7,6 +7,12 @@ export enum AlumniGender {
   PREFER_NOT_TO_SAY = 'prefer-not-to-say',
 }
 
+export enum AlumniVerificationStatus {
+  PENDING = 'pending',
+  VERIFIED = 'verified',
+  REJECTED = 'rejected',
+}
+
 export interface IAlumniPersonalDetails {
   name: string;
   alias: string;
@@ -72,7 +78,8 @@ export interface IAlumni {
   professional: IAlumniProfessionalDetails;
   verification: IAlumniVerificationDetails;
 
-  isVerified: boolean;
+  verificationStatus: AlumniVerificationStatus;
+  rejectionReason?: string;
 
   createdAt: Date;
   updatedAt: Date;

@@ -23,6 +23,8 @@ import { GeneralProfileScreenContent } from './profile/(tabs)/general';
 import { DonationsScreenLayout } from './donations/(tabs)';
 import { MyPledgesScreenContent } from './donations/(tabs)/my-pledges';
 import { MyDonationsScreenContent } from './donations/(tabs)/my-donations';
+import { DonateScreen } from './donations/donate';
+import { PledgeScreen } from './donations/pledge';
 
 export const AppScreens = () => {
   return (
@@ -30,15 +32,20 @@ export const AppScreens = () => {
       <ScreenLayout>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
+
           <Route path="/search/*">
             <Route path="*" element={<SearchScreen />} />
             <Route path="alumni/:ucn" element={<AlumniPublicDetailsScreen />} />
           </Route>
+
           <Route path="/donations/*" element={<DonationsScreenLayout />}>
             <Route path="wall" element={<DonationsWallScreenContent />} />
             <Route path="mine" element={<MyDonationsScreenContent />} />
             <Route path="pledges" element={<MyPledgesScreenContent />} />
           </Route>
+          <Route path="/donate" element={<DonateScreen />} />
+          <Route path="/pledge" element={<PledgeScreen />} />
+
           <Route path="/notifications" element={<NotificationsScreen />} />
           <Route path="/profile/*" element={<ProfileScreenLayout />}>
             <Route path="general" element={<GeneralProfileScreenContent />} />

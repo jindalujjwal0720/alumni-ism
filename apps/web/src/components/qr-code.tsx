@@ -7,21 +7,21 @@ export const QRCode = ({ value }: { value: string }) => {
   const qrCodeRef = useRef<HTMLDivElement>(null);
   const qrCodeOptions = useMemo<Options>(
     () => ({
-      width: isMobile ? 200 : 300,
-      height: isMobile ? 200 : 300,
+      width: isMobile ? 160 : 300,
+      height: isMobile ? 160 : 300,
       data: value,
-      image: '/centenary/logo.png',
+      // image: '/centenary/logo.png',
       dotsOptions: {
-        color: '#a00026',
-        type: 'dots',
+        // color: '#a00026',
+        // type: 'dots',
       },
       cornersSquareOptions: {
-        color: '#193357',
-        type: 'extra-rounded',
+        // color: '#193357',
+        // type: 'extra-rounded',
       },
       cornersDotOptions: {
-        color: '#193357',
-        type: 'extra-rounded',
+        // color: '#193357',
+        // type: 'extra-rounded',
       },
     }),
     [value, isMobile],

@@ -13,6 +13,7 @@ export enum DonationPurpose {
 }
 
 export enum PaymentStatus {
+  PENDING = 'pending',
   ACCEPTED = 'accepted',
   IN_CONSIDERATION = 'in_consideration',
   REJECTED = 'rejected',

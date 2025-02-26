@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import {
   AlumniGender,
   AlumniVerificationDocType,
+  AlumniVerificationStatus,
   IAlumni,
   IAlumniContactDetails,
   IAlumniEducationDetails,
@@ -160,13 +161,13 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
     ucn: {
       type: String,
       required: function () {
-        return this?.isVerified === true;
+        return this?.verificationStatus === AlumniVerificationStatus.VERIFIED;
       },
     },
     validity: {
       type: Date,
       required: function () {
-        return this?.isVerified === true;
+        return this?.verificationStatus === AlumniVerificationStatus.VERIFIED;
       },
       // current date to be set as default
       // means card is not valid yet
@@ -194,10 +195,14 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
       required: true,
     },
 
-    isVerified: {
-      type: Boolean,
-      required: true,
-      default: false,
+    verificationStatus: {
+      type: String,
+      enum: AlumniVerificationStatus,
+      default: AlumniVerificationStatus.PENDING,
+    },
+    rejectionReason: {
+      type: String,
+      default: '',
     },
   },
   { timestamps: true },

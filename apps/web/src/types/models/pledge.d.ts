@@ -1,6 +1,6 @@
 import { IUser } from './user';
 
-export interface IPledge {
+export interface IPledge extends Record<string, unknown> {
   account: string | IUser;
 
   amountInINR: number;

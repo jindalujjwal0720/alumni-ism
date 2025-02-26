@@ -134,12 +134,12 @@ export const PersonalDetailsForm = () => {
                   description={<FormMessage />}
                   status={
                     <FormItem>
-                      <FormControl>
+                      <FormControl className="w-full flex items-center justify-end">
                         <Input
                           type="date"
                           variant="standalone"
                           placeholder="When were you born?"
-                          className="w-full text-end"
+                          className="text-end text-muted-foreground"
                           {...field}
                           value={field.value?.toISOString().split('T')[0] || ''}
                           onChange={(e) => {
