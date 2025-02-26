@@ -36,6 +36,7 @@ export interface IAlumniEducationDetails extends Record<string, unknown> {
   degree: string;
   branch: string;
   yearOfGraduation: number;
+  admissionNumber: string;
 }
 
 export interface IAlumniProfessionalDetails extends Record<string, unknown> {

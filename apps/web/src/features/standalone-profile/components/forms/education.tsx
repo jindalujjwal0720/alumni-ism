@@ -11,6 +11,7 @@ const schema = z.object({
   degree: z.string().min(2),
   branch: z.string().min(2),
   yearOfGraduation: z.coerce.number().int(),
+  admissionNumber: z.string().min(4),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -22,6 +23,7 @@ export const EducationDetailsForm = () => {
       degree: '',
       branch: '',
       yearOfGraduation: new Date().getFullYear(),
+      admissionNumber: '',
     },
   });
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -96,6 +98,28 @@ export const EducationDetailsForm = () => {
                           variant="standalone"
                           type="number"
                           placeholder="2025..."
+                          className="w-full text-end"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  }
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="admissionNumber"
+              render={({ field }) => (
+                <TableViewCell
+                  name="Admission number"
+                  status={
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          variant="standalone"
+                          type="text"
+                          placeholder="21JE..."
                           className="w-full text-end"
                           {...field}
                         />

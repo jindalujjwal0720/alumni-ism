@@ -36,6 +36,7 @@ export interface IAlumniEducationDetails {
   degree: string;
   branch: string;
   yearOfGraduation: number;
+  admissionNumber: string;
 }
 
 export interface IAlumniProfessionalDetails {

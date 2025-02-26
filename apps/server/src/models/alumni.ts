@@ -102,6 +102,10 @@ const alumniEducationDetailsSchema =
         type: Number,
         required: true,
       },
+      admissionNumber: {
+        type: String,
+        required: true,
+      },
     },
     { _id: false },
   );

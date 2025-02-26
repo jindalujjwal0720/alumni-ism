@@ -7,7 +7,7 @@ export const MyPledgesScreenContent = () => {
   return (
     <>
       <div className="p-4">
-        <TableView title="Top contributors">
+        <TableView title="Pledges">
           <TableViewCell
             description={
               <AlumniDonationCard
