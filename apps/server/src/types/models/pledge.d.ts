@@ -5,6 +5,10 @@ export interface IPledge {
 
   amountInINR: number;
   amountInWords: string;
+  expectedFullfillmentDate: Date;
+  // for partial fulfillments
+  fullfilledAmountInINR: number;
+  payments: string[];
 
   createdAt: Date;
   updatedAt: Date;

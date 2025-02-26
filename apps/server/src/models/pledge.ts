@@ -8,6 +8,7 @@ const pledgeSchema = new mongoose.Schema<IPledge>(
       ref: 'User',
       required: true,
     },
+
     amountInINR: {
       type: Number,
       required: true,
@@ -16,6 +17,20 @@ const pledgeSchema = new mongoose.Schema<IPledge>(
       type: String,
       required: true,
     },
+    expectedFullfillmentDate: {
+      type: Date,
+      required: true,
+    },
+    fullfilledAmountInINR: {
+      type: Number,
+      default: 0,
+    },
+    payments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Payment',
+      },
+    ],
   },
   { timestamps: true },
 );

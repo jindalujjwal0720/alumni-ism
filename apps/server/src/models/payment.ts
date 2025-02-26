@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
-import { IPayment, PaymentStatus } from '../types/models/payment';
+import {
+  DonationPurpose,
+  IPayment,
+  PaymentCategory,
+  PaymentStatus,
+} from '../types/models/payment';
 
 const paymentSchema = new mongoose.Schema<IPayment>(
   {
@@ -11,8 +16,12 @@ const paymentSchema = new mongoose.Schema<IPayment>(
 
     category: {
       type: String,
-      enum: ['yearly', 'lifetime', 'donation'],
+      enum: PaymentCategory,
       required: true,
+    },
+    purpose: {
+      type: String,
+      enum: DonationPurpose,
     },
     amountInINR: {
       type: Number,
@@ -22,18 +31,18 @@ const paymentSchema = new mongoose.Schema<IPayment>(
       type: String,
       required: true,
     },
+    referenceNumber: {
+      type: String,
+      required: true,
+    },
     remark: {
       type: String,
       default: '',
     },
-    paymentVerificationLink: {
-      type: String,
-      required: true,
-    },
 
     status: {
       type: String,
-      enum: ['accepted', 'in_consideration', 'rejected'],
+      enum: PaymentStatus,
       required: true,
       default: PaymentStatus.IN_CONSIDERATION,
     },

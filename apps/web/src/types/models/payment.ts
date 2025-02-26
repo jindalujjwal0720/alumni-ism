@@ -1,8 +1,15 @@
 import { IUser } from './user';
 
 export enum PaymentCategory {
-  Yearly = 'yearly',
-  Lifetime = 'lifetime',
+  DONATION = 'donation',
+  ALUMNI_CARD = 'alumni_card',
+}
+
+export enum DonationPurpose {
+  GENERAL = 'general',
+  INFRASTRUCTURE = 'infrastructure',
+  SCHOLARSHIP = 'scholarship',
+  OTHER = 'other',
 }
 
 export enum PaymentStatus {
@@ -12,14 +19,14 @@ export enum PaymentStatus {
 }
 
 export interface IPayment extends Record<string, unknown> {
-  _id: string;
   account: string | IUser;
 
   category: PaymentCategory;
+  purpose?: DonationPurpose;
   amountInINR: number;
   amountInWords: string;
-  remark: string;
-  paymentVerificationLink: string;
+  referenceNumber: string;
+  remark?: string;
 
   status: PaymentStatus;
   rejectionReason?: string;
