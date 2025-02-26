@@ -9,17 +9,20 @@ import { Route, Routes } from 'react-router-dom';
 import { HomeScreen } from './home';
 import { ProfileScreenLayout } from './profile/(tabs)';
 import { NotificationsScreen } from './notifications';
-import { DonationsScreen } from './donations';
+import { DonationsWallScreenContent } from './donations/(tabs)/donations-wall';
 import { SearchScreen } from './search/search';
-import { PersonalDetailsScreen } from './profile/(tabs)/personal';
-import { EducationDetailsScreen } from './profile/(tabs)/education';
-import { ProfessionalDetailsScreen } from './profile/(tabs)/professional';
-import { ContactDetailsScreen } from './profile/(tabs)/contact';
+import { PersonalDetailsScreenContent } from './profile/(tabs)/personal';
+import { EducationDetailsScreenContent } from './profile/(tabs)/education';
+import { ProfessionalDetailsScreenContent } from './profile/(tabs)/professional';
+import { ContactDetailsScreenContent } from './profile/(tabs)/contact';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/utils/tw';
 import { TbCoinRupee } from 'react-icons/tb';
 import { AlumniPublicDetailsScreen } from './search/alumni-public-details';
-import { GeneralProfileScreen } from './profile/(tabs)/general';
+import { GeneralProfileScreenContent } from './profile/(tabs)/general';
+import { DonationsScreenLayout } from './donations/(tabs)';
+import { MyPledgesScreenContent } from './donations/(tabs)/my-pledges';
+import { MyDonationsScreenContent } from './donations/(tabs)/my-donations';
 
 export const AppScreens = () => {
   return (
@@ -31,16 +34,23 @@ export const AppScreens = () => {
             <Route path="*" element={<SearchScreen />} />
             <Route path="alumni/:ucn" element={<AlumniPublicDetailsScreen />} />
           </Route>
-          <Route path="/donations" element={<DonationsScreen />} />
+          <Route path="/donations/*" element={<DonationsScreenLayout />}>
+            <Route path="wall" element={<DonationsWallScreenContent />} />
+            <Route path="mine" element={<MyDonationsScreenContent />} />
+            <Route path="pledges" element={<MyPledgesScreenContent />} />
+          </Route>
           <Route path="/notifications" element={<NotificationsScreen />} />
           <Route path="/profile/*" element={<ProfileScreenLayout />}>
-            <Route path="general" element={<GeneralProfileScreen />} />
-            <Route path="personal" element={<PersonalDetailsScreen />} />
-            <Route path="contact" element={<ContactDetailsScreen />} />
-            <Route path="education" element={<EducationDetailsScreen />} />
+            <Route path="general" element={<GeneralProfileScreenContent />} />
+            <Route path="personal" element={<PersonalDetailsScreenContent />} />
+            <Route path="contact" element={<ContactDetailsScreenContent />} />
+            <Route
+              path="education"
+              element={<EducationDetailsScreenContent />}
+            />
             <Route
               path="professional"
-              element={<ProfessionalDetailsScreen />}
+              element={<ProfessionalDetailsScreenContent />}
             />
           </Route>
 
@@ -62,7 +72,7 @@ export const AppScreens = () => {
           />
           <ScreenBottomNavItem
             title="Donations"
-            path="/donations"
+            path="/donations/wall"
             icon={<TbCoinRupee size={22} />}
           />
           {/* <ScreenBottomNavItem

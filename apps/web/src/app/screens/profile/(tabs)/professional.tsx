@@ -1,6 +1,6 @@
 import { ProfessionalDetailsForm } from '@/features/standalone-profile/components/forms/professional';
 
-export const ProfessionalDetailsScreen = () => {
+export const ProfessionalDetailsScreenContent = () => {
   return (
     <div>
       <ProfessionalDetailsForm />

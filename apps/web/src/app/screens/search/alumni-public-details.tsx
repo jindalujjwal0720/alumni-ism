@@ -9,7 +9,7 @@ export const AlumniPublicDetailsScreen = () => {
     <>
       <ScreenTitleBar title="Ujjwal Jindal" logo />
       <ScreenContent>
-        <PublicProfile />
+        <PublicProfile ucn="0100-0720-2025-1926" />
       </ScreenContent>
     </>
   );

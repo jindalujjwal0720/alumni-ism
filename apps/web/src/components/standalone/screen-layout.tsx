@@ -288,7 +288,7 @@ const ScreenTopNavItem = React.forwardRef<
       title={title}
       ref={ref}
       className={cn(
-        'flex-1 shrink-0 flex items-center justify-center border-b-2 border-transparent px-5 py-3',
+        'flex-1 shrink-0 min-w-max flex items-center justify-center border-b-2 border-transparent px-5 py-3',
         isPathActive(path, location.pathname)
           ? 'text-primary border-primary'
           : 'text-muted-foreground',

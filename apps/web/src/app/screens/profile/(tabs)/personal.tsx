@@ -1,6 +1,6 @@
 import { PersonalDetailsForm } from '@/features/standalone-profile/components/forms/personal';
 
-export const PersonalDetailsScreen = () => {
+export const PersonalDetailsScreenContent = () => {
   return (
     <div>
       <PersonalDetailsForm />
