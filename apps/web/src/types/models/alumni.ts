@@ -14,6 +14,9 @@ export enum AlumniVerificationStatus {
 }
 
 export interface IAlumniPersonalDetails extends Record<string, unknown> {
+  _id: string;
+  account: string | IUser;
+
   name: string;
   alias: string;
   profilePicture?: string;
@@ -21,9 +24,15 @@ export interface IAlumniPersonalDetails extends Record<string, unknown> {
   bio?: string;
   dob?: Date;
   gender: 'male' | 'female' | 'other' | 'prefer-not-to-say';
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IAlumniContactDetails extends Record<string, unknown> {
+  _id: string;
+  account: string | IUser;
+
   phone: string;
   email: string;
 
@@ -36,20 +45,35 @@ export interface IAlumniContactDetails extends Record<string, unknown> {
   linkedIn?: string;
   twitter?: string;
   website?: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IAlumniEducationDetails extends Record<string, unknown> {
+  _id: string;
+  account: string | IUser;
+
   degree: string;
   branch: string;
   yearOfGraduation: number;
   admissionNumber: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IAlumniProfessionalDetails extends Record<string, unknown> {
+  _id: string;
+  account: string | IUser;
+
   currentCompany?: string;
   designation?: string;
   currentCompanyWebsite?: string;
   totalExperienceYears?: number;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export enum AlumniVerificationDocType {
@@ -62,21 +86,23 @@ export enum AlumniVerificationDocType {
 }
 
 export interface IAlumniVerificationDetails extends Record<string, unknown> {
+  _id: string;
+  account: string | IUser;
+
   verificationDocType: AlumniVerificationDocType;
   verificationDocLink: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IAlumni extends Record<string, unknown> {
+  _id: string;
   account: string | IUser;
+
   // unique card number
   ucn: string;
   validity: Date;
-
-  personal: IAlumniPersonalDetails;
-  contact: IAlumniContactDetails;
-  education: IAlumniEducationDetails;
-  professional: IAlumniProfessionalDetails;
-  verification: IAlumniVerificationDetails;
 
   verificationStatus: AlumniVerificationStatus;
   rejectionReason?: string;

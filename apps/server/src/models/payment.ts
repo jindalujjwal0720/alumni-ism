@@ -31,7 +31,7 @@ const paymentSchema = new mongoose.Schema<IPayment>(
       type: String,
       required: true,
     },
-    referenceNumber: {
+    transactionId: {
       type: String,
       required: true,
     },

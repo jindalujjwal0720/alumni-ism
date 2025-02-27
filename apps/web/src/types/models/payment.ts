@@ -26,7 +26,7 @@ export interface IPayment extends Record<string, unknown> {
   purpose?: DonationPurpose;
   amountInINR: number;
   amountInWords: string;
-  referenceNumber: string;
+  transactionId: string;
   remark?: string;
 
   status: PaymentStatus;

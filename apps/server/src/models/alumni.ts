@@ -43,7 +43,7 @@ const alumniPersonalDetailsSchema = new mongoose.Schema<IAlumniPersonalDetails>(
       required: true,
     },
   },
-  { _id: false },
+  { timestamps: true },
 );
 
 const alumniContactDetailsSchema = new mongoose.Schema<IAlumniContactDetails>(
@@ -85,7 +85,7 @@ const alumniContactDetailsSchema = new mongoose.Schema<IAlumniContactDetails>(
       default: '',
     },
   },
-  { _id: false },
+  { timestamps: true },
 );
 
 const alumniEducationDetailsSchema =
@@ -108,7 +108,7 @@ const alumniEducationDetailsSchema =
         required: true,
       },
     },
-    { _id: false },
+    { timestamps: true },
   );
 
 const alumniProfessionalDetailsSchema =
@@ -131,7 +131,7 @@ const alumniProfessionalDetailsSchema =
         default: 0,
       },
     },
-    { _id: false },
+    { timestamps: true },
   );
 
 const alumniVerificationDetailsSchema =
@@ -147,7 +147,7 @@ const alumniVerificationDetailsSchema =
         required: true,
       },
     },
-    { _id: false },
+    { timestamps: true },
   );
 
 const alumniSchema = new mongoose.Schema<IAlumni>(
@@ -174,27 +174,6 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
       default: new Date(),
     },
 
-    personal: {
-      type: alumniPersonalDetailsSchema,
-      required: true,
-    },
-    contact: {
-      type: alumniContactDetailsSchema,
-      required: true,
-    },
-    education: {
-      type: alumniEducationDetailsSchema,
-      required: true,
-    },
-    professional: {
-      type: alumniProfessionalDetailsSchema,
-      required: true,
-    },
-    verification: {
-      type: alumniVerificationDetailsSchema,
-      required: true,
-    },
-
     verificationStatus: {
       type: String,
       enum: AlumniVerificationStatus,
@@ -208,5 +187,33 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
   { timestamps: true },
 );
 
+const AlumniPersonalDetails = mongoose.model<IAlumniPersonalDetails>(
+  'AlumniPersonalDetails',
+  alumniPersonalDetailsSchema,
+);
+const AlumniContactDetails = mongoose.model<IAlumniContactDetails>(
+  'AlumniContactDetails',
+  alumniContactDetailsSchema,
+);
+const AlumniEducationDetails = mongoose.model<IAlumniEducationDetails>(
+  'AlumniEducationDetails',
+  alumniEducationDetailsSchema,
+);
+const AlumniProfessionalDetails = mongoose.model<IAlumniProfessionalDetails>(
+  'AlumniProfessionalDetails',
+  alumniProfessionalDetailsSchema,
+);
+const AlumniVerificationDetails = mongoose.model<IAlumniVerificationDetails>(
+  'AlumniVerificationDetails',
+  alumniVerificationDetailsSchema,
+);
 const Alumni = mongoose.model<IAlumni>('Alumni', alumniSchema);
-export default Alumni;
+
+export {
+  AlumniPersonalDetails,
+  AlumniContactDetails,
+  AlumniEducationDetails,
+  AlumniProfessionalDetails,
+  AlumniVerificationDetails,
+  Alumni,
+};
