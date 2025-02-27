@@ -1,32 +1,37 @@
 import { Model } from 'mongoose';
 import { IPostLike } from '../../../../types/models/post';
 import { RequestHandler } from 'express';
-import { AppError, CommonErrors } from '../../../../utils/errors';
 import { PostLike } from '../../../../models/post';
 
 const createPostLike =
-  (_postModel: Model<IPostLike>): RequestHandler =>
+  (likeModel: Model<IPostLike>): RequestHandler =>
   async (req, res, next) => {
     try {
-      throw new AppError(
-        CommonErrors.InternalServerError.name,
-        CommonErrors.InternalServerError.statusCode,
-        'Not implemented',
+      const { postId } = req.params;
+      const { id: userId } = req.user;
+
+      await likeModel.updateOne(
+        { post: postId, account: userId },
+        { post: postId, account: userId },
+        { upsert: true },
       );
+
+      res.status(201).send();
     } catch (err) {
       next(err);
     }
   };
 
 const removePostLike =
-  (_postModel: Model<IPostLike>): RequestHandler =>
+  (likeModel: Model<IPostLike>): RequestHandler =>
   async (req, res, next) => {
     try {
-      throw new AppError(
-        CommonErrors.InternalServerError.name,
-        CommonErrors.InternalServerError.statusCode,
-        'Not implemented',
-      );
+      const { postId } = req.params;
+      const { id: userId } = req.user;
+
+      await likeModel.deleteOne({ post: postId, account: userId });
+
+      res.status(204).send();
     } catch (err) {
       next(err);
     }

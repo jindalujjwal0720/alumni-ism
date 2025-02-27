@@ -1,18 +1,21 @@
 import { Model } from 'mongoose';
 import { IPost } from '../../../types/models/post';
 import { RequestHandler } from 'express';
-import { AppError, CommonErrors } from '../../../utils/errors';
 import { Post } from '../../../models/post';
 
 const listMyFeedPosts =
-  (_postModel: Model<IPost>): RequestHandler =>
+  (postModel: Model<IPost>): RequestHandler =>
   async (req, res, next) => {
     try {
-      throw new AppError(
-        CommonErrors.InternalServerError.name,
-        CommonErrors.InternalServerError.statusCode,
-        'Not implemented',
-      );
+      const { limit = 10, offset = 0 } = req.query;
+
+      const posts = await postModel
+        .find()
+        .sort({ createdAt: -1 })
+        .skip(Number(offset))
+        .limit(Number(limit));
+
+      res.status(200).send({ posts });
     } catch (err) {
       next(err);
     }
