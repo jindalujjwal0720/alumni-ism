@@ -20,7 +20,10 @@ self.skipWaiting();
 const staticRoute = new Route(
   ({ request }) => {
     return (
-      request.destination === 'style' || request.url.endsWith('.webmanifest')
+      request.destination === 'script' ||
+      request.destination === 'document' ||
+      request.destination === 'style' ||
+      request.url.endsWith('.webmanifest')
     );
   },
   new StaleWhileRevalidate({

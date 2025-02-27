@@ -9,7 +9,7 @@ import { SearchProvider } from '@/features/standalone-search/components/provider
 export const SearchScreen = () => {
   return (
     <SearchProvider>
-      <ScreenTitleBar title="Search" size="large" logo>
+      <ScreenTitleBar title="Search" logo>
         <div className="px-2 pb-2">
           <SearchInput />
         </div>

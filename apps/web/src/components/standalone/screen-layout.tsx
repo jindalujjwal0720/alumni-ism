@@ -6,6 +6,7 @@ import { Show } from '../show';
 import { useStandaloneNavigation } from './navigation';
 import { useLocation } from 'react-router-dom';
 import { Image } from './image';
+import useNetworkStatus from '@/hooks/useNetworkStatus';
 
 const ScreenLayoutContext = React.createContext<{
   title?: string;
@@ -33,6 +34,7 @@ const ScreenLayout = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & {}
 >(({ className, children, ...props }, ref) => {
   const [title, setTitle] = React.useState<string | undefined>(undefined);
+  const { isOnline } = useNetworkStatus();
 
   const contextValue = React.useMemo(() => ({ title, setTitle }), [title]);
 
@@ -46,6 +48,11 @@ const ScreenLayout = React.forwardRef<
         )}
         {...props}
       >
+        <Show when={!isOnline}>
+          <div className="w-screen py-1 bg-yellow-500 text-xs tracking-wide text-center">
+            You are offline, some features may not work properly
+          </div>
+        </Show>
         {children}
       </div>
     </ScreenLayoutContext.Provider>
@@ -140,7 +147,7 @@ const ScreenTitleBar = React.forwardRef<
             </Show>
           </div>
           <Show when={title !== undefined && size === 'large'}>
-            <div className="flex-1 flex items-center justify-between pl-2">
+            <div className="flex-1 flex justify-between pl-2">
               <h1 className="text-3xl font-semibold text-start">{title}</h1>
               <Show when={logo && logoPosition === 'outside'}>
                 <Image

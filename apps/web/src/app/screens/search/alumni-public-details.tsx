@@ -7,7 +7,7 @@ import { PublicProfile } from '@/features/standalone-profile/components/public-p
 export const AlumniPublicDetailsScreen = () => {
   return (
     <>
-      <ScreenTitleBar title="Ujjwal Jindal" logo />
+      <ScreenTitleBar title="Alumni" logo />
       <ScreenContent>
         <PublicProfile ucn="0100-0720-2025-1926" />
       </ScreenContent>

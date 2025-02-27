@@ -6,7 +6,7 @@ import {
 } from '@/components/standalone/screen-layout';
 import { Home, Search } from 'lucide-react';
 import { Route, Routes } from 'react-router-dom';
-import { HomeScreen } from './home';
+import { HomeScreenContent } from './home/home';
 import { ProfileScreenLayout } from './profile/(tabs)';
 import { NotificationsScreen } from './notifications';
 import { DonationsWallScreenContent } from './donations/(tabs)/donations-wall';
@@ -25,13 +25,19 @@ import { MyPledgesScreenContent } from './donations/(tabs)/my-pledges';
 import { MyDonationsScreenContent } from './donations/(tabs)/my-donations';
 import { DonateScreen } from './donations/donate';
 import { PledgeScreen } from './donations/pledge';
+import { HomeScreenLayout } from './home';
+import { PostDetailsScreen } from './home/post-details';
 
 export const AppScreens = () => {
   return (
     <NavigationProvider>
       <ScreenLayout>
         <Routes>
-          <Route path="/" element={<HomeScreen />} />
+          <Route path="/*" element={<HomeScreenLayout />}>
+            <Route path="" element={<HomeScreenContent />} />
+          </Route>
+
+          <Route path="posts/:id" element={<PostDetailsScreen />} />
 
           <Route path="/search/*">
             <Route path="*" element={<SearchScreen />} />
