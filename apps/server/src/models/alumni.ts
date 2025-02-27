@@ -164,6 +164,7 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
       required: function () {
         return this?.verificationStatus === AlumniVerificationStatus.VERIFIED;
       },
+      unique: true,
     },
     validity: {
       type: Date,

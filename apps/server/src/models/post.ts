@@ -88,10 +88,6 @@ const postAnalyticsSchema = new mongoose.Schema<IPostAnalytics>(
       ref: 'Post',
       required: true,
     },
-    views: {
-      type: Number,
-      default: 0,
-    },
     likes: {
       type: Number,
       default: 0,

@@ -43,7 +43,6 @@ export interface IPostAnalytics extends Record<string, unknown> {
   _id: string;
   post: string | IPost;
 
-  views: number;
   likes: number;
   comments: number;
 }
