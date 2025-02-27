@@ -1,36 +1,38 @@
 import { RequestHandler } from 'express';
-import User from '../../models/user';
-import { IUser } from '../../types/models/user';
 import { AppError, CommonErrors } from '../../utils/errors';
 import { Model } from 'mongoose';
+import { IAlumni } from '../../types/models/alumni';
+import { Alumni } from '../../models/alumni';
 
 const checkCardValidity =
-  (userModel: Model<IUser>): RequestHandler =>
+  (alumniModel: Model<IAlumni>): RequestHandler =>
   async (req, res, next) => {
     try {
       const { id } = req.query;
 
-      const user = await userModel
-        .findOne({
-          studentData: { $exists: true },
-          'studentData.ucn': `${id}`,
-          studentDataVerified: true,
-        })
-        .select('studentData');
-      if (!user) {
+      const alumni = await alumniModel.findOne({
+        account: id,
+      });
+      if (!alumni) {
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
-          'Student not found',
+          'Alumni not found',
         );
       }
 
-      res.status(200).json({
-        valid: true,
-      });
+      if (!alumni.ucn || new Date(alumni.validity) < new Date()) {
+        throw new AppError(
+          CommonErrors.BadRequest.name,
+          CommonErrors.BadRequest.statusCode,
+          'Card is not valid or expired',
+        );
+      }
+
+      res.status(200).json({ valid: true });
     } catch (err) {
       next(err);
     }
   };
 
-export const get = checkCardValidity(User);
+export const get = checkCardValidity(Alumni);

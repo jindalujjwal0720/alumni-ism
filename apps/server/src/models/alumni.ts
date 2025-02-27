@@ -8,6 +8,7 @@ import {
   IAlumniEducationDetails,
   IAlumniPersonalDetails,
   IAlumniProfessionalDetails,
+  IAlumniPublicProfilePreferences,
   IAlumniVerificationDetails,
 } from '../types/models/alumni';
 
@@ -187,6 +188,37 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
   { timestamps: true },
 );
 
+const alumniPublicProfilePreferencesSchema =
+  new mongoose.Schema<IAlumniPublicProfilePreferences>(
+    {
+      showDob: {
+        type: Boolean,
+        default: false,
+      },
+      showGender: {
+        type: Boolean,
+        default: true,
+      },
+      showEmail: {
+        type: Boolean,
+        default: true,
+      },
+      showPhone: {
+        type: Boolean,
+        default: false,
+      },
+      showAdmissionNumber: {
+        type: Boolean,
+        default: false,
+      },
+      showZip: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    { timestamps: true },
+  );
+
 const AlumniPersonalDetails = mongoose.model<IAlumniPersonalDetails>(
   'AlumniPersonalDetails',
   alumniPersonalDetailsSchema,
@@ -208,6 +240,11 @@ const AlumniVerificationDetails = mongoose.model<IAlumniVerificationDetails>(
   alumniVerificationDetailsSchema,
 );
 const Alumni = mongoose.model<IAlumni>('Alumni', alumniSchema);
+const AlumniPublicProfilePreferences =
+  mongoose.model<IAlumniPublicProfilePreferences>(
+    'AlumniPublicProfilePreferences',
+    alumniPublicProfilePreferencesSchema,
+  );
 
 export {
   AlumniPersonalDetails,
@@ -216,4 +253,5 @@ export {
   AlumniProfessionalDetails,
   AlumniVerificationDetails,
   Alumni,
+  AlumniPublicProfilePreferences,
 };

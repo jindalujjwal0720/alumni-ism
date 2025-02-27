@@ -27,7 +27,7 @@ const Settings = () => {
   const role = useSelector(selectRole);
   const isMobile = useIsMobile();
   const items = useMemo(() => {
-    if (role === 'student' && !isMobile) {
+    if (role === 'alumni' && !isMobile) {
       return [
         { href: '/settings/details', title: 'Alumni Details' },
         { href: '/settings/donations', title: 'Pledge & Donations' },
@@ -54,13 +54,13 @@ const Settings = () => {
               <>
                 <Route
                   path="/details"
-                  element={<ProtectedRoute roles={['student']} />}
+                  element={<ProtectedRoute roles={['alumni']} />}
                 >
                   <Route path="" element={<AlumniDetails />} />
                 </Route>
                 <Route
                   path="/donations"
-                  element={<ProtectedRoute roles={['student']} />}
+                  element={<ProtectedRoute roles={['alumni']} />}
                 >
                   <Route path="" element={<PledgesAndDonationsPage />} />
                 </Route>

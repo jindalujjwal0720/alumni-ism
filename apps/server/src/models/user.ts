@@ -6,7 +6,7 @@ import {
   IRecoveryDetails,
 } from '../types/models/user.d';
 
-const ALL_ROLES = ['student', 'admin', 'partner'] as const;
+const ALL_ROLES = ['alumni', 'admin', 'partner'] as const;
 
 const refreshTokenSchema = new mongoose.Schema<IRefreshToken>(
   {
@@ -18,26 +18,6 @@ const refreshTokenSchema = new mongoose.Schema<IRefreshToken>(
       platform: String,
       source: String,
     },
-  },
-  { _id: false },
-);
-
-const updatesSchema = new mongoose.Schema<
-  Pick<IUser, 'name' | 'email' | 'imageUrl'>
->(
-  {
-    name: { type: String, minlength: 3, maxlength: 50 },
-    email: {
-      type: String,
-      validate: {
-        validator: (v: string) => {
-          // eslint-disable-next-line no-useless-escape
-          return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid email address!`,
-      },
-    },
-    imageUrl: { type: String },
   },
   { _id: false },
 );
@@ -89,11 +69,7 @@ const userSchema = new mongoose.Schema<IUser>(
         message: (props) => `${props.value} is not a valid email address!`,
       },
     },
-    imageUrl: { type: String },
     passwordHash: { type: String, required: true, select: false },
-
-    updates: { type: updatesSchema, select: false },
-    reason: { type: String, maxlength: 255, select: false },
 
     roles: {
       type: [String],
@@ -103,7 +79,7 @@ const userSchema = new mongoose.Schema<IUser>(
         },
         message: (props) => `${props.value} is not a valid role!`,
       },
-      default: ['student'],
+      default: ['alumni'],
     },
     restricted: [{ type: String }],
 

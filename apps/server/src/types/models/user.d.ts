@@ -1,6 +1,6 @@
 import { IDeviceInfo } from '../custom/middlewares/user-agent';
 
-export type IUserRole = 'student' | 'partner' | 'admin';
+export type IUserRole = 'alumni' | 'partner' | 'admin';
 
 export type IRefreshToken = {
   token: string;

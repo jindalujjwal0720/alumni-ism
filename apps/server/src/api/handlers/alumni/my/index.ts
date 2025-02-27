@@ -1,11 +1,7 @@
 import { Model } from 'mongoose';
-import {
-  AlumniGender,
-  AlumniVerificationDocType,
-  IAlumni,
-} from '../../../../types/models/alumni';
+import { IAlumni } from '../../../../types/models/alumni';
 import { RequestHandler } from 'express';
-import Alumni from '../../../../models/alumni';
+import { Alumni } from '../../../../models/alumni';
 import Joi from 'joi';
 import { AppError, CommonErrors } from '../../../../utils/errors';
 
@@ -40,54 +36,7 @@ const createOrUpdateMyAlumniData =
       }
 
       // Validate request body
-      const schema = Joi.object({
-        // personal details
-        personal: Joi.object({
-          name: Joi.string().required(),
-          alias: Joi.string().required(),
-          profilePicture: Joi.string().optional(),
-          bio: Joi.string().optional(),
-          dob: Joi.date().optional(),
-          gender: Joi.string()
-            .valid(...Object.values(AlumniGender))
-            .required(),
-        }).optional(),
-        // contact details
-        contact: Joi.object({
-          phone: Joi.string().required(),
-          email: Joi.string().required(),
-
-          city: Joi.string().required(),
-          state: Joi.string().required(),
-          country: Joi.string().required(),
-          zip: Joi.string().required(),
-
-          linkedIn: Joi.string().optional(),
-          twitter: Joi.string().optional(),
-          website: Joi.string().optional(),
-        }).optional(),
-        // education details
-        education: Joi.object({
-          degree: Joi.string().required(),
-          branch: Joi.string().required(),
-          yearOfGraduation: Joi.number().required(),
-          admissionNumber: Joi.string().required(),
-        }).optional(),
-        // professional details
-        professional: Joi.object({
-          currentCompany: Joi.string().optional(),
-          designation: Joi.string().optional(),
-          currentCompanyWebsite: Joi.string().optional(),
-          totalExperienceYears: Joi.number().optional(),
-        }).optional(),
-        // verification details
-        verification: Joi.object({
-          verificationDocType: Joi.string()
-            .valid(...Object.values(AlumniVerificationDocType))
-            .required(),
-          verificationDocLink: Joi.string().required(),
-        }).optional(),
-      });
+      const schema = Joi.object({});
       const { error } = schema.validate(req.body);
       if (error) {
         throw new AppError(
@@ -96,13 +45,6 @@ const createOrUpdateMyAlumniData =
           error.message,
         );
       }
-
-      // Update alumni data
-      alumni.personal = req.body.personal ?? alumni.personal;
-      alumni.contact = req.body.contact ?? alumni.contact;
-      alumni.education = req.body.education ?? alumni.education;
-      alumni.professional = req.body.professional ?? alumni.professional;
-      alumni.verification = req.body.verification ?? alumni.verification;
 
       await alumni.save();
 

@@ -1,6 +1,6 @@
 import { IDeviceInfo } from '../custom/middlewares/user-agent';
 
-export type IUserRole = 'student' | 'partner' | 'admin';
+export type IUserRole = 'alumni' | 'partner' | 'admin';
 
 export type IRefreshToken = {
   token: string;
@@ -34,12 +34,6 @@ export type IRecoveryDetails = {
   backupCodesUsedCount?: number;
 };
 
-export interface IStudentData {
-  /** Unique Card Number */
-  ucn: string;
-  verificationDoc?: string;
-}
-
 export interface IPartnerData {
   /** Partner's organization name */
   name: string;
@@ -57,20 +51,6 @@ export interface IUser {
   // Optional because we will check for these in application code
   name: string;
   email: string;
-  imageUrl?: string;
-  // For student and partner
-  studentData?: IStudentData;
-  studentDataVerified: boolean;
-  partnerData?: IPartnerData;
-
-  // For updating user profile
-  // For use cases where user can update their profile but need to be approved by admin
-  updates?: {
-    name?: string;
-    email?: string;
-    imageUrl?: string;
-  };
-  reason?: string; // Reason for updating profile, can be text, url, etc.
 
   // Authorization
   roles: IUserRole[];

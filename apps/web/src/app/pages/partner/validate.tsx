@@ -13,10 +13,8 @@ const formatCreditCardNumber = (value: string) => {
 };
 
 export const ValidatePage = () => {
-  const [
-    validateCard,
-    { data: { valid: isValid, data: studentData } = {}, isLoading },
-  ] = useLazyValidateCardQuery();
+  const [validateCard, { data: { valid: isValid } = {}, isLoading }] =
+    useLazyValidateCardQuery();
   const [cardNumber, setCardNumber] = useState('');
   const formattedCardNumber = useMemo(
     () => formatCreditCardNumber(cardNumber),
@@ -66,7 +64,9 @@ export const ValidatePage = () => {
             {isLoading ? 'Validating...' : 'Validate'}
           </Button>
           {!isLoading && isValid ? (
-            <div className="text-green-500">({studentData?.ucn}) is valid</div>
+            <div className="text-green-500">
+              Card is valid. Alumni is verified.
+            </div>
           ) : (
             <div className="text-red-500">Invalid card</div>
           )}

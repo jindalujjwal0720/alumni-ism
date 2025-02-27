@@ -110,3 +110,27 @@ export interface IAlumni extends Record<string, unknown> {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IAlumniPublicProfilePreferences
+  extends Record<string, unknown> {
+  _id: string;
+
+  // personal
+  showDob: boolean;
+  showGender: boolean;
+
+  // contact
+  showPhone: boolean;
+  showEmail: boolean;
+  showZip: boolean;
+
+  // education
+  showAdmissionNumber: boolean;
+
+  // professional
+
+  // verification
+
+  createdAt: Date;
+  updatedAt: Date;
+}
