@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { AutoResizeTextarea } from '@/components/ui/textarea';
 import { DonationPurpose, PaymentCategory } from '@/types/models/payment';
 import { amountToWords } from '@/utils/numbers';
-import { generateUniqueReferenceNumber, generateUpiLink } from '@/utils/upi';
+import { generateUpiLink } from '@/utils/upi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -35,7 +35,7 @@ const schema = z.object({
   purpose: z.nativeEnum(DonationPurpose),
   amountInINR: z.coerce.number().int().positive(),
   amountInWords: z.string(),
-  referenceNumber: z.string(),
+  transactionId: z.string(),
   remark: z.string().max(255).optional(),
 });
 
@@ -49,22 +49,19 @@ export const DonateForm = () => {
       purpose: DonationPurpose.GENERAL,
       amountInINR: 10000,
       amountInWords: amountToWords(10000),
-      referenceNumber: '',
+      transactionId: '',
       remark: '',
     },
   });
   const currentAmount = form.watch('amountInINR');
-  const currentReferenceNumber = form.watch('referenceNumber');
   const upiUrl = useMemo(
     () =>
       generateUpiLink({
         vpa: UPI_ID,
         name: BENEFACTOR_NAME,
         amount: currentAmount,
-        referenceId: currentReferenceNumber,
-        note: currentReferenceNumber,
       }),
-    [currentAmount, currentReferenceNumber],
+    [currentAmount],
   );
   const gpayUpiUrl = useMemo(
     () =>
@@ -72,11 +69,9 @@ export const DonateForm = () => {
         vpa: UPI_ID,
         name: BENEFACTOR_NAME,
         amount: currentAmount,
-        referenceId: currentReferenceNumber,
-        note: currentReferenceNumber,
         provider: 'googlepay',
       }),
-    [currentAmount, currentReferenceNumber],
+    [currentAmount],
   );
   const phonePeUpiUrl = useMemo(
     () =>
@@ -84,11 +79,9 @@ export const DonateForm = () => {
         vpa: UPI_ID,
         name: BENEFACTOR_NAME,
         amount: currentAmount,
-        referenceId: currentReferenceNumber,
-        note: currentReferenceNumber,
         provider: 'phonepe',
       }),
-    [currentAmount, currentReferenceNumber],
+    [currentAmount],
   );
   const paytmUpiUrl = useMemo(
     () =>
@@ -96,22 +89,13 @@ export const DonateForm = () => {
         vpa: UPI_ID,
         name: BENEFACTOR_NAME,
         amount: currentAmount,
-        referenceId: currentReferenceNumber,
-        note: currentReferenceNumber,
         provider: 'paytm',
       }),
-    [currentAmount, currentReferenceNumber],
+    [currentAmount],
   );
 
   const handleSubmit = (data: FormValues) => {
     console.log('Donating...', data);
-  };
-
-  const handleGenerateReferenceNumber = (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    e.preventDefault();
-    form.setValue('referenceNumber', generateUniqueReferenceNumber());
   };
 
   return (
@@ -229,82 +213,73 @@ export const DonateForm = () => {
                 />
               )}
             />
-            <TableViewCell
-              name="Reference Number"
-              description="Unique reference number for this transaction, generated automatically. In case of failure, you can use this reference number to track the transaction."
-              status={
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      variant="standalone"
-                      type="text"
-                      placeholder="Reference Number"
-                      className="w-full text-end pt-1"
-                      {...form.register('referenceNumber')}
-                    />
-                  </FormControl>
-                </FormItem>
-              }
-            />
-            <TableViewCell
-              description={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full"
-                  onClick={handleGenerateReferenceNumber}
-                >
-                  {currentReferenceNumber ? 'Regenerate' : 'Generate'} Reference
-                  Number
-                </Button>
-              }
+            <FormField
+              control={form.control}
+              name="transactionId"
+              render={({ field }) => (
+                <TableViewCell
+                  name="Transaction ID"
+                  description="Enter the transaction ID for reference. This id is provided by the payment gateway after successful payment."
+                  status={
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          variant="standalone"
+                          placeholder="Enter the transaction ID..."
+                          className="w-full text-end mb-2"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  }
+                />
+              )}
             />
           </TableView>
           <TableView title="Actions">
             <Show when={currentAmount <= 100000}>
-              <Show when={currentReferenceNumber}>
-                <TableViewCell
-                  description={
-                    <div className="w-full flex items-center justify-center py-2">
-                      <QRCode value={upiUrl} />
-                    </div>
-                  }
-                />
-                <TableViewCell
-                  description={
-                    <div className="w-full flex items-center justify-center gap-4 flex-wrap py-2">
-                      <Link to={gpayUpiUrl}>
-                        <img
-                          src="/providers/gpay.png"
-                          alt="GPay"
-                          className="h-10 rounded-md"
-                        />
-                      </Link>
-                      <Link to={phonePeUpiUrl}>
-                        <img
-                          src="/providers/phonepe.png"
-                          alt="PhonePe"
-                          className="h-8 rounded-md"
-                        />
-                      </Link>
-                      <Link to={paytmUpiUrl}>
-                        <img
-                          src="/providers/paytm.png"
-                          alt="Paytm"
-                          className="h-10 rounded-md"
-                        />
-                      </Link>
-                      <Link to={upiUrl}>
-                        <img
-                          src="/providers/upi.png"
-                          alt="UPI"
-                          className="h-10 rounded-md"
-                        />
-                      </Link>
-                    </div>
-                  }
-                />
-              </Show>
+              <TableViewCell
+                description={
+                  <div className="w-full flex items-center justify-center py-2">
+                    <QRCode value={upiUrl} />
+                  </div>
+                }
+              />
+              <TableViewCell
+                description={
+                  <div className="w-full flex items-center justify-center gap-4 flex-wrap py-2">
+                    <Link to={gpayUpiUrl}>
+                      <img
+                        src="/providers/gpay.png"
+                        alt="GPay"
+                        className="h-10 rounded-md"
+                      />
+                    </Link>
+                    <Link to={phonePeUpiUrl}>
+                      <img
+                        src="/providers/phonepe.png"
+                        alt="PhonePe"
+                        className="h-8 rounded-md"
+                      />
+                    </Link>
+                    <Link to={paytmUpiUrl}>
+                      <img
+                        src="/providers/paytm.png"
+                        alt="Paytm"
+                        className="h-10 rounded-md"
+                      />
+                    </Link>
+                    <Link to={upiUrl}>
+                      <img
+                        src="/providers/upi.png"
+                        alt="UPI"
+                        className="h-10 rounded-md"
+                      />
+                    </Link>
+                  </div>
+                }
+              />
             </Show>
             <Show when={currentAmount > 100000}>
               <TableViewCell

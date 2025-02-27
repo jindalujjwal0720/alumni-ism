@@ -11,7 +11,7 @@ export const generateUpiLink = ({
   vpa: string;
   name: string;
   amount: number;
-  referenceId: string;
+  referenceId?: string;
   note?: string;
   callbackUrl?: string;
   currency?: 'INR';
@@ -36,7 +36,7 @@ export const generateUpiLink = ({
   const params = new URLSearchParams({
     pa: vpa,
     pn: name,
-    tr: referenceId,
+    tr: referenceId || '',
     tn: note || '',
     am: amount.toString(),
     cu: currency,
@@ -44,15 +44,4 @@ export const generateUpiLink = ({
   });
 
   return `${base}?${params.toString()}`;
-};
-
-// 12 digit universally unique reference number
-// timestamp is of length 10
-// random number is of length 2
-export const generateUniqueReferenceNumber = () => {
-  const timestamp = Math.floor(Date.now() / 1000).toString();
-  const random = Math.floor(Math.random() * 100)
-    .toString()
-    .padStart(2, '0');
-  return `${timestamp}${random}`;
 };
