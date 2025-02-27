@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
-import { IPostComment } from '../../../../../../types/models/post';
+import { IPostComment } from '../../../../../types/models/post';
 import { RequestHandler } from 'express';
-import { AppError, CommonErrors } from '../../../../../../utils/errors';
-import { PostComment } from '../../../../../../models/post';
+import { AppError, CommonErrors } from '../../../../../utils/errors';
+import { PostComment } from '../../../../../models/post';
 
 const listPostComments =
   (_postModel: Model<IPostComment>): RequestHandler =>

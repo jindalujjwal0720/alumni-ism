@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { AppError, CommonErrors } from '../../../../utils/errors';
 import { RequestHandler } from 'express';
 import { IAlumni } from '../../../../types/models/alumni';
-import Alumni from '../../../../models/alumni';
+import { Alumni } from '../../../../models/alumni';
 import { IUser } from '../../../../types/models/user';
 import User from '../../../../models/user';
 

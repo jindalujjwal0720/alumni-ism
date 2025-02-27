@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
-import { IPostLike } from '../../../../../types/models/post';
+import { IPostLike } from '../../../../types/models/post';
 import { RequestHandler } from 'express';
-import { AppError, CommonErrors } from '../../../../../utils/errors';
-import { PostLike } from '../../../../../models/post';
+import { AppError, CommonErrors } from '../../../../utils/errors';
+import { PostLike } from '../../../../models/post';
 
 const createPostLike =
   (_postModel: Model<IPostLike>): RequestHandler =>

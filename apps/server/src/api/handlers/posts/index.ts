@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
-import { IPost } from '../../../../types/models/post';
+import { IPost } from '../../../types/models/post';
 import { RequestHandler } from 'express';
-import { AppError, CommonErrors } from '../../../../utils/errors';
-import { Post } from '../../../../models/post';
+import { AppError, CommonErrors } from '../../../utils/errors';
+import { Post } from '../../../models/post';
 
 const createPost =
   (_postModel: Model<IPost>): RequestHandler =>

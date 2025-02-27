@@ -1,11 +1,11 @@
 import { Model } from 'mongoose';
-import { IPost } from '../../../../types/models/post';
+import { IPostComment } from '../../../../../types/models/post';
 import { RequestHandler } from 'express';
-import { AppError, CommonErrors } from '../../../../utils/errors';
-import { Post } from '../../../../models/post';
+import { AppError, CommonErrors } from '../../../../../utils/errors';
+import { PostComment } from '../../../../../models/post';
 
-const listMyPosts =
-  (_postModel: Model<IPost>): RequestHandler =>
+const editPostComment =
+  (_postModel: Model<IPostComment>): RequestHandler =>
   async (req, res, next) => {
     try {
       throw new AppError(
@@ -18,4 +18,4 @@ const listMyPosts =
     }
   };
 
-export const get = listMyPosts(Post);
+export const put = editPostComment(PostComment);
