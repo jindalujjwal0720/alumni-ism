@@ -12,9 +12,13 @@ import { AutoResizeTextarea } from '@/components/ui/textarea';
 import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
 import { AlumniGender } from '@/types/models/alumni';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+  useReadMyPersonalDetailsQuery,
+  useUpsertMyPersonalDetailsMutation,
+} from '../../api/details';
 
 const GENDER_OPTIONS = {
   [AlumniGender.FEMALE]: 'Female',
@@ -63,12 +67,31 @@ export const PersonalDetailsForm = () => {
       gender: AlumniGender.PREFER_NOT_TO_SAY,
     },
   });
+  const { data: { details } = {} } = useReadMyPersonalDetailsQuery(undefined);
+  const [upsertPersonalDetails] = useUpsertMyPersonalDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
 
   const saveDataToServer = (data: FormValues) => {
-    console.log('Saving...', data);
+    try {
+      upsertPersonalDetails(data).unwrap();
+    } catch (_err) {
+      // silently fail
+    }
   };
+
+  useEffect(() => {
+    if (details) {
+      form.reset({
+        name: details.name,
+        alias: details.alias,
+        profilePicture: details.profilePicture,
+        bannerPicture: details.bannerPicture,
+        bio: details.bio,
+        dob: details.dob ? new Date(details.dob) : undefined,
+      });
+    }
+  }, [details, form]);
 
   return (
     <div className="p-4">

@@ -4,9 +4,13 @@ import { Input } from '@/components/ui/input';
 import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Globe2, Linkedin, Twitter } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+  useReadMyContactDetailsQuery,
+  useUpsertMyContactDetailsMutation,
+} from '../../api/details';
 
 const schema = z.object({
   phone: z.string().min(10),
@@ -41,12 +45,36 @@ export const ContactDetailsForm = () => {
       website: '',
     },
   });
+  const { data: { details } = {} } = useReadMyContactDetailsQuery(undefined);
+  const [upsertContactDetails] = useUpsertMyContactDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
 
   const saveDataToServer = (data: FormValues) => {
-    console.log('Saving...', data);
+    try {
+      upsertContactDetails(data).unwrap();
+    } catch (_err) {
+      // silently fail
+    }
   };
+
+  useEffect(() => {
+    if (details) {
+      form.reset({
+        phone: details.phone,
+        email: details.email,
+
+        city: details.city,
+        state: details.state,
+        country: details.country,
+        zip: details.zip,
+
+        linkedIn: details.linkedIn,
+        twitter: details.twitter,
+        website: details.website,
+      });
+    }
+  }, [details, form]);
 
   return (
     <div className="p-4 flex flex-col gap-6">
