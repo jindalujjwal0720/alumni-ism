@@ -8,23 +8,23 @@ const detailsApi = api.injectEndpoints({
     }),
     readMyPersonalDetails: builder.query({
       query: () => '/v1/alumni/me/personal',
-      providesTags: ['Alumni'],
+      providesTags: [{ type: 'Alumni', id: 'personal' }],
     }),
     readMyVerificationDetails: builder.query({
       query: () => '/v1/alumni/me/verification',
-      providesTags: ['Alumni'],
+      providesTags: [{ type: 'Alumni', id: 'verification' }],
     }),
     readMyContactDetails: builder.query({
       query: () => '/v1/alumni/me/contact',
-      providesTags: ['Alumni'],
+      providesTags: [{ type: 'Alumni', id: 'contact' }],
     }),
     readMyEducationDetails: builder.query({
       query: () => '/v1/alumni/me/education',
-      providesTags: ['Alumni'],
+      providesTags: [{ type: 'Alumni', id: 'education' }],
     }),
     readMyProfessionalDetails: builder.query({
       query: () => '/v1/alumni/me/professional',
-      providesTags: ['Alumni'],
+      providesTags: [{ type: 'Alumni', id: 'professional' }],
     }),
 
     upsertMyPersonalDetails: builder.mutation({
@@ -41,7 +41,7 @@ const detailsApi = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Alumni'],
+      invalidatesTags: [{ type: 'Alumni', id: 'contact' }],
     }),
     upsertMyEducationDetails: builder.mutation({
       query: (body) => ({
@@ -49,7 +49,7 @@ const detailsApi = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Alumni'],
+      invalidatesTags: [{ type: 'Alumni', id: 'education' }],
     }),
     upsertMyProfessionalDetails: builder.mutation({
       query: (body) => ({
@@ -57,7 +57,7 @@ const detailsApi = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Alumni'],
+      invalidatesTags: [{ type: 'Alumni', id: 'professional' }],
     }),
     upsertMyVerificationDetails: builder.mutation({
       query: (body) => ({
@@ -65,7 +65,7 @@ const detailsApi = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Alumni'],
+      invalidatesTags: [{ type: 'Alumni', id: 'verification' }],
     }),
   }),
 });
