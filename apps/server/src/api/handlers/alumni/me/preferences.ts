@@ -17,7 +17,7 @@ const getMyPreferences =
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
-          'Alumni not found',
+          'Alumni preferences not found',
         );
       }
 

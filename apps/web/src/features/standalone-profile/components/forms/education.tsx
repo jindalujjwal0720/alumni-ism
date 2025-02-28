@@ -1,3 +1,4 @@
+import { Show } from '@/components/show';
 import { TableView, TableViewCell } from '@/components/standalone/table-view';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -16,7 +17,11 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export const EducationDetailsForm = () => {
+export const EducationDetailsForm = ({
+  minimal = false,
+}: {
+  minimal?: boolean;
+}) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -34,7 +39,7 @@ export const EducationDetailsForm = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(saveDataToServer)}
@@ -130,10 +135,12 @@ export const EducationDetailsForm = () => {
               )}
             />
           </TableView>
-          <p className="px-2 text-xs text-muted-foreground">
-            You can change the visibility of your education details in the
-            preference settings.
-          </p>
+          <Show when={!minimal}>
+            <p className="px-2 text-xs text-muted-foreground">
+              You can change the visibility of your education details in the
+              preference settings.
+            </p>
+          </Show>
         </form>
       </Form>
     </div>

@@ -19,7 +19,7 @@ const getMyProfessionalDetails =
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
-          'Alumni not found',
+          'Alumni professional details not found',
         );
       }
 

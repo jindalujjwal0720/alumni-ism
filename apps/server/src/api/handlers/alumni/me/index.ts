@@ -10,13 +10,13 @@ const readMyAlumniData =
   async (req, res, next) => {
     try {
       const { id } = req.user;
-      const alumni = await alumniModel.findOne({ account: id });
+      let alumni = await alumniModel.findOne({ account: id });
       if (!alumni) {
-        throw new AppError(
-          CommonErrors.NotFound.name,
-          CommonErrors.NotFound.statusCode,
-          'Alumni not found',
-        );
+        // Create a new alumni record if it doesn't exist
+        // This is useful when a new user registers
+        // and we need to create an alumni record for them
+        alumni = new alumniModel({ account: id });
+        await alumni.save();
       }
 
       res.status(200).json({ alumni });

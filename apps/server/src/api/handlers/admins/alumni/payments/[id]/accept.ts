@@ -6,7 +6,7 @@ import {
 import { AppError, CommonErrors } from '../../../../../../utils/errors';
 import { IAlumni } from '../../../../../../types/models/alumni';
 import { RequestHandler } from 'express';
-import Alumni from '../../../../../../models/alumni';
+import { Alumni } from '../../../../../../models/alumni';
 import Payment from '../../../../../../models/payment';
 
 const acceptPayment =

@@ -10,7 +10,7 @@ const getMyDonations =
       const { id } = req.user;
       const donations = await paymentModel.find({
         account: id,
-        category: PaymentCategory.Donation,
+        category: PaymentCategory.DONATION,
       });
       res.status(200).json({ donations });
     } catch (err) {

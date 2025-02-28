@@ -1,8 +1,11 @@
 import { RequestHandler } from 'express';
 import { Model } from 'mongoose';
 import { AppError, CommonErrors } from '../../../../../utils/errors';
-import { IAlumni } from '../../../../../types/models/alumni';
-import Alumni from '../../../../../models/alumni';
+import {
+  AlumniVerificationStatus,
+  IAlumni,
+} from '../../../../../types/models/alumni';
+import { Alumni } from '../../../../../models/alumni';
 import { env } from '../../../../../config';
 
 const SPECIAL_OCCASSION_DIGITS = env.alumniCard.specialOccassionDigits;
@@ -43,7 +46,7 @@ const verifyAlumni =
         );
       }
 
-      alumni.isVerified = true;
+      alumni.verificationStatus = AlumniVerificationStatus.VERIFIED;
 
       // generate unique card number, if not already generated
       if (!alumni.ucn) {
@@ -52,7 +55,8 @@ const verifyAlumni =
         let ucn: string;
 
         do {
-          ucn = generateCardNumber(alumni.education.yearOfGraduation);
+          // TODO: Add graduation year
+          ucn = generateCardNumber(1926);
           tries++;
         } while ((await alumniModel.findOne({ ucn })) && tries < maxTries);
 

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { Model } from 'mongoose';
 import { IAlumni } from '../../../../types/models/alumni';
-import Alumni from '../../../../models/alumni';
+import { Alumni } from '../../../../models/alumni';
 
 const listUnverifiedAlumni =
   (alumniModel: Model<IAlumni>): RequestHandler =>

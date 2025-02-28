@@ -1,5 +1,9 @@
 import LoginForm from '@/features/auth/components/forms/login-form';
-import { setAccessToken, setRole } from '@/features/auth/stores/auth';
+import {
+  setAccessToken,
+  setInitialized,
+  setRole,
+} from '@/features/auth/stores/auth';
 import { LoginResponse } from '@/features/auth/types/api/auth';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +18,7 @@ const Login = () => {
     } else {
       dispatch(setAccessToken(data.token));
       dispatch(setRole(data.user.roles[0]));
+      dispatch(setInitialized(true));
       navigate('/');
     }
   };

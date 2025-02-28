@@ -24,6 +24,8 @@ import { LoginResponse } from '../../types/api/auth';
 import { useLoginMutation } from '../../api/auth';
 import { getErrorMessage } from '@/utils/errors';
 import { toast } from 'sonner';
+import useQueryParam from '@/hooks/useQueryParam';
+import { Show } from '@/components/show';
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -41,6 +43,7 @@ interface LoginFormProps {
 const LoginForm = ({ onSuccess }: LoginFormProps) => {
   const message = useLocationState('message');
   const email = useLocationState('email');
+  const verified = useQueryParam('verified');
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -68,6 +71,12 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         <CardDescription>
           {message ||
             'Enter your email and password to login and add your account.'}
+
+          <Show when={verified === '1'}>
+            <div className="mt-4 text-sm bg-primary/5 p-2 rounded-md text-primary">
+              Your email has been verified. You can now login.
+            </div>
+          </Show>
         </CardDescription>
       </CardHeader>
       <CardContent>

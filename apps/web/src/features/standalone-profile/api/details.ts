@@ -5,6 +5,7 @@ import {
   IAlumniEducationDetails,
   IAlumniPersonalDetails,
   IAlumniProfessionalDetails,
+  IAlumniPublicProfilePreferences,
   IAlumniVerificationDetails,
 } from '@/types/models/alumni';
 
@@ -48,6 +49,13 @@ const detailsApi = api.injectEndpoints({
     >({
       query: () => '/v1/alumni/me/professional',
       providesTags: [{ type: 'Alumni', id: 'professional' }],
+    }),
+    readMyPreferences: builder.query<
+      { details: IAlumniPublicProfilePreferences },
+      undefined
+    >({
+      query: () => '/v1/alumni/me/preferences',
+      providesTags: [{ type: 'Alumni', id: 'preferences' }],
     }),
 
     upsertMyPersonalDetails: builder.mutation<
@@ -105,6 +113,17 @@ const detailsApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Alumni', id: 'verification' }],
     }),
+    upsertMyPreferences: builder.mutation<
+      undefined,
+      Partial<IAlumniPublicProfilePreferences>
+    >({
+      query: (body) => ({
+        url: '/v1/alumni/me/preferences',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Alumni', id: 'preferences' }],
+    }),
   }),
 });
 
@@ -115,9 +134,12 @@ export const {
   useReadMyContactDetailsQuery,
   useReadMyEducationDetailsQuery,
   useReadMyProfessionalDetailsQuery,
+  useReadMyPreferencesQuery,
+
   useUpsertMyPersonalDetailsMutation,
   useUpsertMyContactDetailsMutation,
   useUpsertMyEducationDetailsMutation,
   useUpsertMyProfessionalDetailsMutation,
   useUpsertMyVerificationDetailsMutation,
+  useUpsertMyPreferencesMutation,
 } = detailsApi;

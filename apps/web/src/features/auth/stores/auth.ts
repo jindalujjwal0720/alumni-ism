@@ -5,11 +5,13 @@ import { RootState } from '@/stores';
 export interface AuthState {
   token: string | null;
   role: string | null;
+  initialized: boolean;
 }
 
 const initialState: AuthState = {
   token: null,
   role: null,
+  initialized: false,
 };
 
 const authSlice = createSlice({
@@ -22,6 +24,9 @@ const authSlice = createSlice({
     setRole: (state, action) => {
       state.role = action.payload;
     },
+    setInitialized: (state, action) => {
+      state.initialized = action.payload;
+    },
     clearCredentials(state) {
       state.token = null;
       state.role = null;
@@ -29,10 +34,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAccessToken, setRole, clearCredentials } = authSlice.actions;
+export const { setAccessToken, setRole, clearCredentials, setInitialized } =
+  authSlice.actions;
 
 export const selectAuthToken = (state: RootState) => state.auth.token;
 export const selectRole = (state: RootState) => state.auth.role;
-export const selectIsAuthenticated = (state: RootState) => !!state.auth.token;
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.initialized && !!state.auth.token;
 
 export default authSlice.reducer;

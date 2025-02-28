@@ -2,7 +2,7 @@ import { ContactDetailsForm } from '@/features/standalone-profile/components/for
 
 export const ContactDetailsScreenContent = () => {
   return (
-    <div>
+    <div className="p-4">
       <ContactDetailsForm />
     </div>
   );

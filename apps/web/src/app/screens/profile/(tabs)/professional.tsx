@@ -2,7 +2,7 @@ import { ProfessionalDetailsForm } from '@/features/standalone-profile/component
 
 export const ProfessionalDetailsScreenContent = () => {
   return (
-    <div>
+    <div className="p-4">
       <ProfessionalDetailsForm />
     </div>
   );

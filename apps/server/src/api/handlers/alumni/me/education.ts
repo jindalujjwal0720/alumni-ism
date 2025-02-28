@@ -17,7 +17,7 @@ const getMyEducationDetails =
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
-          'Alumni not found',
+          'Alumni education details not found',
         );
       }
 

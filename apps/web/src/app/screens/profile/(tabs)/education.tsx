@@ -2,7 +2,7 @@ import { EducationDetailsForm } from '@/features/standalone-profile/components/f
 
 export const EducationDetailsScreenContent = () => {
   return (
-    <div>
+    <div className="p-4">
       <EducationDetailsForm />
     </div>
   );

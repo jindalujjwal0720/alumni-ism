@@ -3,7 +3,7 @@ import Payment from '../../../../../../models/payment';
 import { AppError, CommonErrors } from '../../../../../../utils/errors';
 import { Model } from 'mongoose';
 import { IAlumni } from '../../../../../../types/models/alumni';
-import Alumni from '../../../../../../models/alumni';
+import { Alumni } from '../../../../../../models/alumni';
 import { IPayment } from '../../../../../../types/models/payment';
 
 const readPayment =

@@ -107,7 +107,9 @@ export class AuthController {
 
       await this.authService.verifyEmail(token as string);
 
-      return res.status(200).redirect(`${env.client.url}`);
+      return res
+        .status(200)
+        .redirect(`${env.client.url}/auth/login?verified=1`);
     } catch (err) {
       next(err);
     }

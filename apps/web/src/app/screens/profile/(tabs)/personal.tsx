@@ -2,7 +2,7 @@ import { PersonalDetailsForm } from '@/features/standalone-profile/components/fo
 
 export const PersonalDetailsScreenContent = () => {
   return (
-    <div>
+    <div className="p-4">
       <PersonalDetailsForm />
     </div>
   );

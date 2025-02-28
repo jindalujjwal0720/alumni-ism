@@ -20,7 +20,7 @@ const getMyPersonalDetails =
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
-          'Alumni not found',
+          'Alumni personal details not found',
         );
       }
 

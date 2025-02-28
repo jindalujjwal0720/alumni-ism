@@ -55,7 +55,11 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export const PersonalDetailsForm = () => {
+export const PersonalDetailsForm = ({
+  minimal = false,
+}: {
+  minimal?: boolean;
+}) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -94,7 +98,7 @@ export const PersonalDetailsForm = () => {
   }, [details, form]);
 
   return (
-    <div className="p-4">
+    <div>
       <Form {...form}>
         <form
           ref={formRef}
@@ -138,7 +142,7 @@ export const PersonalDetailsForm = () => {
                         <Input
                           variant="standalone"
                           type="text"
-                          placeholder="What's your nickname?"
+                          placeholder="Name on your card?"
                           className="w-full text-end"
                           {...field}
                         />
@@ -148,33 +152,37 @@ export const PersonalDetailsForm = () => {
                 />
               )}
             />
-            <FormField
-              control={form.control}
-              name="dob"
-              render={({ field }) => (
-                <TableViewCell
-                  name="Date of birth"
-                  description={<FormMessage />}
-                  status={
-                    <FormItem>
-                      <FormControl className="w-full flex items-center justify-end">
-                        <Input
-                          type="date"
-                          variant="standalone"
-                          placeholder="When were you born?"
-                          className="text-end text-muted-foreground"
-                          {...field}
-                          value={field.value?.toISOString().split('T')[0] || ''}
-                          onChange={(e) => {
-                            field.onChange(new Date(e.target.value));
-                          }}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
+            <Show when={!minimal}>
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <TableViewCell
+                    name="Date of birth"
+                    description={<FormMessage />}
+                    status={
+                      <FormItem>
+                        <FormControl className="w-full flex items-center justify-end">
+                          <Input
+                            type="date"
+                            variant="standalone"
+                            placeholder="When were you born?"
+                            className="text-end text-muted-foreground"
+                            {...field}
+                            value={
+                              field.value?.toISOString().split('T')[0] || ''
+                            }
+                            onChange={(e) => {
+                              field.onChange(new Date(e.target.value));
+                            }}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+            </Show>
             <FormField
               control={form.control}
               name="gender"
@@ -208,80 +216,82 @@ export const PersonalDetailsForm = () => {
               )}
             />
           </TableView>
-          <TableView title="Personalisation">
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <TableViewCell
-                  name="Bio"
-                  description={<FormMessage />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <AutoResizeTextarea
-                          variant="standalone"
-                          placeholder="Tell us about yourself..."
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="profilePicture"
-              render={({ field }) => (
-                <TableViewCell
-                  name="Profile picture"
-                  description={<FormMessage />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          variant="standalone"
-                          type="url"
-                          placeholder="URL"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="bannerPicture"
-              render={({ field }) => (
-                <TableViewCell
-                  name="Banner picture"
-                  description={<FormMessage />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          variant="standalone"
-                          type="url"
-                          placeholder="URL"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-          </TableView>
-          <p className="px-2 text-muted-foreground text-xs">
-            You can change the visibility of your personal details in the
-            preference settings.
-          </p>
+          <Show when={!minimal}>
+            <TableView title="Personalisation">
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <TableViewCell
+                    name="Bio"
+                    description={<FormMessage />}
+                    status={
+                      <FormItem>
+                        <FormControl>
+                          <AutoResizeTextarea
+                            variant="standalone"
+                            placeholder="Tell us about yourself..."
+                            className="w-full text-end"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="profilePicture"
+                render={({ field }) => (
+                  <TableViewCell
+                    name="Profile picture"
+                    description={<FormMessage />}
+                    status={
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            variant="standalone"
+                            type="url"
+                            placeholder="URL"
+                            className="w-full text-end"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bannerPicture"
+                render={({ field }) => (
+                  <TableViewCell
+                    name="Banner picture"
+                    description={<FormMessage />}
+                    status={
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            variant="standalone"
+                            type="url"
+                            placeholder="URL"
+                            className="w-full text-end"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+            </TableView>
+            <p className="px-2 text-muted-foreground text-xs">
+              You can change the visibility of your personal details in the
+              preference settings.
+            </p>
+          </Show>
         </form>
       </Form>
     </div>

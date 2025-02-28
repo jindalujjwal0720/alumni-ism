@@ -11,6 +11,7 @@ import {
   useReadMyContactDetailsQuery,
   useUpsertMyContactDetailsMutation,
 } from '../../api/details';
+import { Show } from '@/components/show';
 
 const schema = z.object({
   phone: z.string().min(10),
@@ -28,7 +29,11 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export const ContactDetailsForm = () => {
+export const ContactDetailsForm = ({
+  minimal = false,
+}: {
+  minimal?: boolean;
+}) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -77,7 +82,7 @@ export const ContactDetailsForm = () => {
   }, [details, form]);
 
   return (
-    <div className="p-4 flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(saveDataToServer)}
@@ -219,78 +224,80 @@ export const ContactDetailsForm = () => {
               )}
             />
           </TableView>
-          <TableView title="Social profiles">
-            <FormField
-              control={form.control}
-              name="linkedIn"
-              render={({ field }) => (
-                <TableViewCell
-                  name={<SocialIconTitle social="LinkedIn" />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          variant="standalone"
-                          type="url"
-                          placeholder="@alice"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="twitter"
-              render={({ field }) => (
-                <TableViewCell
-                  name={<SocialIconTitle social="Twitter" />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          variant="standalone"
-                          type="url"
-                          placeholder="@bob"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="website"
-              render={({ field }) => (
-                <TableViewCell
-                  name={<SocialIconTitle social="Website" />}
-                  status={
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          variant="standalone"
-                          type="url"
-                          placeholder="https://alice.bob.com"
-                          className="w-full text-end"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  }
-                />
-              )}
-            />
-          </TableView>
-          <p className="px-2 text-xs text-muted-foreground">
-            You can change the visibility of your education details in the
-            preference settings.
-          </p>
+          <Show when={!minimal}>
+            <TableView title="Social profiles">
+              <FormField
+                control={form.control}
+                name="linkedIn"
+                render={({ field }) => (
+                  <TableViewCell
+                    name={<SocialIconTitle social="LinkedIn" />}
+                    status={
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            variant="standalone"
+                            type="url"
+                            placeholder="@alice"
+                            className="w-full text-end"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="twitter"
+                render={({ field }) => (
+                  <TableViewCell
+                    name={<SocialIconTitle social="Twitter" />}
+                    status={
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            variant="standalone"
+                            type="url"
+                            placeholder="@bob"
+                            className="w-full text-end"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="website"
+                render={({ field }) => (
+                  <TableViewCell
+                    name={<SocialIconTitle social="Website" />}
+                    status={
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            variant="standalone"
+                            type="url"
+                            placeholder="https://alice.bob.com"
+                            className="w-full text-end"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    }
+                  />
+                )}
+              />
+            </TableView>
+            <p className="px-2 text-xs text-muted-foreground">
+              You can change the visibility of your education details in the
+              preference settings.
+            </p>
+          </Show>
         </form>
       </Form>
     </div>

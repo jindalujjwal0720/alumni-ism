@@ -1,3 +1,4 @@
+import { Show } from '@/components/show';
 import { TableView, TableViewCell } from '@/components/standalone/table-view';
 import {
   Form,
@@ -25,7 +26,11 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export const ProfessionalDetailsForm = () => {
+export const ProfessionalDetailsForm = ({
+  minimal = false,
+}: {
+  minimal?: boolean;
+}) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -43,7 +48,7 @@ export const ProfessionalDetailsForm = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <Form {...form}>
         <form
           ref={formRef}
@@ -144,10 +149,12 @@ export const ProfessionalDetailsForm = () => {
               )}
             />
           </TableView>
-          <p className="px-2 text-muted-foreground text-xs">
-            You can change the visibility of your professional details in the
-            preference settings.
-          </p>
+          <Show when={!minimal}>
+            <p className="px-2 text-muted-foreground text-xs">
+              You can change the visibility of your professional details in the
+              preference settings.
+            </p>
+          </Show>
         </form>
       </Form>
     </div>

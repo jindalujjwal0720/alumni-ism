@@ -17,7 +17,7 @@ const getMyContactDetails =
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
-          'Alumni not found',
+          'Alumni contact details not found',
         );
       }
 

@@ -12,12 +12,12 @@ const alumniApi = api.injectEndpoints({
       },
       undefined
     >({
-      query: () => '/v1/alumni/my',
+      query: () => '/v1/alumni/me',
       providesTags: ['Alumni'],
     }),
     createOrUpdateMyAlumniData: builder.mutation({
       query: (body) => ({
-        url: '/v1/alumni/my',
+        url: '/v1/alumni/me',
         method: 'POST',
         body,
       }),
@@ -37,12 +37,12 @@ const alumniApi = api.injectEndpoints({
       },
       undefined
     >({
-      query: () => '/v1/alumni/my/pledges',
+      query: () => '/v1/alumni/me/pledges',
       providesTags: ['Pledge'],
     }),
     createPledge: builder.mutation({
       query: (body) => ({
-        url: '/v1/alumni/my/pledges',
+        url: '/v1/alumni/me/pledges',
         method: 'POST',
         body,
       }),
@@ -55,7 +55,7 @@ const alumniApi = api.injectEndpoints({
       },
       undefined
     >({
-      query: () => '/v1/alumni/donations',
+      query: () => '/v1/alumni/me/donations',
       providesTags: ['Payment'],
     }),
 
