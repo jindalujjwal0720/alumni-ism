@@ -1,54 +1,61 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   useReadAlumniDataQuery,
+  useRejectAlumniDataMutation,
   useVerifyAlumniDataMutation,
 } from '../../api/alumni';
-import KeyValueGrid, { FormatterFunction } from '@/components/key-value-grid';
+import KeyValueGrid from '@/components/key-value-grid';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/utils/errors';
 import { Button } from '@/components/ui/button';
-import { IAlumni } from '@/types/models/alumni';
-
-const keyValueFormatter: FormatterFunction<IAlumni> = ({ key, row }) => {
-  const updatesKey = key as keyof IAlumni['updates'];
-
-  if (!row.updates) {
-    return String(row[key] ?? 'N/A');
-  }
-
-  if (key === 'ucn') {
-    return String(row[key] ?? 'Not assigned yet');
-  }
-
-  if (row[key] === row.updates?.[updatesKey]) {
-    return String(row[key] ?? 'N/A');
-  }
-
-  return (
-    <div className="space-x-1">
-      <span className="text-red-500 line-through">
-        {String(row[key] ?? 'N/A')}
-      </span>
-      <span className="text-green-600 bg-green-500/10">
-        {String(row.updates?.[updatesKey] ?? 'N/A')}
-      </span>
-    </div>
-  );
-};
+import { Input } from '@/components/ui/input';
+import {
+  AlumniVerificationDocType,
+  AlumniVerificationStatus,
+} from '@/types/models/alumni';
+import { useRef } from 'react';
 
 export const UnverifiedAlumniDetails = () => {
   const { id } = useParams();
-  const { data: { alumni } = {}, isLoading: isAlumniLoading } =
-    useReadAlumniDataQuery(id ?? '', {
-      skip: !id,
-    });
+  const {
+    data: {
+      alumni,
+      personal,
+      contact,
+      professional,
+      education,
+      verification,
+    } = {},
+    isLoading: isAlumniLoading,
+  } = useReadAlumniDataQuery(id ?? '', {
+    skip: !id,
+  });
   const [verifyAlumni, { isLoading: isVerifying }] =
     useVerifyAlumniDataMutation();
+  const [rejectAlumni, { isLoading: isRejecting }] =
+    useRejectAlumniDataMutation();
+  const rejectionReasonRef = useRef<HTMLInputElement>(null);
+
+  const handleRejectAlumni = async () => {
+    if (!id) return;
+    try {
+      await rejectAlumni({
+        alumniId: id,
+        rejectionReason: rejectionReasonRef.current?.value ?? '',
+      }).unwrap();
+      rejectionReasonRef.current!.value = '';
+      toast.success('Alumni rejected successfully');
+    } catch (err) {
+      toast.error(getErrorMessage(err));
+    }
+  };
 
   const handleVerifyAlumni = async () => {
+    if (!id) return;
     try {
       await verifyAlumni(id).unwrap();
+      rejectionReasonRef.current!.value = '';
       toast.success('Alumni verified successfully');
     } catch (err) {
       toast.error(getErrorMessage(err));
@@ -70,12 +77,12 @@ export const UnverifiedAlumniDetails = () => {
         <CardContent>
           <KeyValueGrid
             title="Personal Information"
-            data={alumni}
-            formatter={keyValueFormatter}
+            data={personal || {}}
             keys={[
-              { key: 'ucn', label: 'UCN' },
               { key: 'name', label: 'Name' },
               { key: 'alias', label: 'Alias' },
+              { key: 'dob', label: 'Date of Birth' },
+              { key: 'gender', label: 'Gender' },
             ]}
           />
         </CardContent>
@@ -84,11 +91,25 @@ export const UnverifiedAlumniDetails = () => {
         <CardContent>
           <KeyValueGrid
             title="Contact Information"
-            data={alumni}
-            formatter={keyValueFormatter}
+            data={
+              contact ?? {
+                city: '',
+                state: '',
+                country: '',
+                zip: '',
+              }
+            }
             keys={[
               { key: 'phone', label: 'Phone' },
-              { key: 'permanentAddress', label: 'Permanent Address' },
+              {
+                key: 'currentAddress',
+                label: 'Current Address',
+                formatter: ({ row }) => {
+                  const { city, state, country, zip } = row;
+                  return `${city}, ${state}, ${country} - ${zip}`;
+                },
+              },
+              { key: 'email', label: 'Email' },
             ]}
           />
         </CardContent>
@@ -97,12 +118,12 @@ export const UnverifiedAlumniDetails = () => {
         <CardContent>
           <KeyValueGrid
             title="Academic Information"
-            data={alumni}
-            formatter={keyValueFormatter}
+            data={education || {}}
             keys={[
               { key: 'yearOfGraduation', label: 'Year of Graduation' },
               { key: 'branch', label: 'Branch' },
               { key: 'degree', label: 'Degree' },
+              { key: 'admissionNumber', label: 'Admission Number' },
             ]}
           />
         </CardContent>
@@ -111,27 +132,119 @@ export const UnverifiedAlumniDetails = () => {
         <CardContent>
           <KeyValueGrid
             title="Professional Information"
-            data={alumni}
-            formatter={keyValueFormatter}
+            data={professional || {}}
             keys={[
-              { key: 'company', label: 'Company' },
+              { key: 'currentCompany', label: 'Company' },
               { key: 'designation', label: 'Designation' },
-              { key: 'location', label: 'Work Location' },
             ]}
           />
         </CardContent>
       </Card>
-      <div className="flex gap-4">
-        {alumni.updates && (
-          <Button
-            variant="default"
-            onClick={handleVerifyAlumni}
-            disabled={isVerifying}
-          >
-            {isVerifying ? 'Verifying...' : 'Verify Alumni'}
-          </Button>
-        )}
-      </div>
+      <Card>
+        <CardContent>
+          <KeyValueGrid
+            title="Verification Information"
+            data={
+              verification || {
+                verificationDocType: '',
+                verificationDocLink: '',
+              }
+            }
+            keys={[
+              {
+                key: 'verificationDocType',
+                label: 'Document type',
+                formatter: ({ row }) => {
+                  switch (row.verificationDocType) {
+                    case AlumniVerificationDocType.PAN:
+                      return 'PAN Card';
+                    case AlumniVerificationDocType.AADHAR:
+                      return 'Aadhar Card';
+                    case AlumniVerificationDocType.DRIVING_LICENSE:
+                      return 'Driving License';
+                    case AlumniVerificationDocType.PASSPORT:
+                      return 'Passport';
+                    case AlumniVerificationDocType.VOTER_ID:
+                      return 'Voter ID';
+                    case AlumniVerificationDocType.OTHER:
+                      return 'Other';
+                    default:
+                      return 'Unknown';
+                  }
+                },
+              },
+              {
+                key: 'verificationDocLink',
+                label: 'Document link',
+                formatter: ({ row }) => {
+                  return (
+                    <Link
+                      to={row.verificationDocLink}
+                      target="_blank"
+                      className="text-primary"
+                    >
+                      View Document
+                    </Link>
+                  );
+                },
+              },
+            ]}
+          />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <KeyValueGrid
+            title="Account Information"
+            data={alumni || {}}
+            keys={[
+              { key: 'ucn', label: 'UCN' },
+              {
+                key: 'verificationStatus',
+                label: 'Verification Status',
+                formatter: ({ row }) => {
+                  switch (row.verificationStatus) {
+                    case AlumniVerificationStatus.PENDING:
+                      return 'Pending';
+                    case AlumniVerificationStatus.REJECTED:
+                      return 'Rejected';
+                    case AlumniVerificationStatus.VERIFIED:
+                      return 'Verified';
+                    default:
+                      return 'Unknown';
+                  }
+                },
+              },
+              { key: 'rejectionReason', label: 'Rejection Reason' },
+            ]}
+          />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <div className="flex gap-4">
+            <Input
+              ref={rejectionReasonRef}
+              placeholder="Enter reason for rejecting alumni"
+              className="flex-1"
+            />
+            <Button
+              variant="outline"
+              onClick={handleRejectAlumni}
+              disabled={isRejecting || isVerifying}
+            >
+              {isRejecting || isVerifying ? 'Rejecting...' : 'Reject Alumni'}
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleVerifyAlumni}
+              disabled={isVerifying || isRejecting}
+            >
+              {isVerifying || isRejecting ? 'Verifying...' : 'Verify Alumni'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

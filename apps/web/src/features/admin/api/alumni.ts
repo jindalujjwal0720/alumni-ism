@@ -1,33 +1,73 @@
 import { api } from '@/stores/api';
-import { IAlumni } from '@/types/models/alumni';
+import {
+  IAlumni,
+  IAlumniContactDetails,
+  IAlumniEducationDetails,
+  IAlumniPersonalDetails,
+  IAlumniProfessionalDetails,
+  IAlumniVerificationDetails,
+} from '@/types/models/alumni';
 import { IPayment } from '@/types/models/payment';
 
 const alumniApi = api.injectEndpoints({
   endpoints: (builder) => ({
     listUnverifiedAlumni: builder.query<
       {
-        alumni: IAlumni[];
+        alumni: {
+          _id: string;
+          personal: {
+            name: string;
+          };
+          contact: {
+            phone: string;
+            email: string;
+          };
+          education: {
+            yearOfGraduation: number;
+          };
+        }[];
       },
       undefined
     >({
       query: () => '/v1/admins/alumni/unverified',
-      providesTags: ['Alumni'],
+      providesTags: [{ type: 'Alumni', id: 'LIST' }],
     }),
     readAlumniData: builder.query<
       {
         alumni: IAlumni;
+        personal: IAlumniPersonalDetails;
+        contact: IAlumniContactDetails;
+        education: IAlumniEducationDetails;
+        professional: IAlumniProfessionalDetails;
+        verification: IAlumniVerificationDetails;
       },
       string
     >({
       query: (id) => `/v1/admins/alumni/${id}`,
-      providesTags: ['Alumni'],
+      providesTags: (_result, _error, id) => [{ type: 'Alumni', id }],
     }),
-    verifyAlumniData: builder.mutation({
+    rejectAlumniData: builder.mutation<
+      void,
+      {
+        alumniId: string;
+        rejectionReason: string;
+      }
+    >({
+      query: ({ alumniId, rejectionReason }) => ({
+        url: `/v1/admins/alumni/${alumniId}/reject`,
+        method: 'POST',
+        body: { rejectionReason },
+      }),
+      invalidatesTags: (_r, _e, { alumniId }) => [
+        { type: 'Alumni', id: alumniId },
+      ],
+    }),
+    verifyAlumniData: builder.mutation<void, string>({
       query: (id) => ({
         url: `/v1/admins/alumni/${id}/verify`,
         method: 'POST',
       }),
-      invalidatesTags: ['Alumni'],
+      invalidatesTags: (_r, _e, id) => [{ type: 'Alumni', id }],
     }),
 
     listAlumniPayments: builder.query<
@@ -64,6 +104,7 @@ const alumniApi = api.injectEndpoints({
 export const {
   useListUnverifiedAlumniQuery,
   useReadAlumniDataQuery,
+  useRejectAlumniDataMutation,
   useVerifyAlumniDataMutation,
 
   useListAlumniPaymentsQuery,

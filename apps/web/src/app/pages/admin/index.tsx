@@ -21,7 +21,7 @@ export const AdminHome = () => {
         <Navbar />
       </PageHeader>
       <PageBody>
-        <PageSidebar>
+        <PageSidebar className="bg-card">
           <AdminSidebar />
         </PageSidebar>
         <PageContent>
@@ -31,11 +31,8 @@ export const AdminHome = () => {
             <Route path="/admins" element={<div>Admins</div>} />
             <Route path="/alumni">
               <Route path="" element={<div>Alumni</div>} />
+              <Route path=":id" element={<UnverifiedAlumniDetailsPage />} />
               <Route path="unverified" element={<UnverifiedAlumni />} />
-              <Route
-                path="unverified/:id"
-                element={<UnverifiedAlumniDetailsPage />}
-              />
               <Route path="payments" element={<AlumniPaymentsPage />} />
               <Route
                 path="payments/:id"

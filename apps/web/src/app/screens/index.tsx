@@ -52,6 +52,8 @@ export const AppScreens = () => {
               <Route path="login" element={<LoginScreen />} />
               <Route path="register" element={<RegisterScreen />} />
             </Route>
+
+            <Route path="*" element={<LoginScreen />} />
           </Routes>
         </ScreenLayout>
       </Show>

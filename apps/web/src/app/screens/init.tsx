@@ -10,6 +10,7 @@ import { EducationDetailsForm } from '@/features/standalone-profile/components/f
 import { PersonalDetailsForm } from '@/features/standalone-profile/components/forms/personal';
 import { ProfessionalDetailsForm } from '@/features/standalone-profile/components/forms/professional';
 import { VerificationDetailsForm } from '@/features/standalone-profile/components/forms/verification';
+import { AlumniVerificationStatus } from '@/types/models/alumni';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -49,6 +50,22 @@ export const InitScreen = () => {
                 accurately. You can always edit your profile later.
               </p>
             </div>
+            <Show
+              when={
+                alumni?.rejectionReason &&
+                alumni?.verificationStatus === AlumniVerificationStatus.REJECTED
+              }
+            >
+              <div className="text-destructive bg-red-100 p-4 rounded-md">
+                <p className="text-sm">
+                  Your profile was rejected for the following reason:
+                </p>
+                <p className="font-medium">{alumni?.rejectionReason}</p>
+                <p className="text-sm">
+                  Let us know once you are done, via email (ariraa@iitism.ac.in)
+                </p>
+              </div>
+            </Show>
             <PersonalDetailsForm minimal />
             <ContactDetailsForm minimal />
             <ProfessionalDetailsForm minimal />

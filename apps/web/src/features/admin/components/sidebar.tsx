@@ -44,6 +44,7 @@ export const AdminSidebar = () => {
       <div className="flex flex-col px-6">
         {sidebarItems.map((item) => (
           <Link
+            key={item.title}
             to={item.link}
             className={cn(
               'flex items-center p-2 hover:bg-muted/50 rounded-md',

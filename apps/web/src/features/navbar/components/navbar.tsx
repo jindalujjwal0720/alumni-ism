@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Profile from './profile';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated, selectRole } from '@/features/auth/stores/auth';
+import { selectIsAuthenticated } from '@/features/auth/stores/auth';
 import Logo from '@/components/logo';
 import { useMemo, useState } from 'react';
 import { Show } from '@/components/show';
@@ -26,23 +26,19 @@ const Navbar = ({
 }: NavbarProps) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const currentRole = useSelector(selectRole);
   const { data: { user } = {} } = useGetMeQuery();
   const location = useLocation();
   const showAdminPanelButton = useMemo(() => {
     return (
-      user?.roles.includes('admin') &&
-      currentRole !== 'admin' &&
-      !location.pathname.startsWith('/admin')
+      user?.roles.includes('admin') && !location.pathname.startsWith('/admin')
     );
-  }, [currentRole, location.pathname, user?.roles]);
+  }, [location.pathname, user?.roles]);
   const showPartnerPanelButton = useMemo(() => {
     return (
       user?.roles.includes('partner') &&
-      currentRole !== 'partner' &&
       !location.pathname.startsWith('/partner')
     );
-  }, [currentRole, location.pathname, user?.roles]);
+  }, [location.pathname, user?.roles]);
   // only show the auth/profile if the user is an admin or partner
   const showAuth = showAdminPanelButton || showPartnerPanelButton;
 
@@ -50,7 +46,7 @@ const Navbar = ({
     <>
       <nav
         className={cn(
-          'top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-muted w-full',
+          'top-0 z-50 bg-card backdrop-blur-lg border-b border-muted w-full',
           variant === 'sticky' && 'sticky',
           variant === 'fixed' && 'fixed',
         )}

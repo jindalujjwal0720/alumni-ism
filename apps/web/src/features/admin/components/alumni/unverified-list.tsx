@@ -11,30 +11,30 @@ export const UnverifiedAlumniList = () => {
         columns={[
           {
             header: 'Name',
-            accessorKey: 'name',
+            accessorKey: 'personal.name',
             cell: ({ row }) => {
-              const { _id, name } = row.original;
+              const {
+                _id,
+                personal: { name },
+              } = row.original;
               return (
-                <Link
-                  to={`/admin/alumni/unverified/${_id}`}
-                  className="hover:underline"
-                >
+                <Link to={`/admin/alumni/${_id}`} className="hover:underline">
                   {name}
                 </Link>
               );
             },
           },
           {
-            header: 'Alias',
-            accessorKey: 'alias',
+            header: 'Year of graduation',
+            accessorKey: 'education.yearOfGraduation',
           },
           {
-            header: 'Year of graduation',
-            accessorKey: 'yearOfGraduation',
+            header: 'Email',
+            accessorKey: 'contact.email',
           },
           {
             header: 'Phone',
-            accessorKey: 'phone',
+            accessorKey: 'contact.phone',
           },
         ]}
         data={alumni ?? []}

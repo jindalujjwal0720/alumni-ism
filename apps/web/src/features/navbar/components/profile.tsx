@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -14,7 +14,7 @@ import {
 } from '@/features/auth/stores/auth';
 import { getErrorMessage } from '@/utils/errors';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const Profile = ({
@@ -29,7 +29,7 @@ const Profile = ({
   const currentUserRole = useSelector(selectRole);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   if (!isAuthenticated) {
     return null;
@@ -46,16 +46,16 @@ const Profile = ({
 
   const handleViewAs = (role: string) => {
     dispatch(setRole(role));
-    switch (role) {
-      case 'admin':
-        navigate('/admin');
-        break;
-      case 'partner':
-        navigate('/partner');
-        break;
-      default:
-        navigate('/');
-    }
+    // switch (role) {
+    //   case 'admin':
+    //     navigate('/admin');
+    //     break;
+    //   case 'partner':
+    //     navigate('/partner');
+    //     break;
+    //   default:
+    //     navigate('/');
+    // }
   };
 
   if (!popover) {
@@ -65,7 +65,6 @@ const Profile = ({
         className="flex items-center gap-3 cursor-pointer rounded-md py-1.5 px-2"
       >
         <Avatar className="size-8">
-          <AvatarImage src={user?.imageUrl} alt={user?.name} />
           <AvatarFallback className="bg-muted-foreground text-background">
             {user?.name[0]}
           </AvatarFallback>
@@ -88,7 +87,6 @@ const Profile = ({
         {!isUserLoading ? (
           <div className="flex items-center gap-3 cursor-pointer hover:bg-muted rounded-md py-1.5 px-2">
             <Avatar className="size-8">
-              <AvatarImage src={user?.imageUrl} alt={user?.name} />
               <AvatarFallback className="bg-muted-foreground text-background">
                 {user?.name[0]}
               </AvatarFallback>
@@ -119,7 +117,6 @@ const Profile = ({
         <div className="divide-y-2 space-y-4">
           <div className="flex items-center gap-3">
             <Avatar className="size-9">
-              <AvatarImage src={user?.imageUrl} alt={user?.name} />
               <AvatarFallback className="bg-muted-foreground text-background">
                 {user?.name[0]}
               </AvatarFallback>
