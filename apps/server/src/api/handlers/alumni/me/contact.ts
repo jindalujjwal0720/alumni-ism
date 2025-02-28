@@ -41,9 +41,9 @@ const upsertMyContactDetails =
         country: Joi.string().required(),
         zip: Joi.string().required(),
 
-        linkedIn: Joi.string().optional(),
-        twitter: Joi.string().optional(),
-        website: Joi.string().optional(),
+        linkedIn: Joi.string().min(0).optional(),
+        twitter: Joi.string().min(0).optional(),
+        website: Joi.string().min(0).optional(),
       });
       const { error } = schema.validate(req.body);
       if (error) {

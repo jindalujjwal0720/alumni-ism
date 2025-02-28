@@ -38,9 +38,9 @@ const upsertMyPersonalDetails =
       const schema = Joi.object({
         name: Joi.string().required(),
         alias: Joi.string().required(),
-        profilePicture: Joi.string().optional(),
-        bannerPicture: Joi.string().optional(),
-        bio: Joi.string().optional(),
+        profilePicture: Joi.string().uri().valid('').optional(),
+        bannerPicture: Joi.string().uri().valid('').optional(),
+        bio: Joi.string().min(0).optional(),
         dob: Joi.date().optional(),
         gender: Joi.string()
           .valid(...Object.values(AlumniGender))

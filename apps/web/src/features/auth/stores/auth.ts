@@ -39,7 +39,7 @@ export const { setAccessToken, setRole, clearCredentials, setInitialized } =
 
 export const selectAuthToken = (state: RootState) => state.auth.token;
 export const selectRole = (state: RootState) => state.auth.role;
-export const selectIsAuthenticated = (state: RootState) =>
-  state.auth.initialized && !!state.auth.token;
+export const selectIsAuthenticated = (state: RootState) => !!state.auth.token;
+export const selectIsInitialized = (state: RootState) => state.auth.initialized;
 
 export default authSlice.reducer;

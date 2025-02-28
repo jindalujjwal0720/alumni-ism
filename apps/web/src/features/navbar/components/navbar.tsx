@@ -7,6 +7,7 @@ import { selectIsAuthenticated, selectRole } from '@/features/auth/stores/auth';
 import Logo from '@/components/logo';
 import { useMemo, useState } from 'react';
 import { Show } from '@/components/show';
+import { useGetMeQuery } from '@/features/auth/api/auth';
 
 interface NavbarProps {
   variant?: 'default' | 'sticky' | 'fixed';
@@ -26,15 +27,22 @@ const Navbar = ({
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const currentRole = useSelector(selectRole);
+  const { data: { user } = {} } = useGetMeQuery();
   const location = useLocation();
   const showAdminPanelButton = useMemo(() => {
-    return currentRole === 'admin' && !location.pathname.startsWith('/admin');
-  }, [currentRole, location.pathname]);
+    return (
+      user?.roles.includes('admin') &&
+      currentRole !== 'admin' &&
+      !location.pathname.startsWith('/admin')
+    );
+  }, [currentRole, location.pathname, user?.roles]);
   const showPartnerPanelButton = useMemo(() => {
     return (
-      currentRole === 'partner' && !location.pathname.startsWith('/partner')
+      user?.roles.includes('partner') &&
+      currentRole !== 'partner' &&
+      !location.pathname.startsWith('/partner')
     );
-  }, [currentRole, location.pathname]);
+  }, [currentRole, location.pathname, user?.roles]);
   // only show the auth/profile if the user is an admin or partner
   const showAuth = showAdminPanelButton || showPartnerPanelButton;
 

@@ -39,15 +39,16 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export const VerificationDetailsForm = () => {
+  const { data: { details } = {} } =
+    useReadMyVerificationDetailsQuery(undefined);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      verificationDocType: AlumniVerificationDocType.AADHAR,
+      verificationDocType:
+        details?.verificationDocType ?? AlumniVerificationDocType.AADHAR,
       verificationDocLink: '',
     },
   });
-  const { data: { details } = {} } =
-    useReadMyVerificationDetailsQuery(undefined);
   const [upsertVerificationDetails] = useUpsertMyVerificationDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
@@ -94,13 +95,12 @@ export const VerificationDetailsForm = () => {
                           <div
                             key={key}
                             className="flex items-center justify-between p-2"
-                            onClick={() =>
-                              field.onChange(
-                                AlumniVerificationDocType[
-                                  key as keyof typeof AlumniVerificationDocType
-                                ],
-                              )
-                            }
+                            onClick={() => {
+                              field.onChange(value);
+                              formRef.current?.dispatchEvent(
+                                new Event('input', { bubbles: true }),
+                              );
+                            }}
                           >
                             <label htmlFor={key}>
                               {VERIFICATION_DOC_TYPE_OPTIONS[value]}

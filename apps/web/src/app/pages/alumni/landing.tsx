@@ -27,7 +27,7 @@ const AlumniCardLanding = () => {
       <AlumniNavigation />
       {isAuthenticated && !isLoading && (!alumni || !alumni.isVerified) && (
         <div className="bg-yellow-600 text-sm text-primary-foreground text-center p-3">
-          Your account is not verified. Please{' '}
+          Your alumni account is not verified. Please{' '}
           <Link to="/settings/alumni" className="underline">
             complete your profile and request verification
           </Link>

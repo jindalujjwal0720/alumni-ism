@@ -29,7 +29,6 @@ export const InitScreen = () => {
       dispatch(setInitialized(true));
       navigate('/');
     }
-    console.log('User has not completed their profile');
   }, [alumni, dispatch, navigate]);
 
   return (

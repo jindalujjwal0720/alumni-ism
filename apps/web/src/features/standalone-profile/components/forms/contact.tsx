@@ -65,19 +65,7 @@ export const ContactDetailsForm = ({
 
   useEffect(() => {
     if (details) {
-      form.reset({
-        phone: details.phone,
-        email: details.email,
-
-        city: details.city,
-        state: details.state,
-        country: details.country,
-        zip: details.zip,
-
-        linkedIn: details.linkedIn,
-        twitter: details.twitter,
-        website: details.website,
-      });
+      form.reset(details);
     }
   }, [details, form]);
 
@@ -85,6 +73,7 @@ export const ContactDetailsForm = ({
     <div className="flex flex-col gap-6">
       <Form {...form}>
         <form
+          ref={formRef}
           onSubmit={form.handleSubmit(saveDataToServer)}
           className="space-y-4"
         >

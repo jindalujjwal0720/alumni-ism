@@ -4,9 +4,13 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+  useReadMyEducationDetailsQuery,
+  useUpsertMyEducationDetailsMutation,
+} from '../../api/details';
 
 const schema = z.object({
   degree: z.string().min(2),
@@ -31,17 +35,30 @@ export const EducationDetailsForm = ({
       admissionNumber: '',
     },
   });
+  const { data: { details } = {} } = useReadMyEducationDetailsQuery(undefined);
+  const [upsertEducationDetails] = useUpsertMyEducationDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
 
   const saveDataToServer = (data: FormValues) => {
-    console.log('Saving...', data);
+    try {
+      upsertEducationDetails(data).unwrap();
+    } catch (_err) {
+      // silently fail
+    }
   };
+
+  useEffect(() => {
+    if (details) {
+      form.reset(details);
+    }
+  }, [details, form]);
 
   return (
     <div className="flex flex-col gap-6">
       <Form {...form}>
         <form
+          ref={formRef}
           onSubmit={form.handleSubmit(saveDataToServer)}
           className="space-y-2"
         >

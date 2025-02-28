@@ -10,9 +10,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+  useReadMyProfessionalDetailsQuery,
+  useUpsertMyProfessionalDetailsMutation,
+} from '../../api/details';
 
 const schema = z.object({
   currentCompany: z.string().optional(),
@@ -40,12 +44,25 @@ export const ProfessionalDetailsForm = ({
       totalExperienceYears: 10,
     },
   });
+  const { data: { details } = {} } =
+    useReadMyProfessionalDetailsQuery(undefined);
+  const [upsertProfessionalDetails] = useUpsertMyProfessionalDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
 
   const saveDataToServer = (data: FormValues) => {
-    console.log('Saving...', data);
+    try {
+      upsertProfessionalDetails(data).unwrap();
+    } catch (_err) {
+      // silently fail
+    }
   };
+
+  useEffect(() => {
+    if (details) {
+      form.reset(details);
+    }
+  }, [details, form]);
 
   return (
     <div className="flex flex-col gap-6">

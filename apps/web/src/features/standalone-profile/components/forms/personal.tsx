@@ -60,6 +60,7 @@ export const PersonalDetailsForm = ({
 }: {
   minimal?: boolean;
 }) => {
+  const { data: { details } = {} } = useReadMyPersonalDetailsQuery(undefined);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -68,10 +69,10 @@ export const PersonalDetailsForm = ({
       profilePicture: '',
       bio: '',
       dob: undefined,
-      gender: AlumniGender.PREFER_NOT_TO_SAY,
+      gender:
+        (details?.gender as AlumniGender) ?? AlumniGender.PREFER_NOT_TO_SAY,
     },
   });
-  const { data: { details } = {} } = useReadMyPersonalDetailsQuery(undefined);
   const [upsertPersonalDetails] = useUpsertMyPersonalDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
@@ -198,11 +199,14 @@ export const PersonalDetailsForm = ({
                         <div
                           key={key}
                           className="flex items-center justify-between p-2"
-                          onClick={() =>
-                            field.onChange(
-                              AlumniGender[key as keyof typeof AlumniGender],
-                            )
-                          }
+                          onClick={() => {
+                            field.onChange(value);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                              }),
+                            );
+                          }}
                         >
                           <label htmlFor={key}>{GENDER_OPTIONS[value]}</label>
                           <Show when={field.value === value}>
