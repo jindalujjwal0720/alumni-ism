@@ -14,6 +14,12 @@ import {
 
 const alumniPersonalDetailsSchema = new mongoose.Schema<IAlumniPersonalDetails>(
   {
+    account: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,
@@ -49,6 +55,12 @@ const alumniPersonalDetailsSchema = new mongoose.Schema<IAlumniPersonalDetails>(
 
 const alumniContactDetailsSchema = new mongoose.Schema<IAlumniContactDetails>(
   {
+    account: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      unique: true,
+    },
     phone: {
       type: String,
       required: true,
@@ -92,6 +104,12 @@ const alumniContactDetailsSchema = new mongoose.Schema<IAlumniContactDetails>(
 const alumniEducationDetailsSchema =
   new mongoose.Schema<IAlumniEducationDetails>(
     {
+      account: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true,
+      },
       degree: {
         type: String,
         required: true,
@@ -115,6 +133,12 @@ const alumniEducationDetailsSchema =
 const alumniProfessionalDetailsSchema =
   new mongoose.Schema<IAlumniProfessionalDetails>(
     {
+      account: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true,
+      },
       currentCompany: {
         type: String,
         default: '',
@@ -138,6 +162,12 @@ const alumniProfessionalDetailsSchema =
 const alumniVerificationDetailsSchema =
   new mongoose.Schema<IAlumniVerificationDetails>(
     {
+      account: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true,
+      },
       verificationDocType: {
         type: String,
         enum: AlumniVerificationDocType,
@@ -157,6 +187,7 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+      unique: true,
     },
     // unique card number
     ucn: {
@@ -192,6 +223,12 @@ const alumniSchema = new mongoose.Schema<IAlumni>(
 const alumniPublicProfilePreferencesSchema =
   new mongoose.Schema<IAlumniPublicProfilePreferences>(
     {
+      account: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true,
+      },
       showDob: {
         type: Boolean,
         default: false,

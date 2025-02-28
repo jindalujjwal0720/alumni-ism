@@ -80,6 +80,7 @@ const postLikeSchema = new mongoose.Schema<IPostLike>(
   },
   { timestamps: true },
 );
+postLikeSchema.index({ account: 1, post: 1 }, { unique: true });
 
 const postAnalyticsSchema = new mongoose.Schema<IPostAnalytics>(
   {

@@ -113,6 +113,7 @@ export interface IAlumni {
 
 export interface IAlumniPublicProfilePreferences {
   _id: string;
+  account: string | IUser;
 
   // personal
   showDob: boolean;

@@ -114,6 +114,7 @@ export interface IAlumni extends Record<string, unknown> {
 export interface IAlumniPublicProfilePreferences
   extends Record<string, unknown> {
   _id: string;
+  account: string | IUser;
 
   // personal
   showDob: boolean;

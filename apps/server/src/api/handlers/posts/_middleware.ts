@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { AuthMiddleware } from '../middlewares/authentication';
+import { AuthMiddleware } from '../../middlewares/authentication';
 
 const authMiddleware = new AuthMiddleware();
 

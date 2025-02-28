@@ -1,4 +1,10 @@
 import { RequestHandler } from 'express';
+import { AuthMiddleware } from '../../middlewares/authentication';
 import { authorize } from '../../middlewares/authorization';
 
-export const handler: RequestHandler = authorize(['alumni']);
+const authMiddleware = new AuthMiddleware();
+
+export const handler: RequestHandler[] = [
+  authMiddleware.requireAuthenticated.bind(authMiddleware),
+  authorize(['alumni']),
+];
