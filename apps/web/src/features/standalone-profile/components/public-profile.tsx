@@ -1,13 +1,13 @@
 import { Image } from '@/components/standalone/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/utils/tw';
 import {
   Globe2,
   Linkedin,
   Mail,
   MapPin,
-  MoreHorizontal,
+  // MoreHorizontal,
   Phone,
   // Star,
   Twitter,
@@ -25,6 +25,11 @@ import {
 } from '../api/public';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Show } from '@/components/show';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '@/features/auth/stores/auth';
+import { useGetMyAlumniDataQuery } from '@/features/alumni/api/alumni';
+import { Link } from 'react-router-dom';
+import { formatUcn } from '@/utils/ucn';
 
 export interface PublicProfileProps {
   ucn: string;
@@ -80,7 +85,7 @@ export const PublicProfileHeader = ({ ucn }: PublicProfileProps) => {
         </Avatar>
         <h1 className="pt-6 flex gap-2">
           <span className="text-xl font-semibold">{details?.name}</span>
-          <Flair flair="Admin" className="mt-0.5" />
+          {/* <Flair flair="Admin" className="mt-0.5" /> */}
         </h1>
       </div>
     </div>
@@ -147,19 +152,19 @@ export const PublicProfileDescriptionAndStats = ({
           </div>
         </div> */}
         <Show when={details?.dob}>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <MdCake size={16} className="text-primary fill-primary" />
             <div className="text-sm">
-              <span className="font-medium mr-1">
+              <span className="text-muted-foreground">
                 {convertDateToReadable(details?.dob || '')}
               </span>
             </div>
           </div>
         </Show>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <FaAddressCard size={16} className="text-primary fill-primary" />
           <div className="text-sm">
-            <span className="text-muted-foreground">{ucn}</span>
+            <span className="text-muted-foreground">{formatUcn(ucn)}</span>
           </div>
         </div>
       </div>
@@ -177,10 +182,10 @@ const PublicProfileActionsLoading = () => {
 };
 
 export const PublicProfileActions = ({ ucn }: PublicProfileProps) => {
-  const { data: { alumni } = {}, isLoading } = useReadPublicAlumniDetailsQuery(
-    ucn,
-    { skip: !ucn },
-  );
+  const { data: { alumni, isFollowing } = {}, isLoading } =
+    useReadPublicAlumniDetailsQuery(ucn, { skip: !ucn });
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { data: { alumni: myAlumniDetails } = {} } = useGetMyAlumniDataQuery();
 
   if (isLoading) {
     return <PublicProfileActionsLoading />;
@@ -192,15 +197,37 @@ export const PublicProfileActions = ({ ucn }: PublicProfileProps) => {
 
   return (
     <div className="flex gap-3">
-      <Button className="w-full rounded-full" variant="default">
-        Follow
-      </Button>
+      <Show when={isAuthenticated}>
+        <Show when={myAlumniDetails?.ucn !== ucn}>
+          <Show when={!isFollowing}>
+            <Button className="w-full rounded-full" variant="default">
+              Follow
+            </Button>
+          </Show>
+          <Show when={isFollowing}>
+            <Button className="w-full rounded-full" variant="outline">
+              Unfollow
+            </Button>
+          </Show>
+        </Show>
+        <Show when={myAlumniDetails?.ucn === ucn}>
+          <Link
+            to="/profile/personal"
+            className={cn(
+              buttonVariants({ variant: 'default' }),
+              'w-full rounded-full',
+            )}
+          >
+            Edit Profile
+          </Link>
+        </Show>
+      </Show>
       {/* <Button className="w-full rounded-full" variant="outline">
         Message
-      </Button> */}
-      <Button className="rounded-full px-2" variant="outline" size="icon">
+        </Button> */}
+      {/* <Button className="rounded-full px-2" variant="outline" size="icon">
         <MoreHorizontal />
-      </Button>
+        </Button> */}
     </div>
   );
 };
@@ -381,11 +408,11 @@ export const PublicProfile = ({ ucn }: PublicProfileProps) => {
         <PublicEducationDetails ucn={ucn} />
         <PublicCareerDetails ucn={ucn} />
         <PublicContactDetails ucn={ucn} />
-        <div className="text-xs text-muted-foreground mt-6">
-          <p className="text-center">
-            This profile is managed by the user and not by the organization.
-          </p>
-        </div>
+      </div>
+      <div className="text-xs text-muted-foreground mt-6">
+        <p className="text-center">
+          This profile is managed by the user and not by the organization.
+        </p>
       </div>
     </div>
   );

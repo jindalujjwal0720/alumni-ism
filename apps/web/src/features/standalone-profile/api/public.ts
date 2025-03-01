@@ -9,7 +9,10 @@ import {
 
 const publicDetailsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    readPublicAlumniDetails: builder.query<{ alumni: IAlumni }, string>({
+    readPublicAlumniDetails: builder.query<
+      { alumni: IAlumni; isFollowing: boolean },
+      string
+    >({
       query: (ucn: string) => `/v1/public/alumni/${ucn}`,
       providesTags: (_result, _error, ucn) => [{ type: 'Alumni', id: ucn }],
     }),

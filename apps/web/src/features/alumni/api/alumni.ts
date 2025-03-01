@@ -2,7 +2,6 @@ import { api } from '@/stores/api';
 import { IAlumni } from '@/types/models/alumni';
 import { IPayment } from '@/types/models/payment';
 import { IPledge } from '@/types/models/pledge';
-import { IUser } from '@/types/models/user';
 
 const alumniApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +9,7 @@ const alumniApi = api.injectEndpoints({
       {
         alumni: IAlumni;
       },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me',
       providesTags: ['Alumni'],
@@ -35,7 +34,7 @@ const alumniApi = api.injectEndpoints({
       {
         pledges: IPledge[];
       },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/pledges',
       providesTags: ['Pledge'],
@@ -53,22 +52,10 @@ const alumniApi = api.injectEndpoints({
       {
         donations: IPayment[];
       },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/donations',
       providesTags: ['Payment'],
-    }),
-
-    readAlumniPublicData: builder.query<
-      {
-        alumni: IAlumni & {
-          email: IUser['email'];
-          imageUrl: IUser['imageUrl'];
-        };
-      },
-      string
-    >({
-      query: (ucn) => `/v1/public/alumni/${ucn}`,
     }),
   }),
 });
@@ -82,6 +69,4 @@ export const {
   useCreatePledgeMutation,
 
   useGetMyDonationsQuery,
-
-  useReadAlumniPublicDataQuery,
 } = alumniApi;
