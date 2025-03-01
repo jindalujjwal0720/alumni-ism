@@ -1,5 +1,9 @@
 import { Show } from '@/components/show';
-import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import {
+  TableView,
+  TableViewCell,
+  TableViewLoading,
+} from '@/components/standalone/table-view';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
@@ -35,7 +39,8 @@ export const EducationDetailsForm = ({
       admissionNumber: '',
     },
   });
-  const { data: { details } = {} } = useReadMyEducationDetailsQuery(undefined);
+  const { data: { details } = {}, isLoading } =
+    useReadMyEducationDetailsQuery(undefined);
   const [upsertEducationDetails] = useUpsertMyEducationDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
@@ -53,6 +58,14 @@ export const EducationDetailsForm = ({
       form.reset(details);
     }
   }, [details, form]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <TableViewLoading />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

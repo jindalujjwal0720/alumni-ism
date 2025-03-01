@@ -1,5 +1,9 @@
 import { Show } from '@/components/show';
-import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import {
+  TableView,
+  TableViewCell,
+  TableViewLoading,
+} from '@/components/standalone/table-view';
 import {
   Form,
   FormControl,
@@ -60,7 +64,8 @@ export const PersonalDetailsForm = ({
 }: {
   minimal?: boolean;
 }) => {
-  const { data: { details } = {} } = useReadMyPersonalDetailsQuery(undefined);
+  const { data: { details } = {}, isLoading } =
+    useReadMyPersonalDetailsQuery(undefined);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -97,6 +102,17 @@ export const PersonalDetailsForm = ({
       });
     }
   }, [details, form]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <TableViewLoading />
+        <Show when={!minimal}>
+          <TableViewLoading />
+        </Show>
+      </div>
+    );
+  }
 
   return (
     <div>

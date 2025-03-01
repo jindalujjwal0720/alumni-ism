@@ -1,5 +1,9 @@
 import { Show } from '@/components/show';
-import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import {
+  TableView,
+  TableViewCell,
+  TableViewLoading,
+} from '@/components/standalone/table-view';
 import {
   Form,
   FormControl,
@@ -44,7 +48,7 @@ export const ProfessionalDetailsForm = ({
       totalExperienceYears: 10,
     },
   });
-  const { data: { details } = {} } =
+  const { data: { details } = {}, isLoading } =
     useReadMyProfessionalDetailsQuery(undefined);
   const [upsertProfessionalDetails] = useUpsertMyProfessionalDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -63,6 +67,14 @@ export const ProfessionalDetailsForm = ({
       form.reset(details);
     }
   }, [details, form]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <TableViewLoading />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

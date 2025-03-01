@@ -1,4 +1,8 @@
-import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import {
+  TableView,
+  TableViewCell,
+  TableViewLoading,
+} from '@/components/standalone/table-view';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAutoSaveForm } from '@/hooks/useAutoSaveForm';
@@ -50,7 +54,8 @@ export const ContactDetailsForm = ({
       website: '',
     },
   });
-  const { data: { details } = {} } = useReadMyContactDetailsQuery(undefined);
+  const { data: { details } = {}, isLoading } =
+    useReadMyContactDetailsQuery(undefined);
   const [upsertContactDetails] = useUpsertMyContactDetailsMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
@@ -68,6 +73,18 @@ export const ContactDetailsForm = ({
       form.reset(details);
     }
   }, [details, form]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <TableViewLoading />
+        <Show when={!minimal}>
+          <TableViewLoading />
+          <TableViewLoading />
+        </Show>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

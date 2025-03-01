@@ -1,5 +1,9 @@
 import { Show } from '@/components/show';
-import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import {
+  TableView,
+  TableViewCell,
+  TableViewLoading,
+} from '@/components/standalone/table-view';
 import {
   Form,
   FormControl,
@@ -39,7 +43,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export const VerificationDetailsForm = () => {
-  const { data: { details } = {} } =
+  const { data: { details } = {}, isLoading } =
     useReadMyVerificationDetailsQuery(undefined);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -69,6 +73,14 @@ export const VerificationDetailsForm = () => {
       });
     }
   }, [details, form]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <TableViewLoading />
+      </div>
+    );
+  }
 
   return (
     <div>

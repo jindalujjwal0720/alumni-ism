@@ -1,4 +1,8 @@
-import { TableView, TableViewCell } from '@/components/standalone/table-view';
+import {
+  TableView,
+  TableViewCell,
+  TableViewLoading,
+} from '@/components/standalone/table-view';
 import {
   Form,
   FormControl,
@@ -46,7 +50,8 @@ export const PublicProfilePreferencesForm = () => {
         ALUMNI_PUBLIC_PROFILE_PREFERENCES.showAdmissionNumber,
     },
   });
-  const { data: { details } = {} } = useReadMyPreferencesQuery(undefined);
+  const { data: { details } = {}, isLoading } =
+    useReadMyPreferencesQuery(undefined);
   const [upsertPersonalDetails] = useUpsertMyPreferencesMutation();
   const formRef = useRef<HTMLFormElement | null>(null);
   useAutoSaveForm(formRef);
@@ -73,6 +78,14 @@ export const PublicProfilePreferencesForm = () => {
       });
     }
   }, [details, form]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <TableViewLoading />
+      </div>
+    );
+  }
 
   return (
     <div>

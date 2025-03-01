@@ -4,6 +4,7 @@ import { useStandaloneNavigation } from './navigation';
 import { useScreenLayout } from './screen-layout';
 import { Show } from '../show';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { Skeleton } from '../ui/skeleton';
 
 const TableView = React.forwardRef<
   HTMLTableElement,
@@ -59,7 +60,7 @@ const TableViewCell = React.forwardRef<
       className,
       children,
       icon,
-      name: title,
+      name,
       description,
       link,
       actions,
@@ -102,10 +103,10 @@ const TableViewCell = React.forwardRef<
               <div className="w-full py-3 flex flex-col justify-center">
                 <div className="w-full flex justify-between gap-4">
                   <div>
-                    {typeof title === 'string' ? (
-                      <p className="text-sm w-max">{title}</p>
+                    {typeof name === 'string' ? (
+                      <p className="text-sm w-max">{name}</p>
                     ) : (
-                      title
+                      name
                     )}
                   </div>
                   <Show when={status !== undefined}>
@@ -153,4 +154,23 @@ const TableViewCell = React.forwardRef<
   },
 );
 
-export { TableView, TableViewCell };
+const TableViewLoading = ({ rows = 3 }: { rows?: number }) => {
+  return (
+    <TableView>
+      {[...Array(rows)].map((_, i) => (
+        <TableViewCell
+          key={i}
+          icon={<Skeleton className="h-8 w-8" />}
+          description={
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-1/3" />
+              <Skeleton className="h-3 w-3/4" />
+            </div>
+          }
+        />
+      ))}
+    </TableView>
+  );
+};
+
+export { TableView, TableViewCell, TableViewLoading };
