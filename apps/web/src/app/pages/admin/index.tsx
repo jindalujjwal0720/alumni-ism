@@ -13,6 +13,7 @@ import { UnverifiedAlumni } from './unverified-alumni';
 import { UnverifiedAlumniDetailsPage } from './unverified-alumni-details';
 import { AlumniPaymentsPage } from './payments';
 import { AlumniPaymentDetailsPage } from './payment-details';
+import { RejectedAlumni } from './rejected-alumni';
 
 export const AdminHome = () => {
   return (
@@ -33,6 +34,7 @@ export const AdminHome = () => {
               <Route path="" element={<div>Alumni</div>} />
               <Route path=":id" element={<UnverifiedAlumniDetailsPage />} />
               <Route path="unverified" element={<UnverifiedAlumni />} />
+              <Route path="rejected" element={<RejectedAlumni />} />
               <Route path="payments" element={<AlumniPaymentsPage />} />
               <Route
                 path="payments/:id"

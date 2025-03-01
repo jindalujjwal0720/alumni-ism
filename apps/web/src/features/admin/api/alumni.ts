@@ -32,6 +32,27 @@ const alumniApi = api.injectEndpoints({
       query: () => '/v1/admins/alumni/unverified',
       providesTags: [{ type: 'Alumni', id: 'LIST' }],
     }),
+    listRejectedAlumni: builder.query<
+      {
+        alumni: {
+          _id: string;
+          personal: {
+            name: string;
+          };
+          contact: {
+            phone: string;
+            email: string;
+          };
+          education: {
+            yearOfGraduation: number;
+          };
+        }[];
+      },
+      undefined
+    >({
+      query: () => '/v1/admins/alumni/rejected',
+      providesTags: [{ type: 'Alumni', id: 'LIST' }],
+    }),
     readAlumniData: builder.query<
       {
         alumni: IAlumni;
@@ -103,6 +124,8 @@ const alumniApi = api.injectEndpoints({
 
 export const {
   useListUnverifiedAlumniQuery,
+  useListRejectedAlumniQuery,
+
   useReadAlumniDataQuery,
   useRejectAlumniDataMutation,
   useVerifyAlumniDataMutation,

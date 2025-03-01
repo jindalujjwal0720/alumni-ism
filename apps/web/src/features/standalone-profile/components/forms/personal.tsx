@@ -69,8 +69,7 @@ export const PersonalDetailsForm = ({
       profilePicture: '',
       bio: '',
       dob: undefined,
-      gender:
-        (details?.gender as AlumniGender) ?? AlumniGender.PREFER_NOT_TO_SAY,
+      gender: details?.gender ?? AlumniGender.PREFER_NOT_TO_SAY,
     },
   });
   const [upsertPersonalDetails] = useUpsertMyPersonalDetailsMutation();
@@ -94,6 +93,7 @@ export const PersonalDetailsForm = ({
         bannerPicture: details.bannerPicture,
         bio: details.bio,
         dob: details.dob ? new Date(details.dob) : undefined,
+        gender: details?.gender ?? AlumniGender.PREFER_NOT_TO_SAY,
       });
     }
   }, [details, form]);

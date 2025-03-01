@@ -19,6 +19,11 @@ const sidebarItems = [
     link: '/admin/alumni/unverified',
   },
   {
+    title: 'Rejected Alumni',
+    icon: User2,
+    link: '/admin/alumni/rejected',
+  },
+  {
     title: 'Payments',
     icon: ReceiptIndianRupee,
     link: '/admin/alumni/payments',

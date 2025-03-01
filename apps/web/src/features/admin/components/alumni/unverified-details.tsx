@@ -15,6 +15,7 @@ import {
   AlumniVerificationStatus,
 } from '@/types/models/alumni';
 import { useRef } from 'react';
+import { Show } from '@/components/show';
 
 export const UnverifiedAlumniDetails = () => {
   const { id } = useParams();
@@ -220,31 +221,35 @@ export const UnverifiedAlumniDetails = () => {
           />
         </CardContent>
       </Card>
-      <Card>
-        <CardContent>
-          <div className="flex gap-4">
-            <Input
-              ref={rejectionReasonRef}
-              placeholder="Enter reason for rejecting alumni"
-              className="flex-1"
-            />
-            <Button
-              variant="outline"
-              onClick={handleRejectAlumni}
-              disabled={isRejecting || isVerifying}
-            >
-              {isRejecting || isVerifying ? 'Rejecting...' : 'Reject Alumni'}
-            </Button>
-            <Button
-              variant="default"
-              onClick={handleVerifyAlumni}
-              disabled={isVerifying || isRejecting}
-            >
-              {isVerifying || isRejecting ? 'Verifying...' : 'Verify Alumni'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <Show
+        when={alumni.verificationStatus !== AlumniVerificationStatus.VERIFIED}
+      >
+        <Card>
+          <CardContent>
+            <div className="flex gap-4">
+              <Input
+                ref={rejectionReasonRef}
+                placeholder="Enter reason for rejecting alumni"
+                className="flex-1"
+              />
+              <Button
+                variant="outline"
+                onClick={handleRejectAlumni}
+                disabled={isRejecting || isVerifying}
+              >
+                {isRejecting || isVerifying ? 'Rejecting...' : 'Reject Alumni'}
+              </Button>
+              <Button
+                variant="default"
+                onClick={handleVerifyAlumni}
+                disabled={isVerifying || isRejecting}
+              >
+                {isVerifying || isRejecting ? 'Verifying...' : 'Verify Alumni'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Show>
     </div>
   );
 };

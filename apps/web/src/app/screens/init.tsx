@@ -24,7 +24,11 @@ export const InitScreen = () => {
   useEffect(() => {
     // having a ucn means the user has already completed their profile
     // so we redirect them to the home screen
-    if (alumni && alumni.ucn) {
+    if (
+      alumni &&
+      alumni.ucn &&
+      alumni.verificationStatus === AlumniVerificationStatus.VERIFIED
+    ) {
       console.log('Redirecting to home screen');
       // Redirect to the home screen
       dispatch(setInitialized(true));
@@ -35,7 +39,13 @@ export const InitScreen = () => {
   return (
     <>
       <Show when={isLoading}>Loading...</Show>
-      <Show when={!isLoading && !alumni?.ucn}>
+      <Show
+        when={
+          !isLoading &&
+          (!alumni?.ucn ||
+            alumni?.verificationStatus !== AlumniVerificationStatus.VERIFIED)
+        }
+      >
         <ScreenTitleBar title="Complete Your Profile" />
         <ScreenContent>
           <div className="space-y-4 p-4 pb-24">

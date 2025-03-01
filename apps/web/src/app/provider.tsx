@@ -20,7 +20,7 @@ const Provider = ({ children }: ProviderProps) => {
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
         <ShadCNToaster />
-        <SonnerToaster />
+        <SonnerToaster position="top-center" />
       </ReduxProvider>
     </>
   );

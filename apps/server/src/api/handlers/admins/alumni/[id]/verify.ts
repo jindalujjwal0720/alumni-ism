@@ -49,6 +49,8 @@ const verifyAlumni =
       alumni.verificationStatus = AlumniVerificationStatus.VERIFIED;
 
       // generate unique card number, if not already generated
+      // IMPORTANT: This condition should NOT be removed
+      // as it is required to generate unique non-repeating card numbers
       if (!alumni.ucn) {
         const maxTries = 5;
         let tries = 0;
@@ -71,6 +73,7 @@ const verifyAlumni =
         alumni.ucn = ucn;
       }
 
+      alumni.rejectionReason = undefined;
       await alumni.save();
 
       res.status(204).send();

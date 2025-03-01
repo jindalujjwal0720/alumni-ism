@@ -23,7 +23,7 @@ export interface IAlumniPersonalDetails extends Record<string, unknown> {
   bannerPicture?: string;
   bio?: string;
   dob?: Date;
-  gender: 'male' | 'female' | 'other' | 'prefer-not-to-say';
+  gender: AlumniGender;
 
   createdAt: Date;
   updatedAt: Date;
