@@ -16,6 +16,7 @@ const SearchInput = React.forwardRef<
       <Input
         ref={ref}
         placeholder="Search"
+        type="search"
         {...props}
         className={cn(
           'w-full shadow-none focus-visible:ring-0 border-none bg-muted pl-10',
