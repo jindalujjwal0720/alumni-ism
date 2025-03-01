@@ -3,7 +3,7 @@ import {
   ScreenTitleBar,
 } from '@/components/standalone/screen-layout';
 import { SearchInput } from '@/components/standalone/search-input';
-import { SuggestedAlumni } from '@/features/standalone-search/components/suggested-alumni';
+import { Suggestions } from '@/features/standalone-search/components/suggestions';
 import { SearchProvider } from '@/features/standalone-search/components/provider';
 
 export const SearchScreen = () => {
@@ -16,7 +16,7 @@ export const SearchScreen = () => {
       </ScreenTitleBar>
       <ScreenContent>
         <div className="p-4">
-          <SuggestedAlumni />
+          <Suggestions />
         </div>
       </ScreenContent>
     </SearchProvider>

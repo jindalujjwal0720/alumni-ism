@@ -134,3 +134,15 @@ export interface IAlumniPublicProfilePreferences {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IAlumniAnalytics {
+  _id: string;
+  account: string | IUser;
+
+  profileViews: number;
+  followersCount: number;
+  followingCount: number;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
