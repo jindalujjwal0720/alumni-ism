@@ -8,6 +8,13 @@
 
 import mongoose, { PipelineStage } from 'mongoose';
 
+const ALUMNI_PERSONAL_DETAILS = 'alumnipersonaldetails';
+const ALUMNI_EDUCATION_DETAILS = 'alumnieducationdetails';
+const ALUMNI_FOLLOWS = 'alumnifollows';
+const ALUMNIS = 'alumnis';
+const ALUMNI_PROFESSIONAL_DETAILS = 'alumniprofessionaldetails';
+const ALUMNI_ANALYTICS = 'alumnianalytics';
+
 export const generateSearchSuggestionsPipeline = (
   userId: string,
 ): PipelineStage[] => {
@@ -19,7 +26,7 @@ export const generateSearchSuggestionsPipeline = (
     },
     {
       $lookup: {
-        from: 'alumnipersonaldetails',
+        from: ALUMNI_PERSONAL_DETAILS,
         localField: 'account',
         foreignField: 'account',
         as: 'myPersonal',
@@ -33,7 +40,7 @@ export const generateSearchSuggestionsPipeline = (
     },
     {
       $lookup: {
-        from: 'alumnieducationdetails',
+        from: ALUMNI_EDUCATION_DETAILS,
         localField: 'account',
         foreignField: 'account',
         as: 'myEducation',
@@ -47,7 +54,7 @@ export const generateSearchSuggestionsPipeline = (
     },
     {
       $lookup: {
-        from: 'alumnifollows',
+        from: ALUMNI_FOLLOWS,
         localField: 'account',
         foreignField: 'follower',
         as: 'following',
@@ -85,7 +92,7 @@ export const generateSearchSuggestionsPipeline = (
     },
     {
       $lookup: {
-        from: 'alumnis',
+        from: ALUMNIS,
         let: {
           myDegree: '$myDegree',
           myBranch: '$myBranch',
@@ -114,7 +121,7 @@ export const generateSearchSuggestionsPipeline = (
           },
           {
             $lookup: {
-              from: 'alumnipersonaldetails',
+              from: ALUMNI_PERSONAL_DETAILS,
               localField: 'account',
               foreignField: 'account',
               as: 'personal',
@@ -128,7 +135,7 @@ export const generateSearchSuggestionsPipeline = (
           },
           {
             $lookup: {
-              from: 'alumniEducationDetails',
+              from: ALUMNI_EDUCATION_DETAILS,
               localField: 'account',
               foreignField: 'account',
               as: 'education',
@@ -142,7 +149,7 @@ export const generateSearchSuggestionsPipeline = (
           },
           {
             $lookup: {
-              from: 'alumniProfessionalDetails',
+              from: ALUMNI_PROFESSIONAL_DETAILS,
               localField: 'account',
               foreignField: 'account',
               as: 'professional',
@@ -156,7 +163,7 @@ export const generateSearchSuggestionsPipeline = (
           },
           {
             $lookup: {
-              from: 'alumniAnalytics',
+              from: ALUMNI_ANALYTICS,
               localField: 'account',
               foreignField: 'account',
               as: 'analytics',
@@ -192,7 +199,7 @@ export const generateSearchSuggestionsPipeline = (
           },
           {
             $lookup: {
-              from: 'follows',
+              from: ALUMNI_FOLLOWS,
               let: {
                 alumniId: '$account',
               },
@@ -379,7 +386,7 @@ export const generateSearchSuggestionsPipeline = (
               designation: {
                 $ifNull: ['$professional.designation', ''],
               },
-              mutualConnections: {
+              mutualFollowers: {
                 $size: {
                   $ifNull: ['$mutualFollows', []],
                 },
