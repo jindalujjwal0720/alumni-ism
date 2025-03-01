@@ -9,158 +9,378 @@ import {
   MapPin,
   MoreHorizontal,
   Phone,
-  Star,
+  // Star,
   Twitter,
 } from 'lucide-react';
 import { MdCake } from 'react-icons/md';
 import React from 'react';
 import { convertDateToReadable } from '@/utils/time';
 import { FaAddressCard } from 'react-icons/fa';
+import {
+  useReadPublicAlumniDetailsQuery,
+  useReadPublicContactDetailsQuery,
+  useReadPublicEducationDetailsQuery,
+  useReadPublicPersonalDetailsQuery,
+  useReadPublicProfessionalDetailsQuery,
+} from '../api/public';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Show } from '@/components/show';
 
 export interface PublicProfileProps {
   ucn: string;
 }
 
-export const PublicProfile = ({ ucn }: PublicProfileProps) => {
+const PublicProfileHeaderLoading = () => {
   return (
-    <div>
-      <div className="relative">
-        <div className="rounded-lg overflow-hidden m-2 h-24">
-          <Image
-            src="/pwa/default-profile-banner.jpg"
-            fallback="/pwa/default-profile-banner.jpg"
-            alt="Profile Banner"
-            className="w-full h-full object-cover"
-          />
+    <div className="relative">
+      <div className="rounded-lg overflow-hidden m-2 h-24">
+        <Skeleton className="size-full" />
+      </div>
+      <div className="relative -top-7 px-5 flex items-center gap-4">
+        <Skeleton className="size-16 ring-2 ring-offset-2 ring-border rounded-full" />
+        <h1 className="pt-6 flex gap-2">
+          <Skeleton className="w-24 h-5" />
+        </h1>
+      </div>
+    </div>
+  );
+};
+
+export const PublicProfileHeader = ({ ucn }: PublicProfileProps) => {
+  const { data: { details } = {}, isLoading } =
+    useReadPublicPersonalDetailsQuery(ucn, {
+      skip: !ucn,
+    });
+
+  if (isLoading) {
+    return <PublicProfileHeaderLoading />;
+  }
+
+  if (!details) {
+    return <PublicProfileHeaderLoading />;
+  }
+
+  return (
+    <div className="relative">
+      <div className="rounded-lg overflow-hidden m-2 h-24">
+        <Image
+          src={details?.bannerPicture}
+          fallback="/pwa/default-profile-banner.jpg"
+          alt="Profile Banner"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="relative -top-7 px-5 flex items-center gap-4">
+        <Avatar className="size-16 ring-2 ring-offset-2 ring-border">
+          <AvatarImage src={details?.profilePicture} alt="Avatar" />
+          <AvatarFallback className="text-xl bg-muted text-foreground">
+            {details?.name[0]}
+            {details?.name?.split(' ')[1]?.[0]}
+          </AvatarFallback>
+        </Avatar>
+        <h1 className="pt-6 flex gap-2">
+          <span className="text-xl font-semibold">{details?.name}</span>
+          <Flair flair="Admin" className="mt-0.5" />
+        </h1>
+      </div>
+    </div>
+  );
+};
+
+const PublicProfileDescriptionAndStatsLoading = () => {
+  return (
+    <>
+      <div className="space-y-3">
+        <Skeleton className="w-full h-3" />
+        <Skeleton className="w-full h-3" />
+        <Skeleton className="w-2/3 h-3" />
+      </div>
+      <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-2">
+          <Skeleton className="size-4" />
+          <div className="text-sm">
+            <Skeleton className="w-16 h-3" />
+          </div>
         </div>
-        <div className="relative -top-7 px-5 flex items-center gap-4">
-          <Avatar className="size-16 ring-2 ring-offset-2 ring-border">
-            <AvatarImage
-              src="https://randomuser.me/api/portraits/men/42.jpg"
-              alt="Avatar"
-            />
-            <AvatarFallback className="text-xl bg-muted text-muted-foreground">
-              UJ
-            </AvatarFallback>
-          </Avatar>
-          <h1 className="pt-6 flex gap-2">
-            <span className="text-xl font-semibold">Ujjwal Jindal</span>
-            <Flair flair="Admin" className="mt-0.5" />
-          </h1>
+        <div className="flex gap-2">
+          <Skeleton className="size-4" />
+          <div className="text-sm">
+            <Skeleton className="w-16 h-3" />
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Skeleton className="size-4" />
+          <div className="text-sm">
+            <Skeleton className="w-16 h-3" />
+          </div>
         </div>
       </div>
-      <div className="relative -top-3 flex flex-col px-5 gap-5">
-        <p className="text-sm">
-          Creative Director, Content Creator, Educator I make video content that
-          engages minds, wins hearts, and builds audiences. I'm from the Los
-          Angeles Metroplitan Area. I talk about all things design, creativity,
-          leadership, content creation and personal developement-
-        </p>
-        <div className="flex gap-4 flex-wrap">
-          <div className="flex gap-2">
-            <Star size={16} className="text-primary fill-primary" />
-            <div className="text-sm">
-              <span className="font-medium mr-1">331</span>
-              <span className="text-muted-foreground">Reputation</span>
-            </div>
+    </>
+  );
+};
+
+export const PublicProfileDescriptionAndStats = ({
+  ucn,
+}: PublicProfileProps) => {
+  const { data: { details } = {}, isLoading } =
+    useReadPublicPersonalDetailsQuery(ucn, { skip: !ucn });
+
+  if (isLoading) {
+    return <PublicProfileDescriptionAndStatsLoading />;
+  }
+
+  if (!details) {
+    return <PublicProfileDescriptionAndStatsLoading />;
+  }
+
+  return (
+    <>
+      <p className="text-sm">
+        {details?.bio || 'This user has not provided a bio yet.'}
+      </p>
+      <div className="flex gap-4 flex-wrap">
+        {/* <div className="flex gap-2">
+          <Star size={16} className="text-primary fill-primary" />
+          <div className="text-sm">
+            <span className="font-medium mr-1">331</span>
+            <span className="text-muted-foreground">Reputation</span>
           </div>
+        </div> */}
+        <Show when={details?.dob}>
           <div className="flex gap-2">
             <MdCake size={16} className="text-primary fill-primary" />
             <div className="text-sm">
               <span className="font-medium mr-1">
-                {convertDateToReadable(new Date('1960-03-25'))}
+                {convertDateToReadable(details?.dob || '')}
               </span>
             </div>
           </div>
-          <div className="flex gap-2">
-            <FaAddressCard size={16} className="text-primary fill-primary" />
-            <div className="text-sm">
-              <span className="text-muted-foreground">{ucn}</span>
-            </div>
+        </Show>
+        <div className="flex gap-2">
+          <FaAddressCard size={16} className="text-primary fill-primary" />
+          <div className="text-sm">
+            <span className="text-muted-foreground">{ucn}</span>
           </div>
         </div>
-        <div className="flex gap-3">
-          <Button className="w-full rounded-full" variant="default">
-            Follow
-          </Button>
-          {/* <Button className="w-full rounded-full" variant="outline">
-            Message
-          </Button> */}
-          <Button className="rounded-full px-2" variant="outline" size="icon">
-            <MoreHorizontal />
-          </Button>
+      </div>
+    </>
+  );
+};
+
+const PublicProfileActionsLoading = () => {
+  return (
+    <div className="flex gap-3">
+      <Skeleton className="w-full h-10 rounded-full" />
+      <Skeleton className="size-10 shrink-0 rounded-full" />
+    </div>
+  );
+};
+
+export const PublicProfileActions = ({ ucn }: PublicProfileProps) => {
+  const { data: { alumni } = {}, isLoading } = useReadPublicAlumniDetailsQuery(
+    ucn,
+    { skip: !ucn },
+  );
+
+  if (isLoading) {
+    return <PublicProfileActionsLoading />;
+  }
+
+  if (!alumni) {
+    return <PublicProfileActionsLoading />;
+  }
+
+  return (
+    <div className="flex gap-3">
+      <Button className="w-full rounded-full" variant="default">
+        Follow
+      </Button>
+      {/* <Button className="w-full rounded-full" variant="outline">
+        Message
+      </Button> */}
+      <Button className="rounded-full px-2" variant="outline" size="icon">
+        <MoreHorizontal />
+      </Button>
+    </div>
+  );
+};
+
+const PublicEducationDetailsLoading = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="w-12 h-4" />
+      <div className="flex gap-4">
+        <Skeleton className="size-12 aspect-square rounded-md" />
+        <div className="flex flex-col gap-2 w-full">
+          <Skeleton className="w-24 h-4" />
+          <Skeleton className="w-2/3 h-3" />
         </div>
-        <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-muted-foreground">Career</h2>
+      </div>
+    </div>
+  );
+};
+
+export const PublicEducationDetails = ({ ucn }: PublicProfileProps) => {
+  const { data: { details } = {}, isLoading } =
+    useReadPublicEducationDetailsQuery(ucn, { skip: !ucn });
+
+  if (isLoading) {
+    return <PublicEducationDetailsLoading />;
+  }
+
+  if (!details) {
+    return <PublicEducationDetailsLoading />;
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <h2 className="text-sm font-medium text-muted-foreground">Education</h2>
+      <div className="flex gap-4">
+        <div className="size-10 rounded-md overflow-hidden flex items-center justify-center">
+          <Image
+            src="/iit-ism-logo.png"
+            alt="IIT ISM Dhanbad"
+            className="max-w-8 h-8"
+          />
+        </div>
+        <div className="flex flex-col">
+          <span className="font-medium">IIT ISM Dhanbad</span>
+          <span className="text-sm text-muted-foreground">
+            {details?.degree} in {details?.branch} ({details?.yearOfGraduation})
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const PublicCareerDetails = ({ ucn }: PublicProfileProps) => {
+  const { data: { details } = {}, isLoading } =
+    useReadPublicProfessionalDetailsQuery(ucn, { skip: !ucn });
+
+  if (isLoading) {
+    return <PublicEducationDetailsLoading />;
+  }
+
+  if (!details) {
+    return <PublicEducationDetailsLoading />;
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <h2 className="text-sm font-medium text-muted-foreground">Career</h2>
+      <div className="flex gap-4">
+        <Show when={details?.currentCompanyWebsite}>
+          <div className="size-10 rounded-md overflow-hidden flex items-center justify-center">
+            <Image
+              src={`https://www.google.com/s2/favicons?domain=${details.currentCompanyWebsite}&sz=128`}
+              alt="Salesforce"
+              className="max-w-8 h-8"
+            />
+          </div>
+        </Show>
+        <div className="flex flex-col">
+          <span className="font-medium">{details?.currentCompany}</span>
+          <span className="text-sm text-muted-foreground">
+            {details?.designation}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PublicContactDetailsLoading = () => {
+  return (
+    <div className="flex flex-col gap-3">
+      <Skeleton className="w-12 h-4" />
+      <div className="pl-2 flex flex-col gap-3">
+        <div className="flex gap-4">
+          <Skeleton className="size-5" />
+          <Skeleton className="w-2/3 h-3" />
+        </div>
+        <div className="flex gap-4">
+          <Skeleton className="size-5" />
+          <Skeleton className="w-2/3 h-3" />
+        </div>
+        <div className="flex gap-4">
+          <Skeleton className="size-5" />
+          <Skeleton className="w-2/3 h-3" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const PublicContactDetails = ({ ucn }: PublicProfileProps) => {
+  const { data: { details } = {}, isLoading } =
+    useReadPublicContactDetailsQuery(ucn, { skip: !ucn });
+
+  if (isLoading) {
+    return <PublicContactDetailsLoading />;
+  }
+
+  if (!details) {
+    return <PublicContactDetailsLoading />;
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      <h2 className="text-sm font-medium text-muted-foreground">Contact</h2>
+      <div className="pl-2 flex flex-col gap-3">
+        <Show when={details.email}>
           <div className="flex gap-4">
-            <div className="size-10 rounded-md overflow-hidden flex items-center justify-center">
-              <Image
-                src="https://www.google.com/s2/favicons?domain=https://salesforce.com&sz=128"
-                alt="Salesforce"
-                className="max-w-8 h-8"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-medium">Salesforce</span>
-              <span className="text-sm text-muted-foreground">
-                Associate Member Technical Staff
-              </span>
-            </div>
+            <Mail size={16} className="text-primary" />
+            <span className="text-sm">{details?.email}</span>
           </div>
-        </div>
-        <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-muted-foreground">
-            Education
-          </h2>
+        </Show>
+        <Show when={details.phone}>
           <div className="flex gap-4">
-            <div className="size-10 rounded-md overflow-hidden flex items-center justify-center">
-              <Image
-                src="/iit-ism-logo.png"
-                alt="IIT ISM Dhanbad"
-                className="max-w-8 h-8"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-medium">IIT ISM Dhanbad</span>
-              <span className="text-sm text-muted-foreground">
-                B.Tech in Computer Science and Engineering (2018-2022)
-              </span>
-            </div>
+            <Phone size={16} className="text-primary" />
+            <span className="text-sm">{details?.phone}</span>
           </div>
+        </Show>
+        <div className="flex gap-4">
+          <MapPin size={16} className="text-primary" />
+          <span className="text-sm">
+            {[details?.city, details?.state, details?.country, details?.zip]
+              .filter(Boolean)
+              .join(', ')}
+          </span>
         </div>
-        <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-muted-foreground">Contact</h2>
-          <div className="pl-2 flex flex-col gap-3">
-            <div className="flex gap-4">
-              <Mail size={16} className="text-primary" />
-              <span className="text-sm">temp-ujjwal@gmail.com</span>
-            </div>
-            <div className="flex gap-4">
-              <Phone size={16} className="text-primary" />
-              <span className="text-sm">+91 1234567890</span>
-            </div>
-            <div className="flex gap-4">
-              <MapPin size={16} className="text-primary" />
-              <span className="text-sm">
-                123, New Street, New City, New Country
-              </span>
-            </div>
-            <div className="flex gap-4">
-              <Linkedin size={16} className="text-primary" />
-              <span className="text-sm">linkedin.com/in/jindalujjwal0720</span>
-            </div>
-            <div className="flex gap-4">
-              <Twitter size={16} className="text-primary" />
-              <span className="text-sm">twitter.com/jindalujjwal07</span>
-            </div>
-            <div className="flex gap-4">
-              <Globe2 size={16} className="text-primary" />
-              <span className="text-sm">
-                jindalujjwal0720.github.io/portfolio
-              </span>
-            </div>
+        <Show when={details.linkedin}>
+          <div className="flex gap-4">
+            <Linkedin size={16} className="text-primary" />
+            <span className="text-sm">linkedin.com/in/{details.linkedIn}</span>
           </div>
-        </div>
+        </Show>
+        <Show when={details.twitter}>
+          <div className="flex gap-4">
+            <Twitter size={16} className="text-primary" />
+            <span className="text-sm">twitter.com/{details.twitter}</span>
+          </div>
+        </Show>
+        <Show when={details.website}>
+          <div className="flex gap-4">
+            <Globe2 size={16} className="text-primary" />
+            <span className="text-sm">{details.website}</span>
+          </div>
+        </Show>
+      </div>
+    </div>
+  );
+};
+
+export const PublicProfile = ({ ucn }: PublicProfileProps) => {
+  return (
+    <div>
+      <PublicProfileHeader ucn={ucn} />
+      <div className="relative -top-3 flex flex-col px-5 gap-5">
+        <PublicProfileDescriptionAndStats ucn={ucn} />
+        <PublicProfileActions ucn={ucn} />
+        <PublicEducationDetails ucn={ucn} />
+        <PublicCareerDetails ucn={ucn} />
+        <PublicContactDetails ucn={ucn} />
         <div className="text-xs text-muted-foreground mt-6">
           <p className="text-center">
             This profile is managed by the user and not by the organization.

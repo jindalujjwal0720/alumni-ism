@@ -33,19 +33,18 @@ const readAlumniEducationPublicDetails =
 
       const prefs = await preferencesModel.findOne({ account: alumni.account });
 
-      const fields = {
-        degree: 1,
-        branch: 1,
-        yearOfGraduation: 1,
-        admissionNumber:
-          prefs?.showAdmissionNumber ||
-          ALUMNI_PUBLIC_PROFILE_PREFERENCES.showAdmissionNumber
-            ? 1
-            : 0,
-      };
+      const fields = [
+        'degree',
+        'branch',
+        'yearOfGraduation',
+        prefs?.showAdmissionNumber ||
+        ALUMNI_PUBLIC_PROFILE_PREFERENCES.showAdmissionNumber
+          ? 'admissionNumber'
+          : '',
+      ].filter((field) => field);
 
       const details = await educationModel
-        .find({ account: alumni.account })
+        .findOne({ account: alumni.account })
         .select(fields);
 
       res.status(200).json({ details });

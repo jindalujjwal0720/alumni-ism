@@ -33,27 +33,26 @@ const readAlumniContactPublicDetails =
 
       const prefs = await preferencesModel.findOne({ account: alumni.account });
 
-      const fields = {
-        phone:
-          prefs?.showPhone || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showPhone
-            ? 1
-            : 0,
-        email:
-          prefs?.showEmail || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showEmail
-            ? 1
-            : 0,
-        city: 1,
-        state: 1,
-        country: 1,
-        zip:
-          prefs?.showZip || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showZip ? 1 : 0,
-        linkedin: 1,
-        twitter: 1,
-        website: 1,
-      };
+      const fields = [
+        prefs?.showPhone || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showPhone
+          ? 'phone'
+          : '',
+        prefs?.showEmail || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showEmail
+          ? 'email'
+          : '',
+        'city',
+        'state',
+        'country',
+        prefs?.showZip || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showZip
+          ? 'zip'
+          : '',
+        'linkedin',
+        'twitter',
+        'website',
+      ].filter((field) => field);
 
       const details = await contactModel
-        .find({ account: alumni.account })
+        .findOne({ account: alumni.account })
         .select(fields);
 
       res.status(200).json({ details });

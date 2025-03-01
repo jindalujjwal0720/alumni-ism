@@ -11,55 +11,55 @@ import {
 
 const detailsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    readMyAlumniDetails: builder.query<{ alumni: IAlumni }, undefined>({
+    readMyAlumniDetails: builder.query<{ alumni: IAlumni }, void>({
       query: () => '/v1/alumni/me',
       providesTags: ['Alumni'],
     }),
     readMyPersonalDetails: builder.query<
       { details: IAlumniPersonalDetails },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/personal',
       providesTags: [{ type: 'Alumni', id: 'personal' }],
     }),
     readMyVerificationDetails: builder.query<
       { details: IAlumniVerificationDetails },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/verification',
       providesTags: [{ type: 'Alumni', id: 'verification' }],
     }),
     readMyContactDetails: builder.query<
       { details: IAlumniContactDetails },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/contact',
       providesTags: [{ type: 'Alumni', id: 'contact' }],
     }),
     readMyEducationDetails: builder.query<
       { details: IAlumniEducationDetails },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/education',
       providesTags: [{ type: 'Alumni', id: 'education' }],
     }),
     readMyProfessionalDetails: builder.query<
       { details: IAlumniProfessionalDetails },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/professional',
       providesTags: [{ type: 'Alumni', id: 'professional' }],
     }),
     readMyPreferences: builder.query<
       { details: IAlumniPublicProfilePreferences },
-      undefined
+      void
     >({
       query: () => '/v1/alumni/me/preferences',
       providesTags: [{ type: 'Alumni', id: 'preferences' }],
     }),
 
     upsertMyPersonalDetails: builder.mutation<
-      undefined,
+      void,
       Partial<IAlumniPersonalDetails>
     >({
       query: (body) => ({
@@ -70,7 +70,7 @@ const detailsApi = api.injectEndpoints({
       invalidatesTags: ['Alumni'],
     }),
     upsertMyContactDetails: builder.mutation<
-      undefined,
+      void,
       Partial<IAlumniContactDetails>
     >({
       query: (body) => ({
@@ -81,7 +81,7 @@ const detailsApi = api.injectEndpoints({
       invalidatesTags: [{ type: 'Alumni', id: 'contact' }],
     }),
     upsertMyEducationDetails: builder.mutation<
-      undefined,
+      void,
       Partial<IAlumniEducationDetails>
     >({
       query: (body) => ({
@@ -92,7 +92,7 @@ const detailsApi = api.injectEndpoints({
       invalidatesTags: [{ type: 'Alumni', id: 'education' }],
     }),
     upsertMyProfessionalDetails: builder.mutation<
-      undefined,
+      void,
       Partial<IAlumniProfessionalDetails>
     >({
       query: (body) => ({
@@ -103,7 +103,7 @@ const detailsApi = api.injectEndpoints({
       invalidatesTags: [{ type: 'Alumni', id: 'professional' }],
     }),
     upsertMyVerificationDetails: builder.mutation<
-      undefined,
+      void,
       Partial<IAlumniVerificationDetails>
     >({
       query: (body) => ({
@@ -114,7 +114,7 @@ const detailsApi = api.injectEndpoints({
       invalidatesTags: [{ type: 'Alumni', id: 'verification' }],
     }),
     upsertMyPreferences: builder.mutation<
-      undefined,
+      void,
       Partial<IAlumniPublicProfilePreferences>
     >({
       query: (body) => ({

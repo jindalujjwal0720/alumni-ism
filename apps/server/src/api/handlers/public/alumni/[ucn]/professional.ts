@@ -27,15 +27,15 @@ const readAlumniProfessionalPublicDetails =
         );
       }
 
-      const fields = {
-        currentCompany: 1,
-        designation: 1,
-        currentCompanyWebsite: 1,
-        totalExperienceYears: 1,
-      };
+      const fields = [
+        'currentCompany',
+        'designation',
+        'totalExperienceYears',
+        'currentCompanyWebsite',
+      ];
 
       const details = await professionalModel
-        .find({ account: alumni.account })
+        .findOne({ account: alumni.account })
         .select(fields);
 
       res.status(200).json({ details });

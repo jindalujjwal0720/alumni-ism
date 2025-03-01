@@ -24,10 +24,14 @@ export const convertDateTimeToReadable = (dateTime: string | Date): string => {
 };
 
 export const convertDateToReadable = (date: string | Date): string => {
-  const dateObj = new Date(date);
-  return Intl.DateTimeFormat('en-IN', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  }).format(dateObj);
+  try {
+    const dateObj = new Date(date);
+    return Intl.DateTimeFormat('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(dateObj);
+  } catch (_) {
+    return '';
+  }
 };

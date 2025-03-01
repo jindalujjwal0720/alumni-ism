@@ -33,22 +33,22 @@ const readAlumniPersonalPublicDetails =
 
       const prefs = await preferencesModel.findOne({ account: alumni.account });
 
-      const fields = {
-        name: 1,
-        alias: 1,
-        profilePicture: 1,
-        bannerPicture: 1,
-        bio: 1,
-        dob:
-          prefs?.showDob || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showDob ? 1 : 0,
-        gender:
-          prefs?.showGender || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showGender
-            ? 1
-            : 0,
-      };
+      const fields = [
+        'name',
+        'alias',
+        'profilePicture',
+        'bannerPicture',
+        'bio',
+        prefs?.showDob || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showDob
+          ? 'dob'
+          : '',
+        prefs?.showGender || ALUMNI_PUBLIC_PROFILE_PREFERENCES.showGender
+          ? 'gender'
+          : '',
+      ].filter((field) => field);
 
       const details = await personalModel
-        .find({ account: alumni.account })
+        .findOne({ account: alumni.account })
         .select(fields);
 
       res.status(200).json({ details });
