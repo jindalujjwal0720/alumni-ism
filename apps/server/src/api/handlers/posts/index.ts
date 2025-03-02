@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { IPost, MediaType } from '../../../types/models/post';
+import { IPost, MediaType, PostVisibility } from '../../../types/models/post';
 import { RequestHandler } from 'express';
 import { AppError, CommonErrors } from '../../../utils/errors';
 import { Post } from '../../../models/post';
@@ -17,7 +17,15 @@ const createPost =
             url: Joi.string().uri().required(),
           }),
         ),
-        tags: Joi.array().items(Joi.string()),
+        mentions: Joi.array().items(
+          Joi.object({
+            ucn: Joi.string().required(),
+            name: Joi.string().required(),
+          }),
+        ),
+        visibility: Joi.string()
+          .valid(...Object.values(PostVisibility))
+          .required(),
       });
       const { error } = schema.validate(req.body);
       if (error) {

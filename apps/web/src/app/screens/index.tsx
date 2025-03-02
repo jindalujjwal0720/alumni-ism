@@ -38,6 +38,7 @@ import LoginScreen from './auth/login';
 import { InitScreen } from './init';
 import { PreferencesScreenContent } from './profile/(tabs)/preferences';
 import { SearchProvider } from '@/features/standalone-search/components/provider';
+import { NewPostScreen } from './home/new-post';
 
 export const AppScreens = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -71,6 +72,7 @@ export const AppScreens = () => {
                   <Route path="" element={<HomeScreenContent />} />
                 </Route>
 
+                <Route path="posts/new" element={<NewPostScreen />} />
                 <Route path="posts/:id" element={<PostDetailsScreen />} />
 
                 <Route

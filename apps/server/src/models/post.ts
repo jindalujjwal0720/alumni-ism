@@ -6,6 +6,7 @@ import {
   IPostComment,
   IPostLike,
   MediaType,
+  PostVisibility,
 } from '../types/models/post';
 
 const mediaSchema = new mongoose.Schema<IMedia>(
@@ -19,6 +20,14 @@ const mediaSchema = new mongoose.Schema<IMedia>(
       type: String,
       required: true,
     },
+  },
+  { _id: false },
+);
+
+const mentionSchema = new mongoose.Schema(
+  {
+    ucn: String,
+    name: String,
   },
   { _id: false },
 );
@@ -38,9 +47,14 @@ const postSchema = new mongoose.Schema<IPost>(
       type: [mediaSchema],
       default: [],
     },
-    tags: {
-      type: [String],
+    mentions: {
+      type: [mentionSchema],
       default: [],
+    },
+    visibility: {
+      type: String,
+      enum: PostVisibility,
+      default: PostVisibility.PUBLIC,
     },
   },
   { timestamps: true },

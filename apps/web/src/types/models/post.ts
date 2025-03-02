@@ -9,13 +9,25 @@ export interface IMedia {
   url: string;
 }
 
+export enum PostVisibility {
+  PUBLIC = 'public',
+  FOLLOWERS = 'followers',
+}
+
+export type PostMention = {
+  ucn: string;
+  name: string;
+};
+
 export interface IPost extends Record<string, unknown> {
   _id: string;
   account: string | IUser;
 
   body: string;
   media: IMedia[];
-  tags: string[];
+  mentions: PostMention[];
+
+  visibility: PostVisibility;
 
   createdAt: Date;
   updatedAt: Date;
