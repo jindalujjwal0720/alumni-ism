@@ -5,7 +5,9 @@ import { Show } from '@/components/show';
 import { Users } from 'lucide-react';
 
 export interface AlumniSuggestionCardProps {
-  suggestion: IAlumniSuggestion;
+  suggestion:
+    | IAlumniSuggestion
+    | Omit<IAlumniSuggestion, 'mutualFollowers' | 'score'>;
 }
 
 export const AlumniSuggestionCard = ({
@@ -42,10 +44,17 @@ export const AlumniSuggestionCard = ({
               </Show>
             </div>
           </Show>
-          <Show when={suggestion.mutualFollowers > 0}>
+          <Show
+            when={
+              'mutualFollowers' in suggestion && suggestion.mutualFollowers > 0
+            }
+          >
             <div className="text-sm text-muted-foreground mt-1">
               <Users size={16} className="inline-block -mt-1 mr-1" />
-              {suggestion.mutualFollowers} mutual followers
+              {'mutualFollowers' in suggestion
+                ? suggestion.mutualFollowers
+                : 0}{' '}
+              mutual followers
             </div>
           </Show>
         </div>

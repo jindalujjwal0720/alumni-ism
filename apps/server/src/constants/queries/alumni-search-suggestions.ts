@@ -3,7 +3,7 @@
  *
  * The query is used to generate search suggestions for alumni based on the user's profile.
  *
- * for visual or editing the pipeline, use MongoDB Compass Pipeline Aggregation.
+ * Note: for visual or editing the pipeline, use MongoDB Compass Pipeline Aggregation.
  */
 
 import mongoose, { PipelineStage } from 'mongoose';

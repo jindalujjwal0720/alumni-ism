@@ -59,6 +59,8 @@ const TableViewCell = React.forwardRef<
     {
       className,
       children,
+      onClick,
+
       icon,
       name,
       description,
@@ -77,11 +79,16 @@ const TableViewCell = React.forwardRef<
     const { title: screenTitle } = useScreenLayout();
     const [isExpanded, setIsExpanded] = React.useState(false);
 
-    const handleRowClick = useCallback(() => {
-      if (children) return setIsExpanded((prev) => !prev);
+    const handleRowClick = useCallback(
+      (e: React.MouseEvent<HTMLTableRowElement>) => {
+        if (children) return setIsExpanded((prev) => !prev);
 
-      if (link) navigate(link, screenTitle);
-    }, [children, link, navigate, screenTitle]);
+        if (link) navigate(link, screenTitle);
+
+        if (onClick) onClick(e);
+      },
+      [children, link, navigate, onClick, screenTitle],
+    );
 
     return (
       <>

@@ -26,7 +26,35 @@ const alumniSearchApi = api.injectEndpoints({
     >({
       query: () => '/v1/alumni/search/suggestions',
     }),
+    getSearchFilterSuggestions: builder.query<
+      { suggestions: { value: string; count: number }[] },
+      { filterType: string; limit?: number }
+    >({
+      query: ({ filterType, limit = 5 }) =>
+        `/v1/alumni/search/filters?ft=${filterType}&limit=${limit}`,
+    }),
+    getSearchResults: builder.mutation<
+      { results: Omit<IAlumniSuggestion, 'mutualFollowers' | 'score'>[] },
+      {
+        query: string;
+        filters: Record<string, string>;
+        limit?: number;
+        offset?: number;
+      }
+    >({
+      query: ({ query, filters, limit = 10, offset = 0 }) =>
+        `/v1/alumni/search?${new URLSearchParams({
+          q: query,
+          ...filters,
+          ...(limit !== undefined && { limit: limit.toString() }),
+          ...(offset !== undefined && { offset: offset.toString() }),
+        }).toString()}`,
+    }),
   }),
 });
 
-export const { useGetSearchSuggestionsQuery } = alumniSearchApi;
+export const {
+  useGetSearchSuggestionsQuery,
+  useGetSearchFilterSuggestionsQuery,
+  useGetSearchResultsMutation,
+} = alumniSearchApi;

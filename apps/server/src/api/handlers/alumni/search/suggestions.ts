@@ -13,7 +13,12 @@ const getSearchSuggestions =
       const pipeline = generateSearchSuggestionsPipeline(userId);
       const suggestions = await personalDetailsModel.aggregate(pipeline);
 
-      res.status(200).json({ suggestions });
+      res.status(200).json({
+        suggestions,
+        _meta: {
+          total: suggestions.length,
+        },
+      });
     } catch (err) {
       next(err);
     }
