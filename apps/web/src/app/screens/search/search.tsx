@@ -2,7 +2,6 @@ import {
   ScreenContent,
   ScreenTitleBar,
 } from '@/components/standalone/screen-layout';
-import { SearchProvider } from '@/features/standalone-search/components/provider';
 import {
   Drawer,
   DrawerContent,
@@ -28,7 +27,7 @@ export const SearchScreen = () => {
   const { goBack } = useStandaloneNavigation();
 
   return (
-    <SearchProvider>
+    <>
       <ScreenTitleBar title="Search" logo>
         <div className="px-2 pb-2 flex gap-2">
           <SearchInputBox />
@@ -77,6 +76,6 @@ export const SearchScreen = () => {
           <SearchResults />
         </div>
       </ScreenContent>
-    </SearchProvider>
+    </>
   );
 };
