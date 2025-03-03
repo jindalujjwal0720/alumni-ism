@@ -1,9 +1,14 @@
 import { Model } from 'mongoose';
-import { IPost, MediaType } from '../../../../types/models/post';
+import {
+  IPost,
+  MediaType,
+  PostVisibility,
+} from '../../../../types/models/post';
 import { RequestHandler } from 'express';
 import { AppError, CommonErrors } from '../../../../utils/errors';
 import { Post } from '../../../../models/post';
 import Joi from 'joi';
+import { generateGetPostByIdPipeline } from '../../../../constants/queries/post-by-id';
 
 const readPost =
   (_postModel: Model<IPost>): RequestHandler =>
@@ -11,8 +16,9 @@ const readPost =
     try {
       const { postId } = req.params;
 
-      const post = await Post.findById(postId);
-      if (!post) {
+      const pipeline = generateGetPostByIdPipeline(postId);
+      const post = await Post.aggregate(pipeline);
+      if (!post[0]) {
         throw new AppError(
           CommonErrors.NotFound.name,
           CommonErrors.NotFound.statusCode,
@@ -20,7 +26,7 @@ const readPost =
         );
       }
 
-      res.status(200).send({ post });
+      res.status(200).send({ post: post[0] });
     } catch (err) {
       next(err);
     }
@@ -50,7 +56,15 @@ const editPost =
             url: Joi.string().uri().required(),
           }),
         ),
-        tags: Joi.array().items(Joi.string()),
+        mentions: Joi.array().items(
+          Joi.object({
+            ucn: Joi.string().required(),
+            name: Joi.string().required(),
+          }),
+        ),
+        visibility: Joi.string()
+          .valid(...Object.values(PostVisibility))
+          .required(),
       });
       const { error } = schema.validate(req.body);
       if (error) {

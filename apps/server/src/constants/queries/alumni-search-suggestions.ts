@@ -1,8 +1,6 @@
 /**
  * @file This file contains the query to generate search suggestions for alumni.
  *
- * The query is used to generate search suggestions for alumni based on the user's profile.
- *
  * Note: for visual or editing the pipeline, use MongoDB Compass Pipeline Aggregation.
  */
 
@@ -26,34 +24,6 @@ export const generateSearchSuggestionsPipeline = (
     },
     {
       $lookup: {
-        from: ALUMNI_PERSONAL_DETAILS,
-        localField: 'account',
-        foreignField: 'account',
-        as: 'myPersonal',
-      },
-    },
-    {
-      $unwind: {
-        path: '$myPersonal',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: ALUMNI_EDUCATION_DETAILS,
-        localField: 'account',
-        foreignField: 'account',
-        as: 'myEducation',
-      },
-    },
-    {
-      $unwind: {
-        path: '$myEducation',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
         from: ALUMNI_FOLLOWS,
         localField: 'account',
         foreignField: 'follower',
@@ -61,32 +31,32 @@ export const generateSearchSuggestionsPipeline = (
       },
     },
     {
+      $lookup: {
+        from: ALUMNI_PERSONAL_DETAILS,
+        localField: 'account',
+        foreignField: 'account',
+        as: 'personal',
+      },
+    },
+    {
+      $lookup: {
+        from: ALUMNI_EDUCATION_DETAILS,
+        localField: 'account',
+        foreignField: 'account',
+        as: 'education',
+      },
+    },
+    {
       $project: {
-        _id: 0,
-        account: 1,
-        myName: {
-          $ifNull: ['$myPersonal.name', ''],
-        },
-        myProfilePicture: {
-          $ifNull: ['$myPersonal.profilePicture', ''],
-        },
+        followingIds: '$following.following',
         myDegree: {
-          $ifNull: ['$myEducation.degree', ''],
+          $arrayElemAt: ['$education.degree', 0],
         },
         myBranch: {
-          $ifNull: ['$myEducation.branch', ''],
+          $arrayElemAt: ['$education.branch', 0],
         },
         myGradYear: {
-          $ifNull: ['$myEducation.yearOfGraduation', null],
-        },
-        followingIds: {
-          $map: {
-            input: {
-              $ifNull: ['$following', []],
-            },
-            as: 'follow',
-            in: '$$follow.following',
-          },
+          $arrayElemAt: ['$education.yearOfGraduation', 0],
         },
       },
     },
@@ -94,13 +64,11 @@ export const generateSearchSuggestionsPipeline = (
       $lookup: {
         from: ALUMNIS,
         let: {
+          currentUser: new mongoose.Types.ObjectId(userId),
+          followingIds: '$followingIds',
           myDegree: '$myDegree',
           myBranch: '$myBranch',
           myGradYear: '$myGradYear',
-          followingIds: {
-            $ifNull: ['$followingIds', []],
-          },
-          currentUser: new mongoose.Types.ObjectId(userId),
         },
         pipeline: [
           {
@@ -128,23 +96,11 @@ export const generateSearchSuggestionsPipeline = (
             },
           },
           {
-            $unwind: {
-              path: '$personal',
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-          {
             $lookup: {
               from: ALUMNI_EDUCATION_DETAILS,
               localField: 'account',
               foreignField: 'account',
               as: 'education',
-            },
-          },
-          {
-            $unwind: {
-              path: '$education',
-              preserveNullAndEmptyArrays: true,
             },
           },
           {
@@ -156,12 +112,6 @@ export const generateSearchSuggestionsPipeline = (
             },
           },
           {
-            $unwind: {
-              path: '$professional',
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-          {
             $lookup: {
               from: ALUMNI_ANALYTICS,
               localField: 'account',
@@ -170,50 +120,16 @@ export const generateSearchSuggestionsPipeline = (
             },
           },
           {
-            $addFields: {
-              analytics: {
-                $cond: {
-                  if: {
-                    $eq: [
-                      {
-                        $size: '$analytics',
-                      },
-                      0,
-                    ],
-                  },
-                  then: [
-                    {
-                      followersCount: 0,
-                    },
-                  ],
-                  else: '$analytics',
-                },
-              },
-            },
-          },
-          {
-            $unwind: {
-              path: '$analytics',
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-          {
             $lookup: {
               from: ALUMNI_FOLLOWS,
-              let: {
-                alumniId: '$account',
-              },
+              let: { alumniId: '$account' },
               pipeline: [
                 {
                   $match: {
                     $expr: {
                       $and: [
-                        {
-                          $eq: ['$following', '$$alumniId'],
-                        },
-                        {
-                          $in: ['$follower', '$$followingIds'],
-                        },
+                        { $in: ['$follower', '$$followingIds'] },
+                        { $eq: ['$following', '$$alumniId'] },
                       ],
                     },
                   },
@@ -224,110 +140,32 @@ export const generateSearchSuggestionsPipeline = (
           },
           {
             $addFields: {
+              personal: { $arrayElemAt: ['$personal', 0] },
+              education: { $arrayElemAt: ['$education', 0] },
+              professional: { $arrayElemAt: ['$professional', 0] },
+              analytics: { $arrayElemAt: ['$analytics', 0] },
+              mutualCount: { $size: '$mutualFollows' },
               score: {
-                $sum: [
+                $add: [
+                  { $multiply: ['$mutualCount', 10] },
                   {
-                    $multiply: [
-                      {
-                        $size: {
-                          $ifNull: ['$mutualFollows', []],
-                        },
-                      },
-                      10,
-                    ],
+                    $cond: [{ $eq: ['$education.degree', '$$myDegree'] }, 5, 0],
+                  },
+                  {
+                    $cond: [{ $eq: ['$education.branch', '$$myBranch'] }, 8, 0],
                   },
                   {
                     $cond: [
                       {
                         $and: [
-                          {
-                            $ne: [
-                              {
-                                $ifNull: ['$education.degree', ''],
-                              },
-                              '',
-                            ],
-                          },
-                          {
-                            $ne: [
-                              {
-                                $ifNull: ['$$myDegree', ''],
-                              },
-                              '',
-                            ],
-                          },
-                          {
-                            $eq: ['$education.degree', '$$myDegree'],
-                          },
-                        ],
-                      },
-                      5,
-                      0,
-                    ],
-                  },
-                  {
-                    $cond: [
-                      {
-                        $and: [
-                          {
-                            $ne: [
-                              {
-                                $ifNull: ['$education.branch', ''],
-                              },
-                              '',
-                            ],
-                          },
-                          {
-                            $ne: [
-                              {
-                                $ifNull: ['$$myBranch', ''],
-                              },
-                              '',
-                            ],
-                          },
-                          {
-                            $eq: ['$education.branch', '$$myBranch'],
-                          },
-                        ],
-                      },
-                      8,
-                      0,
-                    ],
-                  },
-                  {
-                    $cond: [
-                      {
-                        $and: [
-                          {
-                            $ne: [
-                              {
-                                $ifNull: ['$education.yearOfGraduation', null],
-                              },
-                              null,
-                            ],
-                          },
-                          {
-                            $ne: [
-                              {
-                                $ifNull: ['$$myGradYear', null],
-                              },
-                              null,
-                            ],
-                          },
+                          { $ne: ['$education.yearOfGraduation', null] },
                           {
                             $lte: [
                               {
                                 $abs: {
                                   $subtract: [
-                                    {
-                                      $ifNull: [
-                                        '$education.yearOfGraduation',
-                                        0,
-                                      ],
-                                    },
-                                    {
-                                      $ifNull: ['$$myGradYear', 0],
-                                    },
+                                    '$education.yearOfGraduation',
+                                    '$$myGradYear',
                                   ],
                                 },
                               },
@@ -352,45 +190,20 @@ export const generateSearchSuggestionsPipeline = (
               },
             },
           },
-          {
-            $sort: {
-              score: -1,
-            },
-          },
-          {
-            $limit: 10,
-          },
+          { $sort: { score: -1 } },
+          { $limit: 10 },
           {
             $project: {
-              _id: 1,
               ucn: 1,
               account: 1,
-              name: {
-                $ifNull: ['$personal.name', ''],
-              },
-              profilePicture: {
-                $ifNull: ['$personal.profile', ''],
-              },
-              degree: {
-                $ifNull: ['$education.degree', ''],
-              },
-              branch: {
-                $ifNull: ['$education.branch', ''],
-              },
-              yearOfGraduation: {
-                $ifNull: ['$education.yearOfGraduation', null],
-              },
-              currentCompany: {
-                $ifNull: ['$professional.currentCompany', ''],
-              },
-              designation: {
-                $ifNull: ['$professional.designation', ''],
-              },
-              mutualFollowers: {
-                $size: {
-                  $ifNull: ['$mutualFollows', []],
-                },
-              },
+              name: '$personal.name',
+              profilePicture: '$personal.profile',
+              degree: '$education.degree',
+              branch: '$education.branch',
+              yearOfGraduation: '$education.yearOfGraduation',
+              currentCompany: '$professional.currentCompany',
+              designation: '$professional.designation',
+              mutualConnections: '$mutualCount',
               score: 1,
             },
           },
@@ -398,22 +211,7 @@ export const generateSearchSuggestionsPipeline = (
         as: 'suggestions',
       },
     },
-    {
-      $match: {
-        suggestions: {
-          $exists: true,
-        },
-      },
-    },
-    {
-      $unwind: {
-        path: '$suggestions',
-      },
-    },
-    {
-      $replaceRoot: {
-        newRoot: '$suggestions',
-      },
-    },
+    { $unwind: '$suggestions' },
+    { $replaceRoot: { newRoot: '$suggestions' } },
   ];
 };

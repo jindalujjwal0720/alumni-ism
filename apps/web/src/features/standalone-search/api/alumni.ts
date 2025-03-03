@@ -39,15 +39,15 @@ const alumniSearchApi = api.injectEndpoints({
         query: string;
         filters: Record<string, string>;
         limit?: number;
-        offset?: number;
+        page?: number;
       }
     >({
-      query: ({ query, filters, limit = 10, offset = 0 }) =>
+      query: ({ query, filters, limit = 10, page = 0 }) =>
         `/v1/alumni/search?${new URLSearchParams({
           q: query,
           ...filters,
           ...(limit !== undefined && { limit: limit.toString() }),
-          ...(offset !== undefined && { offset: offset.toString() }),
+          ...(page !== undefined && { page: page.toString() }),
         }).toString()}`,
     }),
   }),

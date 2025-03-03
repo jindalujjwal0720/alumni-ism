@@ -73,7 +73,7 @@ export const AppScreens = () => {
                 </Route>
 
                 <Route path="posts/new" element={<NewPostScreen />} />
-                <Route path="posts/:id" element={<PostDetailsScreen />} />
+                <Route path="posts/:postId" element={<PostDetailsScreen />} />
 
                 <Route
                   path="search/*"

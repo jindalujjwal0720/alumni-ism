@@ -108,7 +108,15 @@ export const PublicProfilePreferencesForm = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                                cancelable: true,
+                              }),
+                            );
+                          }}
                         />
                       </FormControl>
                     </FormItem>
@@ -128,7 +136,15 @@ export const PublicProfilePreferencesForm = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                                cancelable: true,
+                              }),
+                            );
+                          }}
                         />
                       </FormControl>
                     </FormItem>
@@ -148,7 +164,15 @@ export const PublicProfilePreferencesForm = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                                cancelable: true,
+                              }),
+                            );
+                          }}
                         />
                       </FormControl>
                     </FormItem>
@@ -168,7 +192,15 @@ export const PublicProfilePreferencesForm = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                                cancelable: true,
+                              }),
+                            );
+                          }}
                         />
                       </FormControl>
                     </FormItem>
@@ -188,7 +220,15 @@ export const PublicProfilePreferencesForm = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                                cancelable: true,
+                              }),
+                            );
+                          }}
                         />
                       </FormControl>
                     </FormItem>
@@ -208,7 +248,15 @@ export const PublicProfilePreferencesForm = () => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            formRef.current?.dispatchEvent(
+                              new Event('input', {
+                                bubbles: true,
+                                cancelable: true,
+                              }),
+                            );
+                          }}
                         />
                       </FormControl>
                     </FormItem>

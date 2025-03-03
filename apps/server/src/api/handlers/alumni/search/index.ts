@@ -8,8 +8,10 @@ import { generateSearchResultsPipeline } from '../../../../constants/queries/alu
 
 interface SearchQuery {
   q?: string;
+
   limit?: number;
-  offset?: number;
+  page?: number;
+
   location?: string;
   company?: string;
   designation?: string;
@@ -47,11 +49,11 @@ const getSearchResults =
       let {
         q = '',
         limit = 10,
-        offset = 0,
+        page = 1,
         ...filters
       } = req.query as SearchQuery;
       limit = Math.min(Math.max(Number(limit) || 10, 1), 50); // Limit between 1 and 50, default 10
-      offset = Math.max(Number(offset) || 0, 0); // Offset >= 0
+      const offset = Math.max(Number(page) - 1 || 0, 0) * limit; // Offset >= 0
       filters = Object.fromEntries(
         Object.entries(filters).filter(([_, value]) => value),
       );

@@ -9,27 +9,58 @@ import {
   // MoreHorizontal,
   Share2,
 } from 'lucide-react';
+import { ExtendedPost } from '../api/posts';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { convertDateToReadable, convertDurationToReadable } from '@/utils/time';
+import { PostVisibility } from '@/types/models/post';
+import { Show } from '@/components/show';
+import {
+  linkProcessor,
+  TextMarkup,
+  TextProcessor,
+} from '../../../components/text-markup';
 
-export const Post = () => {
+const getPostTime = (createdAt: string | Date) => {
+  const durationInSeconds = Math.abs(
+    (new Date(createdAt).getTime() - new Date().getTime()) / 1000,
+  );
+
+  const TWO_WEEKS = 2 * 7 * 24 * 60 * 60;
+  if (durationInSeconds > TWO_WEEKS) {
+    return convertDateToReadable(createdAt);
+  }
+  return convertDurationToReadable(durationInSeconds) + ' ago';
+};
+
+export const Post = ({ post }: { post: ExtendedPost }) => {
   return (
     <div className="pt-4 flex flex-col bg-card rounded-lg">
       <div className="pl-4 pr-3 flex items-center gap-4 justify-between">
-        <Link to="/p/alumni/123456" from="Home">
+        <Link to={`/p/alumni/${post.author.ucn}`} from="Home">
           <div className="flex items-center gap-2">
-            <img
-              src="https://randomuser.me/api/portraits/men/42.jpg"
-              className="size-12 rounded-full"
-              alt="User"
-            />
+            <Avatar className="size-12">
+              <AvatarImage
+                src={post.author.profilePicture}
+                alt={post.author.name}
+              />
+              <AvatarFallback>
+                {post.author.name[0]}
+                {post.author.name.split(' ')[1]
+                  ? post.author?.name.split(' ')[1][0]
+                  : ''}
+              </AvatarFallback>
+            </Avatar>
             <div className="ml-2">
-              <h2 className="font-medium">Nikhil Kamath</h2>
+              <h2 className="font-medium">{post.author.name}</h2>
               <p className="text-muted-foreground text-xs">
-                Co-Founder at Zerodha
+                {post?.author.designation} at {post.author.company}
               </p>
-              <p className="text-muted-foreground text-xs flex gap-2 items-center">
-                <span>2 hours ago</span>
+              <p className="text-muted-foreground text-xs flex gap-2 items-center mt-0.5">
+                <span>{getPostTime(post.createdAt)}</span>
                 <span> • </span>
-                <Earth size={13} />
+                <Show when={post.visibility === PostVisibility.PUBLIC}>
+                  <Earth size={13} />
+                </Show>
               </p>
             </div>
           </div>
@@ -42,31 +73,33 @@ export const Post = () => {
       </div>
 
       <div className="pt-4 pb-2 space-y-2">
-        <ClipText lines={3} more className="px-4 text-sm">
-          Everything health-related in the last decade felt like it was too
-          early. This seems to be changing now, with health and longevity
-          becoming mainstream in urban India. The timing might be right now for
-          entrepreneurs to build something in health. Thoughts?
+        <ClipText lines={3} more className="px-4 text-sm space-y-3">
+          <TextMarkup
+            processors={[linkProcessor, createMentionProcessor(post.mentions)]}
+          >
+            {post.body}
+          </TextMarkup>
         </ClipText>
         <div className="px-2">
-          <Link to="/posts/123456" from="Home">
+          {/* Space for media carousel or grid */}
+          {/* <Link to="/posts/123456" from="Home">
             <img
               src="https://media.licdn.com/dms/image/v2/D5610AQEWxz5hzzQdOw/image-shrink_800/B56ZVHEFD8GoAg-/0/1740654007144?e=1741262400&v=beta&t=0Ccf6R8yA_BrZ6316WiqfQtxSvUpjSdo8nbMydF6BOk"
               className="w-full max-h-[600px] rounded-lg object-cover"
               alt="Post"
             />
-          </Link>
+          </Link> */}
         </div>
         <div className="px-4 py-2">
           <div className="flex gap-6 items-center justify-between text-muted-foreground text-sm">
             <div className="flex gap-6 items-center">
               <span className="p-0 flex items-center gap-1">
                 <Heart size={18} className={cn('fill-muted-foreground')} />
-                <span>18</span>
+                <span>{post.analytics.likes}</span>
               </span>
               <span className="p-0 flex items-center gap-1">
                 <MessageCircle size={18} />
-                <span>7</span>
+                <span>{post.analytics.comments}</span>
               </span>
             </div>
             <span className="p-0 flex items-center gap-1">
@@ -76,23 +109,44 @@ export const Post = () => {
         </div>
       </div>
 
-      <Link to="/posts/123456" from="Home">
-        <div className="m-3 mt-0 px-3 py-2 bg-muted/70 rounded-md">
-          <div className="space-y-1">
-            <ClipText lines={2} className="text-sm">
-              <span className="font-medium">Nilesh Mishra</span>{' '}
-              <span className="text-muted-foreground">
-                Everything health-related in the last decade felt like it was
-                too early. This seems to be changing now, with health and
-                longevity becoming mainstream in urban India. The timing might
-                be right now for entrepreneurs to build something in health.
-                Thoughts?
-              </span>
-            </ClipText>
-            <p className="text-muted-foreground text-sm">View all 7 comments</p>
+      <Show when={post.latestComment}>
+        <Link to={`/posts/${post._id}`} from="Home">
+          <div className="m-3 mt-0 px-3 py-2 bg-muted/70 rounded-md">
+            <div className="space-y-1">
+              <ClipText lines={2} className="text-sm">
+                <span className="font-medium">
+                  {post.latestComment?.author}
+                </span>{' '}
+                <span className="text-muted-foreground">
+                  {post.latestComment?.body}
+                </span>
+              </ClipText>
+              <p className="text-muted-foreground text-sm">View all comments</p>
+            </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      </Show>
     </div>
   );
 };
+
+const createMentionProcessor = (
+  mentions: Array<{ name: string; ucn: string }>,
+): TextProcessor => ({
+  pattern: /@(\w+)/g,
+  component: (_, username) => {
+    // partial match also
+    const user = mentions.find((m) => m.name.startsWith(username));
+    return user ? (
+      <Link
+        to={`/p/alumni/${user.ucn}`}
+        from="Home"
+        className="font-medium text-primary"
+      >
+        @{username}
+      </Link>
+    ) : (
+      `@${username}`
+    );
+  },
+});
