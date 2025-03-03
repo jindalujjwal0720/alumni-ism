@@ -13,8 +13,10 @@ export const PostDetailsScreen = () => {
     <>
       <ScreenTitleBar title="Post" logo />
       <ScreenContent>
-        <PostDetails post={postId ?? ''} />
-        <PostComments />
+        <div className="pb-24">
+          <PostDetails post={postId ?? ''} />
+          <PostComments post={postId ?? ''} />
+        </div>
       </ScreenContent>
     </>
   );

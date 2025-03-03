@@ -1,5 +1,5 @@
 import { api } from '@/stores/api';
-import { IPost } from '@/types/models/post';
+import { IPost, IPostComment } from '@/types/models/post';
 
 export interface ExtendedPost extends IPost {
   author: {
@@ -16,6 +16,16 @@ export interface ExtendedPost extends IPost {
   analytics: {
     likes: number;
     comments: number;
+  };
+}
+
+export interface ExtendedPostComment extends IPostComment {
+  author: {
+    ucn: string;
+    name: string;
+    profilePicture: string;
+    company: string;
+    designation: string;
   };
 }
 
@@ -43,10 +53,15 @@ const postsApi = api.injectEndpoints({
       query: (postId) => `/v1/posts/${postId}`,
     }),
     listPostComments: build.query<
-      { comments: { body: string; author: { name: string } }[] },
-      string
+      { comments: ExtendedPostComment[] },
+      {
+        postId: string;
+        limit?: number;
+        page?: number;
+      }
     >({
-      query: (postId) => `/v1/posts/${postId}/comments`,
+      query: ({ postId, limit = 10, page = 1 }) =>
+        `/v1/posts/${postId}/comments?limit=${limit}&page=${page}`,
     }),
   }),
 });
@@ -55,4 +70,5 @@ export const {
   useCreatePostMutation,
   useListFeedPostsQuery,
   useReadPostQuery,
+  useListPostCommentsQuery,
 } = postsApi;
